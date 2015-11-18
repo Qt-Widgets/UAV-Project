@@ -1,32 +1,18 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+QT       += core gui
 
-#include <QMainWindow>
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-namespace Ui {
-class MainWindow;
-}
-
-class MainWindow : public QMainWindow
-{
-    Q_OBJECT
-
-public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+TARGET = VoceTest1
+TEMPLATE = app
 
 
-private slots:
+SOURCES += main.cpp\
+        mainwindow.cpp
 
-    void on_pushButton_pressed();
+HEADERS  += mainwindow.h
 
-    void on_pushButton_released();
+FORMS    += mainwindow.ui
 
-protected:
-    bool eventFilter(QObject *, QEvent *);
+INCLUDEPATH += "C:\Users\Ernest Curioso\Documents\Voce\voce-0.9.1\voce-0.9.1\src\c++" "C:\Program Files\Java\jdk1.8.0_65\include" "C:\Program Files\Java\jdk1.8.0_65\include\win32"
+LIBS += "-LC:\Program Files\Java\jdk1.8.0_65\lib" "-LC:\Program Files\Java\jdk1.8.0_65\jre\bin\server" -ljvm
 
-private:
-    Ui::MainWindow *ui;
-};
-
-#endif // MAINWINDOW_H
