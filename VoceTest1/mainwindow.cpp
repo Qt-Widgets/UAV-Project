@@ -292,7 +292,7 @@ void manipString(QString x){
     if      (word == "emergency"){}
     else if (word == "change"||word == "fly"||word == "ascend"||word == "descend"){
         QStringList list1 = x.split(QRegExp("\\s"));             //split it by every space and store each word into QStringList
-        pTense = Out(list1);
+        string pTense = Out(list1);
         cout<<pTense<<endl;
         voce::synthesize(pTense);
         manipCommand(x);
@@ -345,9 +345,7 @@ void MainWindow::on_pushButton_released()
     {
     ui->textBrowser->QTextBrowser::append("You said: " + QString::fromStdString(s));
     manipString(QString::fromStdString(s));
-
     }
-
 }
 
 bool MainWindow::eventFilter(QObject *object, QEvent *event)
@@ -381,7 +379,6 @@ bool MainWindow::eventFilter(QObject *object, QEvent *event)
                             {
                                 ui->textBrowser->QTextBrowser::append("You typed: " + QString::fromStdString(s));
                                 manipString(QString::fromStdString(s));
-                                ui->textBrowser->QTextBrowser::append("Cayley: " + QString::fromStdString(pTense));
                                 ui->textEdit->QTextEdit::setText("");
 
                                 return true;
