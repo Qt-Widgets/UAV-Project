@@ -231,9 +231,9 @@ void manipCommand(QString qs){
         }
     }
     transformNums(nums);
-
 }
-void manipReport(QString str){
+
+string manipReport(QString str){
     QStringList list1 = str.split(QRegExp("\\s"));             //split it by every space and store each word into QStringList
     if(list1[1] == "height"){
     int xx = height;
@@ -243,8 +243,8 @@ void manipReport(QString str){
             ss >> str1;
 
     string j = "        The height is " + str1 + " feet ";
-    //cout<<j;
-    //ui->textBrowser->QTextBrowser::append("Cayley: " + QString::fromStdString(j));
+    cout<<j;
+    return j;
 
     voce::synthesize(j);
     }
@@ -258,6 +258,7 @@ void manipReport(QString str){
     string j = "        The latitude is " + str1 + " feet ";
     cout<<j;
     voce::synthesize(j);
+    return j;
     }
     if(list1[1] == "longitude"){
     double xx = longitude;
@@ -269,9 +270,8 @@ void manipReport(QString str){
     string j = "        The longitude is " + str1 + " feet ";
     cout<<j;
     voce::synthesize(j);
+    return j;
     }
-
-
 }
 void manipSet(QString str){
     boolean latitude = false;
@@ -321,14 +321,16 @@ string manipString(QString x){
         return pTense;
     }
     else if (word == "report"){
-        manipReport(x);
+        string temp = manipReport(x);
+        voce::synthesize(temp);
+        return temp;
     }
-    else if(word == "set")
-    {
+    else if(word == "set"){
         manipSet(x);
     }
 }
-//*********************************************************************************************************************************
+
+//********************************************************************************
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -344,7 +346,7 @@ MainWindow::MainWindow(QWidget *parent) :
     voce::setRecognizerEnabled(false);
     voce::synthesize("Hello there. I'm Cayley.");
 
-    //MAP STUFF ************************************************
+    //**************** MAP STUFF ************************************************
 
     m_map = new EsriRuntimeQt::Map(this);
 
@@ -444,6 +446,7 @@ void MainWindow::on_pushButton_released()
     s = voce::popRecognizedString();
     voce::setRecognizerEnabled(false);
     voce::stopSynthesizing();
+
     if (s.empty() == false)
     {
     ui->textBrowser->QTextBrowser::append("You said: " + QString::fromStdString(s));
