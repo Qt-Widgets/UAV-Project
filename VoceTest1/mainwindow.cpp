@@ -6,30 +6,52 @@
 #include <string>
 #include <sstream>
 
-//******************
+//DANIELS GRAMMAR STUFF
 #include <QString>
 #include <QDebug>
 #include <QStringList>
 #include <cmath>
 #include <stdlib.h>
 #include <sstream>
-//*******************
+
+//MAP STUFF
+
+#include <QGridLayout>
+#include "MapGraphicsView.h"
+#include "Map.h"
+#include "ArcGISRuntime.h"
+#include "MapGraphicsView.h"
+#include "Map.h"
+#include "ArcGISRuntime.h"
+
+// Uncomment if needed
+//#include "ArcGISLocalTiledLayer.h"
+#include "ArcGISTiledMapServiceLayer.h"
+//#include "ArcGISDynamicMapServiceLayer.h"
+//#include "ArcGISFeatureLayer.h"
+//#include "GraphicsLayer.h"
+//#include "Graphic.h"
+//#include "SimpleMarkerSymbol.h"
+//#include "Point.h"
+//#include "ServiceInfoTask.h"
+//#include "GeodatabaseFeatureServiceTable.h"
+//#include "FeatureLayer.h"
+//*****************************
 
 #ifdef WIN32
 #include <windows.h>
 #else
 #include <unistd.h>
 #endif
+
+//DANIELS GRAMMAR STUFF *********************************************************************************************************************************
+
 int height = 0;
 double latitude = 0;
 double longitude = 0;
 using namespace std;
 std::string s;
 
-
-
-
-//*********************************************************************************************************************************
 QString getFirstWord(QString x){
     QStringList list1 = x.split(QRegExp("\\s"));
     x = list1[0];
@@ -303,6 +325,7 @@ void manipString(QString x){
     else if(word == "set"){manipSet(x);}
 }
 //*********************************************************************************************************************************
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -310,12 +333,88 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->pushButton->setText("Speak");
     ui->textEdit->installEventFilter(this);
+    ui->label->setText("Type Command Here:");
 
     voce::init("C:/Users/Ernest Curioso/Documents/Voce/voce-0.9.1/voce-0.9.1/lib", true, true,
                "file:/C:/Users/Ernest Curioso/Documents/GitHub/teamcayley/VOCE/lib", "digits");
     voce::setRecognizerEnabled(false);
-    voce::synthesize("Press down and speak.");
-    voce::synthesize("Or type your command in the input text field.");
+    voce::synthesize("Hello there. I'm Cayley.");
+
+    //MAP STUFF ************************************************
+
+    m_map = new EsriRuntimeQt::Map(this);
+
+    //// connect to signal that is emitted when the map is ready
+    //// the mapReady signal is emitted when the Map has obtained a
+    //// spatial reference from an added layer
+    // connect(m_map, SIGNAL(mapReady()), this, SLOT(onMapReady()));
+
+    m_mapGraphicsView = EsriRuntimeQt::MapGraphicsView::create(m_map, this);
+    //setCentralWidget(m_mapGraphicsView);
+    ui->verticalLayout->addWidget(m_mapGraphicsView);
+    m_map->setWrapAroundEnabled(false);
+
+    QString path = EsriRuntimeQt::ArcGISRuntime::installDirectory();
+    path.append("/sdk/samples/data");
+    QDir dataDir(path); // using QDir to convert to correct file separator
+    QString pathSampleData = dataDir.path() + QDir::separator();
+
+    //// ArcGIS Online Tiled Basemap Layer
+    m_tiledServiceLayer = new EsriRuntimeQt::ArcGISTiledMapServiceLayer("http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer", this);
+    m_map->addLayer(m_tiledServiceLayer);
+
+    //// Local Tiled Basemap Layer using: sdk/samples/data/tpks/Topographic.tpk
+    QString tiledBaseMapLayer = pathSampleData + "tpks" + QDir::separator() + "Topographic.tpk";
+    //m_tiledLayer = new EsriRuntimeQt::ArcGISLocalTiledLayer(tiledBaseMapLayer, this);
+    //m_map->addLayer(m_tiledLayer);
+
+    //// ArcGIS Online Dynamic Map Service Layer
+    //m_dynamicServiceLayer = new EsriRuntimeQt::ArcGISDynamicMapServiceLayer("http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Specialty/ESRI_StateCityHighway_USA/MapServer", this);
+    //m_map->addLayer(m_dynamicServiceLayer);
+
+    //Local Dynamic Layer using: sdk/samples/data/mpks/USCitiesStates.mpk
+    /*
+  QString dataPath = pathSampleData + "mpks" + QDir::separator() + "USCitiesStates.mpk";
+  m_localMapService = EsriRuntimeQt::LocalMapService(dataPath);
+
+  // connect to signal that is emitted when the service is created successfully
+  connect(&m_localMapService, SIGNAL(serviceCreationSuccess(const QString&, const QString&)), this, SLOT(onLocalServiceCreationSuccess(const QString&, const QString&)));
+
+  // connect to signal that is emitted when the service failed
+  connect(&m_localMapService, SIGNAL(serviceCreationFailure(const QString&)), this, SLOT(onLocalServiceCreationFailure(const QString&)));
+
+  // start the service and the Local Server
+  m_localMapService.start();
+  */
+
+    // Feature service using: sdk/samples/data/mpks/USCitiesStates.mpk
+    /*
+  QString localFeatureService = pathSampleData + "mpks" + QDir::separator() + "USCitiesStates.mpk";
+  m_localFeatureService = EsriRuntimeQt::LocalFeatureService(localFeatureService);
+  m_localFeatureService.setMaximumRecords(3000);
+
+  // connect to signal that is emitted when the service is created successfully
+  connect(&m_localFeatureService, SIGNAL(serviceCreationSuccess(const QString&, const QString&)), this, SLOT(onFeatureServiceCreationSuccess(const QString&, const QString&)));
+
+  // connect to signal that is emitted when the service failed
+  connect(&m_localFeatureService, SIGNAL(serviceCreationFailure(const QString&)), this, SLOT(onFeatureServiceCreationFailure(const QString&)));
+
+  // start the service and the Local Server
+  m_localFeatureService.start();
+  */
+
+    // Graphics Layer
+    /*
+  EsriRuntimeQt::Point point1(0, 0, m_map->spatialReference());
+  EsriRuntimeQt::SimpleMarkerSymbol redCircle(Qt::red, 10, EsriRuntimeQt::SimpleMarkerSymbolStyle::Circle);
+  EsriRuntimeQt::Graphic* graphic1 = new EsriRuntimeQt::Graphic(point1, redCircle);
+  m_graphicsLayer = new EsriRuntimeQt::GraphicsLayer(this);
+  m_graphicsLayer->addGraphic(graphic1);
+  m_map->addLayer(m_graphicsLayer);
+  */
+
+  //*******************************************************
+
 }
 
 MainWindow::~MainWindow()
