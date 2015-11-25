@@ -142,17 +142,18 @@ private:
 //! [PlaneController2]
 
 //! [PlaneControllerMain]
+
+
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
-    PlaneController losAngeles2NY;
-    PlaneController newYork2Houston;
-
+    PlaneController flightPath;
+    PlaneController C_flightPath;
 
     QQmlApplicationEngine engine;
-    engine.rootContext()->setContextProperty("losAngeles2NY", &losAngeles2NY);
-    engine.rootContext()->setContextProperty("newYork2Houston", &newYork2Houston);
+    engine.rootContext()->setContextProperty("flightPath", &flightPath);
+    engine.rootContext()->setContextProperty("C_flightPath", &C_flightPath);
 
     engine.load(QUrl(QStringLiteral("qrc:/planespotter.qml")));
 
