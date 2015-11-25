@@ -76,7 +76,7 @@ int arr2int(QStringList nums,int arr[]){
 
 void transformNums(QStringList nums){
     int *arr = new int [nums.count()];
-    for(int i= 0; i < nums.count(); i++){                                                       //populate the int array
+    for(int i= 0; i < nums.count(); i++){                                       //populate the int array
         if(nums[i] == "one"){
             arr[i] = 1;
         }
@@ -191,7 +191,7 @@ void transformL(QStringList L,boolean lat, boolean lon){
     double d = a+b;
     //qDebug()<<bL;
     //qDebug()<<aL;
-   // cout<<b<<endl;
+    //cout<<b<<endl;
     //cout<<a<<endl;
     cout.precision(8);
     if(minus){
@@ -309,7 +309,7 @@ string Out(QStringList strL){
     return x.toStdString();
 }
 
-void manipString(QString x){
+string manipString(QString x){
     QString word = getFirstWord(x);
     if      (word == "emergency"){}
     else if (word == "change"||word == "fly"||word == "ascend"||word == "descend"){
@@ -318,11 +318,15 @@ void manipString(QString x){
         cout<<pTense<<endl;
         voce::synthesize(pTense);
         manipCommand(x);
+        return pTense;
     }
     else if (word == "report"){
         manipReport(x);
     }
-    else if(word == "set"){manipSet(x);}
+    else if(word == "set")
+    {
+        manipSet(x);
+    }
 }
 //*********************************************************************************************************************************
 
@@ -443,7 +447,8 @@ void MainWindow::on_pushButton_released()
     if (s.empty() == false)
     {
     ui->textBrowser->QTextBrowser::append("You said: " + QString::fromStdString(s));
-    manipString(QString::fromStdString(s));
+    string temp = manipString(QString::fromStdString(s));
+    ui->textBrowser->QTextBrowser::append("Cayley: " + QString::fromStdString(temp));
     }
 }
 
@@ -477,8 +482,9 @@ bool MainWindow::eventFilter(QObject *object, QEvent *event)
                             if (list2[j] != "")
                             {
                                 ui->textBrowser->QTextBrowser::append("You typed: " + QString::fromStdString(s));
-                                manipString(QString::fromStdString(s));
                                 ui->textEdit->QTextEdit::setText("");
+                                string temp = manipString(QString::fromStdString(s));
+                                ui->textBrowser->QTextBrowser::append("Cayley: " + QString::fromStdString(temp));
 
                                 return true;
                             }
