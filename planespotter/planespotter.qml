@@ -3,7 +3,7 @@
 ** Copyright (C) 2015 The Qt Company Ltd.
 ** Contact: http://www.qt.io/licensing/
 **
-** This file is part of the examples of the Qt Toolkit.
+** This file is part of the e newYork2Houstonamples of the Qt Toolkit.
 **
 ** $QT_BEGIN_LICENSE:BSD$
 ** You may use this file under the terms of the BSD license as follows:
@@ -23,11 +23,11 @@
 **
 **
 ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+** "AS IS" AND ANY E newYork2HoustonPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 ** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
 ** A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
 ** OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-** SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+** SPECIAL, E newYork2HoustonEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
 ** LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
 ** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
 ** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
@@ -60,19 +60,25 @@ Window{
     property variant newYork: QtPositioning.coordinate(40.7127,-74.0059)
     property variant houston: QtPositioning.coordinate(29.7604,-95.3698)
 
+
+
     //create a Map and plane
     Map{
         id: mapOfUS
-        anchors.centerIn: parent
+        anchors.centerIn: parent;
         anchors.fill: parent
+
         plugin: Plugin{
             name: "osm"
         }
 
+        //********************** QML Version ***********************************************
+
         Plane{
             id: planeOne
             pilotName: "CSUN UAV_1"
-            coordinate: losAngeles2NY.position
+            coordinate: flightPath.position
+
 
             SequentialAnimation{
                 id: planeOneAnimation
@@ -80,14 +86,14 @@ Window{
 
                 NumberAnimation {
                     target: planeOne
-                    property: "bearing"; duration: 3000
+                    property: "bearing"; duration: 1000
                     easing.type: Easing.InOutQuad
                     to: planeOneAnimation.rotationDirection
                 }
                 //qmlPlane
                 CoordinateAnimation {
                     id: coordinateAnimation; duration: 9000
-                    target: losAngeles2NY; property: "position"
+                    target: flightPath; property: "position"
                     easing.type: Easing.InOutQuad
                 }
 
@@ -112,39 +118,42 @@ Window{
                         return;
                     }
 
-                    if (losAngeles2NY.position === losAngeles) {
+                    if (/*losAngeles2NY*/flightPath.position === losAngeles) {
                         coordinateAnimation.from = losAngeles;
                         coordinateAnimation.to = newYork;
-                    } else if (losAngeles2NY.position === newYork) {
+                    } else if (/*losAngeles2NY*/flightPath.position === newYork) {
                         coordinateAnimation.from = newYork;
                         coordinateAnimation.to = losAngeles;
                     }
 
-                    planeOneAnimation.rotationDirection = losAngeles2NY.position.azimuthTo(coordinateAnimation.to)
+                    planeOneAnimation.rotationDirection = flightPath.position.azimuthTo(coordinateAnimation.to)
                     planeOneAnimation.start()
                 }
             }
             Component.onCompleted: {
-                losAngeles2NY.position = losAngeles;
+
+                flightPath.position = losAngeles;
             }
         }
+
+        //************************* C++ Version ******************************************
 
         //! [CppPlane1]
         Plane {
             id: cppPlane
             pilotName: "CSUN UAV_2"
-            coordinate: newYork2Houston.position
+            coordinate:  C_flightPath.position
 
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    if (cppPlaneAnimation.running || newYork2Houston.isFlying()) {
+                    if (cppPlaneAnimation.running ||  C_flightPath.isFlying()) {
                         console.log("Plane still in the air.");
                         return;
                     }
 
-                    newYork2Houston.swapDestinations();
-                    cppPlaneAnimation.rotationDirection = newYork2Houston.position.azimuthTo(newYork2Houston.to)
+                    C_flightPath.swapDestinations();
+                    cppPlaneAnimation.rotationDirection =  C_flightPath.position.azimuthTo( C_flightPath.to)
                     cppPlaneAnimation.start();
                     cppPlane.departed();
                 }
@@ -159,30 +168,33 @@ Window{
                     easing.type: Easing.InOutQuad
                     to: cppPlaneAnimation.rotationDirection
                 }
-                ScriptAction { script: newYork2Houston.startFlight() }
+                ScriptAction { script: C_flightPath.startFlight() }
             }
             //! [CppPlane3]
 
+            //Assign to and from coordinates here.
             Component.onCompleted: {
-                newYork2Houston.position = newYork;
-                newYork2Houston.to = houston;
-                newYork2Houston.from = newYork;
-                newYork2Houston.arrived.connect(arrived)
+                C_flightPath.position = newYork;
+                C_flightPath.to = houston;
+                C_flightPath.from = newYork;
+                C_flightPath.arrived.connect(arrived)
             }
 
+            //Messages to display
             function arrived(){
-                if (newYork2Houston.to === newYork)
+                if ( C_flightPath.to === newYork)
                     cppPlane.showMessage(qsTr("Hello NewYork!"))
-                else if (newYork2Houston.to === houston)
+                else if ( C_flightPath.to === houston)
                     cppPlane.showMessage(qsTr("Hello Houston!"))
             }
 
             function departed(){
-                if (newYork2Houston.from === newYork)
+                if ( C_flightPath.from === newYork)
                     cppPlane.showMessage(qsTr("See you NewYork!"))
-                else if (newYork2Houston.from === houston)
+                else if ( C_flightPath.from === houston)
                     cppPlane.showMessage(qsTr("See you Houston!"))
             }
+
         //! [CppPlane2]
         }
 
