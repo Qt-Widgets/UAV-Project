@@ -2,6 +2,7 @@
 #include <QString>
 #include <QDebug>
 #include <QStringList>
+#include <iomanip>
 #include <cmath>
 #include <stdlib.h>
 #include <sstream>
@@ -15,6 +16,10 @@ using namespace std;
 int height = 0;//global variable for height
 double latitude = 0;//global variable for latitude
 double longitude = 0;//global variable for longitude
+vector<string> strings;//global variable for all the strings spoken
+bool nine = false;
+bool eight = false;
+//int setD = 0;
 void ELP(){
     const int arraysize = 3;
     place arr[arraysize];
@@ -38,24 +43,28 @@ void ELP(){
 
     while(!land){
         if(!been){
-        string out = "the aircraft is now landing to " + arr[highestindex].name.toStdString() + " because it has " + QString::number(arr[highestindex].percent).toStdString() + " percent  chance of landing. Enter 0 to land enter 9 for other percentages";
-     cout<<out;
+        string out = "the aircraft is now landing to " + arr[highestindex].name.toStdString() + " because it has " + QString::number(arr[highestindex].percent).toStdString() + " percent  chance of landing. Should it land? Say Yes or Enter 0 to land enter 9 or say no for other percentages";
+     cout<<out<<endl;
      voce::synthesize(out);
      been = true;
         }
-     cin>>i;
-     if(i == 0){
+        string j = voce::popRecognizedString();
+        cout<<j;
+
+        //cin>>i;
+     if(i == 0 || j == "yes"){
          land = true;
+         cout<<" \nThank you now landing";
+         voce::synthesize(" Thank you now landing");
         }
-     else if(i == 9){
+     else if(i == 9|| j == "no"){
          for(int i = 0; i < arraysize; i++){
              qDebug()<< "place: " <<arr[i].name;
              qDebug()<< "percent: "<<arr[i].percent;
              cout<<endl;
-
-         }
       }
-   }
+    }
+  }
 }
 QString getFirstWord(QString x){
     QStringList list1 = x.split(QRegExp("\\s"));
@@ -146,7 +155,7 @@ double transformNums(QStringList nums, string x){
         else if(nums[i] == "zero"){
             arr[i] = 0;
         }
-        else{arr[i] = -99999;}
+        else{arr[i] = 0;}
     }
     double number = 0;
     for(int i= 0; i< nums.count() ;i++){
@@ -161,11 +170,17 @@ double transformNums(QStringList nums, string x){
 }
 
 void transformL(QStringList L,boolean lat, boolean lon){
-    boolean execute = false;
+    //setD++;
+    //either two digits before the decimal or three digits before the decimal
+    boolean execute10,execute11 = false;
     if(L.count() == 10){
-        execute = true;
+        execute10 = true;
     }
-    if(execute)
+    if(L.count() == 11){
+        execute11 = true;
+    }
+
+    if(execute10)
     {
     //qDebug()<<"this is the qstring before everything"<<L;
     boolean minus = false;
@@ -203,15 +218,73 @@ void transformL(QStringList L,boolean lat, boolean lon){
         d -= d*2;
     }
     cout<<"YOU HAVE SET IT TO "<<d;
+    voce::synthesize("it has been set");
     if(lat){
         latitude = d;
     }
     if(lon){
         longitude = d;
     }
-  }else{
+
+  }
+    //**********************************************************
+    if(execute11)
+    {
+    //qDebug()<<"this is the qstring before everything"<<L;
+    boolean minus = false;
+    if(L[0] == "minus"){
+        minus = true;
+    }
+    L.removeFirst();
+    QStringList bL;
+    QStringList aL;
+    bL.append(L[0]);
+    bL.append(L[1]);
+    bL.append(L[2]);
+    double b = transformNums(bL,"");
+    //qDebug()<<"THE SIZE OF AL before population"<<aL.count();
+    aL.append(L[4]);
+    aL.append(L[5]);
+    aL.append(L[6]);
+    aL.append(L[7]);
+    aL.append(L[8]);
+    L[9].chop(1);
+    aL.append(L[9]);
+    //qDebug()<<"the L[8] is "<<L[8];
+    //qDebug()<<"THE SIZE OF AL after population"<<aL.count();
+    double a = transformNums(aL,"");
+    //cout<<transformNums(aL,"");
+    //cout<<a;
+    a = a * .000001;
+    //cout<<a;
+    double d = a+b;
+    //qDebug()<<bL;
+    //qDebug()<<aL;
+   // cout<<b<<endl;
+    //cout<<a<<endl;
+    cout.precision(9);
+    if(minus){
+        d -= d*2;
+    }
+    cout<<"YOU HAVE SET IT TO "<<d;
+    voce::synthesize("it has been set");
+    if(lat){
+        latitude = d;
+    }
+    if(lon){
+        longitude = d;
+    }
+
+  }
+
+    //**********************************************************
+    else{
     cout<<"Invalid input. Format = +/- dd.dddddd";
   }
+    if(longitude != 0 && latitude != 0){
+        //CALL THE SETDESTINATION ON THE MAP
+        cout<<"setDEST()";
+    }
 }
 
 void manipCommand(QString qs){
@@ -254,7 +327,7 @@ void manipReport(QString str){
     if(list1[1] == "latitude"){
     double xx = latitude;
     std::stringstream ss;   //convert the int height to a string
-        ss << xx;
+        ss << setprecision(8) << xx;
         string str1;
             ss >> str1;
 
@@ -265,7 +338,7 @@ void manipReport(QString str){
     if(list1[1] == "longitude"){
     double xx = longitude;
     std::stringstream ss;   //convert the int height to a string
-        ss << xx;
+        ss << setprecision(8) << xx;
         string str1;
             ss>> str1;
 
@@ -273,7 +346,26 @@ void manipReport(QString str){
     cout<<j;
     voce::synthesize(j);
     }
+    if(list1[1] == "destination"){
+    double xx = longitude;
+    std::stringstream ss;   //convert the int height to a string
+        ss << setprecision(8) << xx;
+        string str1;
+            ss>> str1;
 
+    string j = "        The longitude is " + str1 + " feet ";
+    cout<<j;
+    voce::synthesize(j);
+    xx = latitude;
+    std::stringstream ss1;   //convert the int height to a string
+        ss1 << setprecision(8) << xx;
+        str1;
+            ss1 >> str1;
+
+    j = "        The latitude is " + str1 + " feet ";
+    cout<<j;
+    voce::synthesize(j);
+    }
 
 }
 void manipSet(QString str){
@@ -294,6 +386,7 @@ void manipSet(QString str){
         }
     }
     transformL(L.split(QRegExp("\\s")),latitude,longitude);
+  //  transformL(L.split(QRegExp("\\s")),!latitude,!longitude);
 }
 
 string Out(QStringList strL){
@@ -325,6 +418,9 @@ void manipString(QString x){
         manipReport(x);
     }
     else if(word == "set"){manipSet(x);}
+    else{
+        cout<<"invalid input";
+    }
 }
 int main(int argc, char **argv)
 {
@@ -343,17 +439,19 @@ int main(int argc, char **argv)
         //1. CHANGE THE 3RD PARAMETER TO TRUE IN THE INIT()
         //2. COMMENT OUT THE GETLINE CALL
         //3. uncomment the while recognizer que and the x = poprecognized string.
-
+        //4. line 28 of the elp function uses the voice
+          vector<string> strings;
           while(voce::getRecognizerQueueSize() > 0)
             {
-                string x = "null";                                          //instantiate a string
+                string x = "null";                                           //instantiate a string
                cout<<"\nListening"<<endl;
-                x = voce::popRecognizedString();
-             //getline(cin, x);                                            //get input
+               x = voce::popRecognizedString();
+             //getline(cin, x);                                                //get input
                 cout << "You said: " << x << endl;
+                strings.push_back(x);
                 if(x == "quit" || x == "thank you"){quit = true;}
 
-                QString qstr = QString::fromStdString(x);                   //convert string to QString
+                QString qstr = QString::fromStdString(x);                    //convert string to QString
                 manipString(qstr);
             }
         }
