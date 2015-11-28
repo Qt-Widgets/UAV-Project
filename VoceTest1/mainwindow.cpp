@@ -6,6 +6,8 @@
 #include <string>
 #include <sstream>
 
+#include "place.h"
+
 //DANIELS GRAMMAR STUFF
 #include <QString>
 #include <QDebug>
@@ -51,7 +53,56 @@ double latitude = 0;
 double longitude = 0;
 using namespace std;
 std::string s;
+vector<string> strings;//global variable for all the strings spoken
+bool nine = false;
+bool eight = false;
+//int setD = 0;
+void ELP(){
+    const int arraysize = 3;
+    place arr[arraysize];
+    arr[0].name = "california";
+    arr[1].name = "texas";
+    arr[2].name = "florida";
 
+    arr[0].percent = rand() % 100;
+    arr[1].percent = rand() % 100;
+    arr[2].percent = rand() % 100;
+
+    int highestindex = 0;
+    if(arr[0].percent < arr[1].percent)
+        highestindex = 1;
+    if(arr[1].percent < arr[2].percent)
+        highestindex = 2;
+
+    boolean land = false;
+    boolean been = false;
+    int i = 1;
+
+    while(!land){
+        if(!been){
+        string out = "the aircraft is now landing to " + arr[highestindex].name.toStdString() + " because it has " + QString::number(arr[highestindex].percent).toStdString() + " percent  chance of landing. Should it land? Say Yes or Enter 0 to land enter 9 or say no for other percentages";
+     cout<<out<<endl;
+     voce::synthesize(out);
+     been = true;
+        }
+        string j = voce::popRecognizedString();
+        cout<<j;
+
+        //cin>>i;
+     if(i == 0 || j == "yes"){
+         land = true;
+         cout<<" \nThank you now landing";
+         voce::synthesize(" Thank you now landing");
+        }
+     else if(i == 9|| j == "no"){
+         for(int i = 0; i < arraysize; i++){
+             qDebug()<< "place: " <<arr[i].name;
+             qDebug()<< "percent: "<<arr[i].percent;
+             cout<<endl;
+      }
+    }
+  }
+}
 QString getFirstWord(QString x){
     QStringList list1 = x.split(QRegExp("\\s"));
     x = list1[0];
@@ -103,6 +154,9 @@ void transformNums(QStringList nums){
         }
         else if(nums[i] == "nine"){
             arr[i] = 9;
+        }
+        else if(nums[i] == "zero"){
+            arr[i] = 0;
         }
     }
     height = arr2int(nums,arr);
@@ -156,11 +210,17 @@ double transformNums(QStringList nums, string x){
 }
 
 void transformL(QStringList L,boolean lat, boolean lon){
-    boolean execute = false;
+    //setD++;
+    //either two digits before the decimal or three digits before the decimal
+    boolean execute10,execute11 = false;
     if(L.count() == 10){
-        execute = true;
+        execute10 = true;
     }
-    if(execute)
+    if(L.count() == 11){
+        execute11 = true;
+    }
+
+    if(execute10)
     {
     //qDebug()<<"this is the qstring before everything"<<L;
     boolean minus = false;
@@ -191,22 +251,80 @@ void transformL(QStringList L,boolean lat, boolean lon){
     double d = a+b;
     //qDebug()<<bL;
     //qDebug()<<aL;
-    //cout<<b<<endl;
+   // cout<<b<<endl;
     //cout<<a<<endl;
     cout.precision(8);
     if(minus){
         d -= d*2;
     }
     cout<<"YOU HAVE SET IT TO "<<d;
+    voce::synthesize("it has been set");
     if(lat){
         latitude = d;
     }
     if(lon){
         longitude = d;
     }
-  }else{
+
+  }
+    //**********************************************************
+    if(execute11)
+    {
+    //qDebug()<<"this is the qstring before everything"<<L;
+    boolean minus = false;
+    if(L[0] == "minus"){
+        minus = true;
+    }
+    L.removeFirst();
+    QStringList bL;
+    QStringList aL;
+    bL.append(L[0]);
+    bL.append(L[1]);
+    bL.append(L[2]);
+    double b = transformNums(bL,"");
+    //qDebug()<<"THE SIZE OF AL before population"<<aL.count();
+    aL.append(L[4]);
+    aL.append(L[5]);
+    aL.append(L[6]);
+    aL.append(L[7]);
+    aL.append(L[8]);
+    L[9].chop(1);
+    aL.append(L[9]);
+    //qDebug()<<"the L[8] is "<<L[8];
+    //qDebug()<<"THE SIZE OF AL after population"<<aL.count();
+    double a = transformNums(aL,"");
+    //cout<<transformNums(aL,"");
+    //cout<<a;
+    a = a * .000001;
+    //cout<<a;
+    double d = a+b;
+    //qDebug()<<bL;
+    //qDebug()<<aL;
+   // cout<<b<<endl;
+    //cout<<a<<endl;
+    cout.precision(9);
+    if(minus){
+        d -= d*2;
+    }
+    cout<<"YOU HAVE SET IT TO "<<d;
+    voce::synthesize("it has been set");
+    if(lat){
+        latitude = d;
+    }
+    if(lon){
+        longitude = d;
+    }
+
+  }
+
+    //**********************************************************
+    else{
     cout<<"Invalid input. Format = +/- dd.dddddd";
   }
+    if(longitude != 0 && latitude != 0){
+        //CALL THE SETDESTINATION ON THE MAP
+        cout<<"setDEST()";
+    }
 }
 
 void manipCommand(QString qs){
@@ -327,6 +445,7 @@ string manipString(QString x){
     }
     else if(word == "set"){
         manipSet(x);
+        return " ";
     }
 }
 
@@ -337,9 +456,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->pushButton->setText("Speak");
     ui->textEdit->installEventFilter(this);
     ui->label->setText("Type Command Here:");
+
+    ui->label_2->setStyleSheet("color: #FF6600;");
 
     voce::init("C:/Users/Ernest Curioso/Documents/Voce/voce-0.9.1/voce-0.9.1/lib", true, true,
                "file:/C:/Users/Ernest Curioso/Documents/GitHub/teamcayley/VOCE/lib", "digits");
