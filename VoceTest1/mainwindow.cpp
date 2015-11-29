@@ -502,13 +502,26 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->textEdit->installEventFilter(this);
+
+    this->setStyleSheet("background-color: black;");
+
     ui->label->setText("Type Command Here:");
+    ui->label->setStyleSheet("color: #33FF00;");
 
-    ui->title->setStyleSheet("color: #FF6600;");
+    ui->title->setStyleSheet("color: #33FF00;");
 
-    ui->pushButton->setStyleSheet("background-color: #FF6600;");
+    ui->pushButton->setStyleSheet("background-color: #FF0000;");
     ui->pushButton->setIcon(QIcon("C:/Users/Ernest Curioso/Downloads/Microphone 1"));
     ui->pushButton->setIconSize(QSize(30,30));
+
+    ui->textEdit->setStyleSheet("background-color: #585858;"
+                                "color: yellow;");
+
+    ui->textBrowser->setStyleSheet("background-color: #585858;"
+                                   "color: yellow;");
+
+    ui->textBrowser_2->setStyleSheet("background-color: #585858;"
+                                     "color: yellow;");
 
     voce::init("C:/Users/Ernest Curioso/Documents/Voce/voce-0.9.1/voce-0.9.1/lib", true, true,
                "file:/C:/Users/Ernest Curioso/Documents/GitHub/teamcayley/VOCE/lib", "digits");
@@ -627,7 +640,7 @@ void MainWindow::move()
     qDebug() << height1;
     qDebug() << latitude;
     qDebug() << longitude;
-*/
+    */
     if(set){
         coord(latitude,longitude);
         set = false;
@@ -692,7 +705,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_pressed()
 {
-    ui->pushButton->setStyleSheet("background-color: #66ff00;");
+    ui->pushButton->setStyleSheet("background-color: #33ff00;");
     voce::stopSynthesizing();
     voce::setRecognizerEnabled(true);
 
@@ -706,7 +719,7 @@ void MainWindow::on_pushButton_released()
         usleep(1500);
     #endif
 
-    ui->pushButton->setStyleSheet("background-color: #FF6600;");
+    ui->pushButton->setStyleSheet("background-color: #FF0000;");
     s = voce::popRecognizedString();
     voce::setRecognizerEnabled(false);
     voce::stopSynthesizing();
