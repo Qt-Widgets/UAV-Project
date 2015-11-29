@@ -461,6 +461,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->label_2->setStyleSheet("color: #FF6600;");
 
+    ui->pushButton->setStyleSheet("background-color: green;");
+    ui->pushButton->setIcon(QIcon("C:/Users/Ernest Curioso/Downloads/red.png"));
+
     voce::init("C:/Users/Ernest Curioso/Documents/Voce/voce-0.9.1/voce-0.9.1/lib", true, true,
                "file:/C:/Users/Ernest Curioso/Documents/GitHub/teamcayley/VOCE/lib", "digits");
     voce::setRecognizerEnabled(false);
@@ -551,8 +554,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_pressed()
 {
+    ui->pushButton->setStyleSheet("background-color: green;");
     voce::stopSynthesizing();
     voce::setRecognizerEnabled(true);
+
 }
 
 void MainWindow::on_pushButton_released()
@@ -563,6 +568,7 @@ void MainWindow::on_pushButton_released()
         usleep(1500);
     #endif
 
+    ui->pushButton->setStyleSheet("background-color: red;");
     s = voce::popRecognizedString();
     voce::setRecognizerEnabled(false);
     voce::stopSynthesizing();
