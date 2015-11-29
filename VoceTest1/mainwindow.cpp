@@ -6,9 +6,8 @@
 #include <string>
 #include <sstream>
 
+// ***** GRAMMAR *****
 #include "place.h"
-
-//DANIELS GRAMMAR STUFF
 #include <QString>
 #include <QDebug>
 #include <QStringList>
@@ -16,8 +15,7 @@
 #include <stdlib.h>
 #include <sstream>
 
-//MAP STUFF
-
+// ***** MAP *****
 #include <QGridLayout>
 #include "MapGraphicsView.h"
 #include "Map.h"
@@ -46,7 +44,7 @@
 #include <unistd.h>
 #endif
 
-//DANIELS GRAMMAR STUFF *********************************************************************************************************************************
+// ***** GRAMMAR ****************************************************************
 
 int height = 0;
 double latitude = 0;
@@ -300,7 +298,7 @@ void transformL(QStringList L,boolean lat, boolean lon){
     double d = a+b;
     //qDebug()<<bL;
     //qDebug()<<aL;
-   // cout<<b<<endl;
+    //cout<<b<<endl;
     //cout<<a<<endl;
     cout.precision(9);
     if(minus){
@@ -361,7 +359,7 @@ string manipReport(QString str){
             ss >> str1;
 
     string j = "        The height is " + str1 + " feet ";
-    cout<<j;
+    cout<<j<<endl;
     return j;
 
     voce::synthesize(j);
@@ -374,7 +372,7 @@ string manipReport(QString str){
             ss >> str1;
 
     string j = "        The latitude is " + str1 + " feet ";
-    cout<<j;
+    cout<<j<<endl;
     voce::synthesize(j);
     return j;
     }
@@ -386,7 +384,7 @@ string manipReport(QString str){
             ss>> str1;
 
     string j = "        The longitude is " + str1 + " feet ";
-    cout<<j;
+    cout<<j<<endl;
     voce::synthesize(j);
     return j;
     }
@@ -461,7 +459,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->label_2->setStyleSheet("color: #FF6600;");
 
-    ui->pushButton->setStyleSheet("background-color: green;");
+    ui->pushButton->setStyleSheet("background-color: red;");
     ui->pushButton->setIcon(QIcon("C:/Users/Ernest Curioso/Downloads/red.png"));
 
     voce::init("C:/Users/Ernest Curioso/Documents/Voce/voce-0.9.1/voce-0.9.1/lib", true, true,
@@ -469,7 +467,7 @@ MainWindow::MainWindow(QWidget *parent) :
     voce::setRecognizerEnabled(false);
     voce::synthesize("Hello there. I'm Cayley.");
 
-    //**************** MAP STUFF ************************************************
+    //**************** MAP ************************************************
 
     m_map = new EsriRuntimeQt::Map(this);
 
@@ -542,7 +540,7 @@ MainWindow::MainWindow(QWidget *parent) :
   m_map->addLayer(m_graphicsLayer);
   */
 
-  //*******************************************************
+  //*************************************************************************************************
 
 }
 
