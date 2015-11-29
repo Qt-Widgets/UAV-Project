@@ -104,7 +104,7 @@
      <layout class="QVBoxLayout" name="verticalLayout"/>
     </item>
     <item row="0" column="0">
-     <widget class="QLabel" name="label_2">
+     <widget class="QLabel" name="title">
       <property name="font">
        <font>
         <family>Agency FB</family>

@@ -445,6 +445,9 @@ string manipString(QString x){
         manipSet(x);
         return " ";
     }
+    else {
+        return "Invalid input.";
+    }
 }
 
 //********************************************************************************
@@ -457,9 +460,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->textEdit->installEventFilter(this);
     ui->label->setText("Type Command Here:");
 
-    ui->label_2->setStyleSheet("color: #FF6600;");
+    ui->title->setStyleSheet("color: #FF6600;");
 
-    ui->pushButton->setStyleSheet("background-color: red;");
+    ui->pushButton->setStyleSheet("background-color: #FF6600;");
     ui->pushButton->setIcon(QIcon("C:/Users/Ernest Curioso/Downloads/Microphone 1"));
     ui->pushButton->setIconSize(QSize(30,30));
 
@@ -553,7 +556,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_pressed()
 {
-    ui->pushButton->setStyleSheet("background-color: green;");
+    ui->pushButton->setStyleSheet("background-color: #66ff00;");
     voce::stopSynthesizing();
     voce::setRecognizerEnabled(true);
 
@@ -567,7 +570,7 @@ void MainWindow::on_pushButton_released()
         usleep(1500);
     #endif
 
-    ui->pushButton->setStyleSheet("background-color: red;");
+    ui->pushButton->setStyleSheet("background-color: #FF6600;");
     s = voce::popRecognizedString();
     voce::setRecognizerEnabled(false);
     voce::stopSynthesizing();
@@ -577,6 +580,10 @@ void MainWindow::on_pushButton_released()
     ui->textBrowser->QTextBrowser::append("You said: " + QString::fromStdString(s));
     string temp = manipString(QString::fromStdString(s));
     ui->textBrowser->QTextBrowser::append("Cayley: " + QString::fromStdString(temp));
+    }
+    else {
+        ui->textBrowser->QTextBrowser::append("Cayley: I didn't hear what you said.");
+        voce::synthesize("I didn't hear what you said.");
     }
 }
 
