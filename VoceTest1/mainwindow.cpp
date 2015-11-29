@@ -56,6 +56,7 @@ vector<string> strings;//global variable for all the strings spoken
 bool nine = false;
 bool eight = false;
 bool set = false;
+bool landCounter = false;
 //int setD = 0;
 void ELP(){
 //    const int arraysize = 3;
@@ -508,7 +509,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->label->setText("Type Command Here:");
     ui->label->setStyleSheet("color: #33FF00;");
 
-    ui->title->setStyleSheet("color: #33FF00;");
+    ui->title->setStyleSheet("color: #33FF00;"
+                             "background-color: #585858;");
 
     ui->pushButton->setStyleSheet("background-color: #FF0000;");
     ui->pushButton->setIcon(QIcon("C:/Users/Ernest Curioso/Downloads/Microphone 1"));
@@ -655,9 +657,15 @@ void MainWindow::move()
     if(var_x == var_x2 && var_y == var_y2){
         land = true;
         qDebug()<<"INSIDE";
+        if(!landCounter){
+            latitude = 0;
+            longitude = 0;
+        }
+        landCounter = true;
     }
 
     if(!land){
+        landCounter = false;
     // Graphics Layer
     m_graphicsLayer->removeGraphics(m_graphicsLayer->graphicIds());
     EsriRuntimeQt::Graphic *graphic1;

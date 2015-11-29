@@ -17,7 +17,7 @@ public <command>	= (<verb> <noun> <article> <number> <measure>)|(<report>)|(than
 <measure>			= (feet | meters | altitude );
 <bool>				= (yes|no);
 
-public<latlong>		= (<V> <L> <article> <value> <number> <P> <number>);
+public<latlong>		= (<V> <L> <article> <value> <number> <P> <number>)|(<V><L><article><value><number>);
 <value>				= (plus|minus);
 <V>					= (set);
 <L>					= (latitude|longitude);
