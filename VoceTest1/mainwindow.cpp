@@ -460,7 +460,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->label_2->setStyleSheet("color: #FF6600;");
 
     ui->pushButton->setStyleSheet("background-color: red;");
-    ui->pushButton->setIcon(QIcon("C:/Users/Ernest Curioso/Downloads/red.png"));
+    ui->pushButton->setIcon(QIcon("C:/Users/Ernest Curioso/Downloads/Microphone 1"));
+    ui->pushButton->setIconSize(QSize(30,30));
 
     voce::init("C:/Users/Ernest Curioso/Documents/Voce/voce-0.9.1/voce-0.9.1/lib", true, true,
                "file:/C:/Users/Ernest Curioso/Documents/GitHub/teamcayley/VOCE/lib", "digits");
@@ -501,46 +502,46 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Local Dynamic Layer using: sdk/samples/data/mpks/USCitiesStates.mpk
     /*
-  QString dataPath = pathSampleData + "mpks" + QDir::separator() + "USCitiesStates.mpk";
-  m_localMapService = EsriRuntimeQt::LocalMapService(dataPath);
+    QString dataPath = pathSampleData + "mpks" + QDir::separator() + "USCitiesStates.mpk";
+    m_localMapService = EsriRuntimeQt::LocalMapService(dataPath);
 
-  // connect to signal that is emitted when the service is created successfully
-  connect(&m_localMapService, SIGNAL(serviceCreationSuccess(const QString&, const QString&)), this, SLOT(onLocalServiceCreationSuccess(const QString&, const QString&)));
+    // connect to signal that is emitted when the service is created successfully
+    connect(&m_localMapService, SIGNAL(serviceCreationSuccess(const QString&, const QString&)), this, SLOT(onLocalServiceCreationSuccess(const QString&, const QString&)));
 
-  // connect to signal that is emitted when the service failed
-  connect(&m_localMapService, SIGNAL(serviceCreationFailure(const QString&)), this, SLOT(onLocalServiceCreationFailure(const QString&)));
+    // connect to signal that is emitted when the service failed
+    connect(&m_localMapService, SIGNAL(serviceCreationFailure(const QString&)), this, SLOT(onLocalServiceCreationFailure(const QString&)));
 
-  // start the service and the Local Server
-  m_localMapService.start();
-  */
+    // start the service and the Local Server
+    m_localMapService.start();
+    */
 
     // Feature service using: sdk/samples/data/mpks/USCitiesStates.mpk
     /*
-  QString localFeatureService = pathSampleData + "mpks" + QDir::separator() + "USCitiesStates.mpk";
-  m_localFeatureService = EsriRuntimeQt::LocalFeatureService(localFeatureService);
-  m_localFeatureService.setMaximumRecords(3000);
+    QString localFeatureService = pathSampleData + "mpks" + QDir::separator() + "USCitiesStates.mpk";
+    m_localFeatureService = EsriRuntimeQt::LocalFeatureService(localFeatureService);
+    m_localFeatureService.setMaximumRecords(3000);
 
-  // connect to signal that is emitted when the service is created successfully
-  connect(&m_localFeatureService, SIGNAL(serviceCreationSuccess(const QString&, const QString&)), this, SLOT(onFeatureServiceCreationSuccess(const QString&, const QString&)));
+    // connect to signal that is emitted when the service is created successfully
+    connect(&m_localFeatureService, SIGNAL(serviceCreationSuccess(const QString&, const QString&)), this, SLOT(onFeatureServiceCreationSuccess(const QString&, const QString&)));
 
-  // connect to signal that is emitted when the service failed
-  connect(&m_localFeatureService, SIGNAL(serviceCreationFailure(const QString&)), this, SLOT(onFeatureServiceCreationFailure(const QString&)));
+    // connect to signal that is emitted when the service failed
+    connect(&m_localFeatureService, SIGNAL(serviceCreationFailure(const QString&)), this, SLOT(onFeatureServiceCreationFailure(const QString&)));
 
-  // start the service and the Local Server
-  m_localFeatureService.start();
-  */
+    // start the service and the Local Server
+    m_localFeatureService.start();
+    */
 
     // Graphics Layer
     /*
-  EsriRuntimeQt::Point point1(0, 0, m_map->spatialReference());
-  EsriRuntimeQt::SimpleMarkerSymbol redCircle(Qt::red, 10, EsriRuntimeQt::SimpleMarkerSymbolStyle::Circle);
-  EsriRuntimeQt::Graphic* graphic1 = new EsriRuntimeQt::Graphic(point1, redCircle);
-  m_graphicsLayer = new EsriRuntimeQt::GraphicsLayer(this);
-  m_graphicsLayer->addGraphic(graphic1);
-  m_map->addLayer(m_graphicsLayer);
-  */
+    EsriRuntimeQt::Point point1(0, 0, m_map->spatialReference());
+    EsriRuntimeQt::SimpleMarkerSymbol redCircle(Qt::red, 10, EsriRuntimeQt::SimpleMarkerSymbolStyle::Circle);
+    EsriRuntimeQt::Graphic* graphic1 = new EsriRuntimeQt::Graphic(point1, redCircle);
+    m_graphicsLayer = new EsriRuntimeQt::GraphicsLayer(this);
+    m_graphicsLayer->addGraphic(graphic1);
+    m_map->addLayer(m_graphicsLayer);
+    */
 
-  //*************************************************************************************************
+    //*************************************************************************************************
 
 }
 
