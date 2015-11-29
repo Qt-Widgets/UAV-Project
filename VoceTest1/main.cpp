@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include <QApplication>
 
-//MAP STUFF ***********************************
+//***** MAP ******************************
 #include <QMessageBox>
 #include "ArcGISRuntime.h"
 //****************************************
