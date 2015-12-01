@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>715</width>
-    <height>509</height>
+    <height>570</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -40,6 +40,11 @@
           <width>150</width>
           <height>16777215</height>
          </size>
+        </property>
+        <property name="font">
+         <font>
+          <family>MS Shell Dlg 2</family>
+         </font>
         </property>
        </widget>
       </item>
@@ -114,7 +119,7 @@
        </font>
       </property>
       <property name="text">
-       <string>   CAYLEY UAV SYSTEM</string>
+       <string>    UAV SYSTEM</string>
       </property>
      </widget>
     </item>

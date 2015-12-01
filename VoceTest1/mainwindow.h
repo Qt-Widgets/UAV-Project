@@ -40,6 +40,13 @@ public:
     double SLOPE = 0;
     bool   land = true;
     void coord(double lat,double lon);
+    void setDestination(double destX, double destY);
+
+    double dx = 0;
+    double dy = 0;
+    double xStep = 0;
+    double yStep = 0;
+    double steps = 0;
 
 public slots:
     void onMapReady();

@@ -45,7 +45,7 @@
 #include <unistd.h>
 #endif
 
-// ***** GRAMMAR ****************************************************************
+// ***** GRAMMAR ***************
 
 int height1 = 0;
 double latitude = 0;
@@ -260,6 +260,7 @@ void transformL(QStringList L,boolean lat, boolean lon){
         }
 
     }
+
     if(execute10)
     {
     //qDebug()<<"this is the qstring before everything"<<L;
@@ -291,7 +292,7 @@ void transformL(QStringList L,boolean lat, boolean lon){
     double d = a+b;
     //qDebug()<<bL;
     //qDebug()<<aL;
-   // cout<<b<<endl;
+    //cout<<b<<endl;
     //cout<<a<<endl;
     cout.precision(8);
     if(minus){
@@ -354,8 +355,8 @@ void transformL(QStringList L,boolean lat, boolean lon){
     if(lon){
         longitude = d;
     }
-
   }
+
 
     //**********************************************************
     else{
@@ -395,15 +396,16 @@ void manipCommand(QString qs){
 }
 
 string manipReport(QString str){
+    boolean minuss = false;
     QStringList list1 = str.split(QRegExp("\\s"));             //split it by every space and store each word into QStringList
-    if(list1[1] == "height1"){
+    if(list1[1] == "height"){
     int xx = height1;
     std::stringstream ss;   //convert the int height1 to a string
         ss << xx;
         string str1;
             ss >> str1;
 
-    string j = "        The height1 is " + str1 + " feet ";
+    string j = "        The height is " + str1 + " feet ";
     cout<<j<<endl;
     return j;
 
@@ -432,6 +434,33 @@ string manipReport(QString str){
     cout<<j<<endl;
     voce::synthesize(j);
     return j;
+    }
+    if(list1[1] == "destination"){
+        cout<<latitude<<" "<<longitude;
+        double xx = latitude;
+        std::stringstream ss;   //convert the int height1 to a string
+            ss << xx;
+            string str1;
+                ss >> str1;
+
+
+        double xy = longitude;
+        if(longitude < 0){
+            minuss = true;
+        }
+        std::stringstream sy;   //convert the int height1 to a string
+            sy << xy;
+            string stry;
+                sy >> stry;
+                string j = "        The latitude is " + str1 + " degrees " + "\n The longitude is" + stry + " degrees.";
+
+        if(minuss){
+             j = "        The latitude is " + str1 + " degrees " + "\n The longitude is negative" + stry + " degrees.";
+
+        }
+        cout<<j<<endl;
+        //voce::synthesize(j);
+        return j;
     }
 }
 void manipSet(QString str){
@@ -482,8 +511,12 @@ string manipString(QString x){
         return pTense;
     }
     else if (word == "report"){
+        qDebug()<<"made it here";
         string temp = manipReport(x);
+        qDebug()<<"made it here";
         voce::synthesize(temp);
+        qDebug()<<"made it here";
+        qDebug()<<QString::fromStdString(temp);
         return temp;
     }
     else if(word == "set"){
@@ -616,6 +649,7 @@ MainWindow::MainWindow(QWidget *parent) :
 void MainWindow::onMapReady()
 {
     //locationSymbol(EsriRuntimeQt::PictureMarkerSymbol(QImage(":/new/prefix1/airplane.png")));
+    m_map->setExtent(EsriRuntimeQt::Envelope(-130, 55, -60, 20, m_map->spatialReference()));
 
     EsriRuntimeQt::Graphic *graphic1;
     EsriRuntimeQt::Point point1(-118, 34, m_map->spatialReference());
@@ -629,26 +663,28 @@ void MainWindow::onMapReady()
 }
 
 void MainWindow::move()
-
 {
 
     ui->textBrowser_2->QTextBrowser::setText("Height: " + QString::number(height1)+
-                                                "\n" "Destination Lat: " + QString::number(latitude)+
-                                                "\n" "Destination Lon: " +QString::number(longitude)+
-                                                "\n" "\n" + "Latitude: " + QString::number(y) +
-                                                "\n" "Longitude: " + QString::number(x));
+                                             "\n" "Destination Lat: " + QString::number(latitude)+
+                                             "\n" "Destination Lon: " +QString::number(longitude)+
+                                             "\n" "\n" + "Latitude: " + QString::number(y) +
+                                             "\n" "Longitude: " + QString::number(x));
 
     /*
     qDebug() << height1;
     qDebug() << latitude;
     qDebug() << longitude;
     */
+
     if(set){
-        coord(latitude,longitude);
+       // coord(latitude,longitude);
+        setDestination(longitude,latitude);
         set = false;
         land = false;
     }
-//    qDebug()<<(x < newX);
+
+    //qDebug()<<(x < newX);
     int var_x = (int)x;
     int var_x2 = (int)newX;
     int var_y = (int)y;
@@ -666,36 +702,40 @@ void MainWindow::move()
 
     if(!land){
         landCounter = false;
-    // Graphics Layer
-    m_graphicsLayer->removeGraphics(m_graphicsLayer->graphicIds());
-    EsriRuntimeQt::Graphic *graphic1;
-  //qDebug() << m_map->spatialReference().wkid();
+        // Graphics Layer
 
-    for(int i = 0; i < 1; i++){
-        if(i != 0){
-             m_graphicsLayer->removeGraphic(m_graphicsLayer->graphicIds()[0]);
+        EsriRuntimeQt::Graphic *graphic1;
+        //qDebug() << m_map->spatialReference().wkid();
+
+        if(steps >= 0){
+            m_graphicsLayer->removeGraphics(m_graphicsLayer->graphicIds());
+            EsriRuntimeQt::Point point1(x, y, m_map->spatialReference());
+            //qDebug() << x + " " + y;
+            EsriRuntimeQt::SimpleMarkerSymbol redCircle(Qt::red, 10, EsriRuntimeQt::SimpleMarkerSymbolStyle::Circle);
+            graphic1 = new EsriRuntimeQt::Graphic(point1, redCircle);
+
+            m_graphicsLayer->addGraphic(graphic1);
+            m_map->addLayer(m_graphicsLayer);
+            //qDebug()<<"x is "<<QString::number(x);
+            //qDebug()<<"y is "<<QString::numer(y);
+            //qDebug()<<"newY is "<<newY;
+            //qDebug()<<"newX is "<<newX;
+            //qDebug() << height1;
+
+           // x += .1; y += SLOPE*(.1);
+            x += xStep; y += yStep;
         }
-
-    EsriRuntimeQt::Point point1(x, y, m_map->spatialReference());
-    //qDebug() << x + " " + y;
-    EsriRuntimeQt::SimpleMarkerSymbol redCircle(Qt::red, 10, EsriRuntimeQt::SimpleMarkerSymbolStyle::Circle);
-    graphic1 = new EsriRuntimeQt::Graphic(point1, redCircle);
-
-    m_graphicsLayer->addGraphic(graphic1);
-    m_map->addLayer(m_graphicsLayer);
-//    qDebug()<<"x is "<<QString::number(x);
-//    qDebug()<<"y is "<<QString::numer(y);
-//    qDebug()<<"newY is "<<newY;
-//    qDebug()<<"newX is "<<newX;
-    //qDebug() << height1;
-
-
-
-    x += .1; y += SLOPE*(.1);
-
-  }
- }
-
+        steps--;
+        if(steps == 0){
+            land = true;
+            qDebug()<<"INSIDE";
+            if(!landCounter){
+                latitude = 0;
+                longitude = 0;
+            }
+            landCounter = true;
+        }
+    }
 }
 
  void MainWindow::coord(double lat, double lon){
@@ -704,6 +744,15 @@ void MainWindow::move()
     qDebug()<<"coord has been called";
     SLOPE = (latitude - y) / (lon - x);
 }
+ void MainWindow::setDestination(double destX, double destY){//destX = long, destY = lat
+     steps = 450;//greater = faster, smaller = slower
+     dx = destX;
+     dy = destY;
+     //double totalDist = sqrt(pow((dx - x),2) + pow((dy - y),2));
+     xStep = (dx-x)/steps;
+     yStep = (dy-y)/steps;
+ }
+
 
 MainWindow::~MainWindow()
 {
@@ -716,7 +765,6 @@ void MainWindow::on_pushButton_pressed()
     ui->pushButton->setStyleSheet("background-color: #33ff00;");
     voce::stopSynthesizing();
     voce::setRecognizerEnabled(true);
-
 }
 
 void MainWindow::on_pushButton_released()
