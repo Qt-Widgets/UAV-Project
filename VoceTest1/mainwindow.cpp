@@ -37,6 +37,7 @@
 #include "ServiceInfoTask.h"
 #include "GeodatabaseFeatureServiceTable.h"
 #include "FeatureLayer.h"
+
 //*****************************
 
 #ifdef WIN32
@@ -58,7 +59,9 @@ bool eight = false;
 bool set = false;
 bool landCounter = false;
 //int setD = 0;
-void ELP(){
+
+void ELP()
+{
 //    const int arraysize = 3;
 //    place arr[arraysize];
 //    arr[0].name = "california";
@@ -104,107 +107,153 @@ void ELP(){
 //    }
 //  }
 }
-QString getFirstWord(QString x){
+
+QString getFirstWord(QString x)
+{
     QStringList list1 = x.split(QRegExp("\\s"));
     x = list1[0];
     return x;
 }
-QString removeFirstWord(QString x){
+
+QString removeFirstWord(QString x)
+{
     QStringList list1 = x.split(QRegExp("\\s"));
     x = "";
+
     for(int i = 0; i < list1.count()-1;i++)
     {
         x += list1[i+1]+" ";
     }
+
     return x;
 }
-int arr2int(QStringList nums,int arr[]){
+
+int arr2int(QStringList nums,int arr[])
+{
     int number = 0;
-    for(int i= 0; i< nums.count() ;i++){
+
+    for(int i= 0; i< nums.count() ;i++)
+    {
         number += arr[i] * pow(10, nums.count() - i - 1);
     }
+
     return number;
 }
 
-void transformNums(QStringList nums){
+void transformNums(QStringList nums)
+{
     int *arr = new int [nums.count()];
-    for(int i= 0; i < nums.count(); i++){                                       //populate the int array
-        if(nums[i] == "one"){
+
+    for(int i= 0; i < nums.count(); i++)
+    {                                       //populate the int array
+        if(nums[i] == "one")
+        {
             arr[i] = 1;
         }
-        else if(nums[i] == "two"){
+        else if(nums[i] == "two")
+        {
             arr[i] = 2;
         }
-        else if(nums[i] == "three"){
+        else if(nums[i] == "three")
+        {
             arr[i] = 3;
         }
-        else if(nums[i] == "four"){
+        else if(nums[i] == "four")
+        {
             arr[i] = 4;
         }
-        else if(nums[i] == "five"){
+        else if(nums[i] == "five")
+        {
             arr[i] = 5;
         }
-        else if(nums[i] == "six"){
+        else if(nums[i] == "six")
+        {
             arr[i] = 6;
         }
-        else if(nums[i] == "seven"){
+        else if(nums[i] == "seven")
+        {
             arr[i] = 7;
         }
-        else if(nums[i] == "eight"){
+        else if(nums[i] == "eight")
+        {
             arr[i] = 8;
         }
-        else if(nums[i] == "nine"){
+        else if(nums[i] == "nine")
+        {
             arr[i] = 9;
         }
-        else if(nums[i] == "zero"){
+        else if(nums[i] == "zero")
+        {
             arr[i] = 0;
         }
     }
+
     height1 = arr2int(nums,arr);
     delete [] arr;
 }
-double transformNums(QStringList nums, string x){
+
+double transformNums(QStringList nums, string x)
+{
     double *arr = new double [nums.count()];
-    for(int i= 0; i < nums.count(); i++){
-        if(nums[i] == "one"){
+
+    for(int i= 0; i < nums.count(); i++)
+    {
+        if(nums[i] == "one")
+        {
             arr[i] = 1;
         }
-        else if(nums[i] == "two"){
+        else if(nums[i] == "two")
+        {
             arr[i] = 2;
         }
-        else if(nums[i] == "three"){
+        else if(nums[i] == "three")
+        {
             arr[i] = 3;
         }
-        else if(nums[i] == "four"){
+        else if(nums[i] == "four")
+        {
             arr[i] = 4;
         }
-        else if(nums[i] == "five"){
+        else if(nums[i] == "five")
+        {
             arr[i] = 5;
         }
-        else if(nums[i] == "six"){
+        else if(nums[i] == "six")
+        {
             arr[i] = 6;
         }
-        else if(nums[i] == "seven"){
+        else if(nums[i] == "seven")
+        {
             arr[i] = 7;
         }
-        else if(nums[i] == "eight"){
+        else if(nums[i] == "eight")
+        {
             arr[i] = 8;
         }
-        else if(nums[i] == "nine"){
+        else if(nums[i] == "nine")
+        {
             arr[i] = 9;
         }
-        else if(nums[i] == "zero"){
+        else if(nums[i] == "zero")
+        {
             arr[i] = 0;
         }
-        else{arr[i] = -99999;}
+        else
+        {
+            arr[i] = -99999;
+        }
     }
+
     double number = 0;
-    for(int i= 0; i< nums.count() ;i++){
+
+    for(int i= 0; i< nums.count() ;i++)
+    {
         number += arr[i] * pow(10, nums.count() - i - 1);
         //cout<< "arr[i] * pow(10, nums.count() - i - 1) is "<<arr[i] * pow(10, nums.count() - i - 1) <<endl;
         //cout<<"arr[i] is " << arr[i]<<endl;
         //cout<<number<<endl;
     }
+
     //cout<<number<<endl;
     delete [] arr;
     return number;
@@ -406,97 +455,119 @@ void transformL(QStringList L,boolean lat, boolean lon)
     }
 }
 
-void manipCommand(QString qs){
+void manipCommand(QString qs)
+{
     //first step search for the word 2
     //after the word 'to' will be the number except the last word
     //the last word is the measure
     boolean to = false;
     QStringList qsl = qs.split(QRegExp("\\s"));
     QStringList nums;
-    for(int i = 0; i < qsl.count(); i++){
-        if(qsl[i] == "to"){
-         to = true;
-         continue;
+
+    for(int i = 0; i < qsl.count(); i++)
+    {
+        if(qsl[i] == "to")
+        {
+            to = true;
+            continue;
         }
-        else if(i == qsl.count() -1 ){
-         to = false;
-         continue;
+        else if(i == qsl.count() -1 )
+        {
+            to = false;
+            continue;
         }
-        else if(to){
+        else if(to)
+        {
             nums += qsl[i];
             //qDebug()<<qsl[i];
         }
     }
+
     transformNums(nums);
 }
 
-string manipReport(QString str){
+string manipReport(QString str)
+{
     boolean minuss = false;
     QStringList list1 = str.split(QRegExp("\\s"));             //split it by every space and store each word into QStringList
-    if(list1[1] == "height"){
-    int xx = height1;
-    std::stringstream ss;   //convert the int height1 to a string
+
+    if(list1[1] == "height")
+    {
+        int xx = height1;
+        std::stringstream ss;   //convert the int height1 to a string
         ss << xx;
         string str1;
-            ss >> str1;
+        ss >> str1;
 
-    string j = "        The height is " + str1 + " feet ";
-    cout<<j<<endl;
-    return j;
+        string j = "The height is " + str1 + " feet ";
+        cout<<j<<endl;
+        voce::synthesize(j);
 
-    voce::synthesize(j);
-    }
-    if(list1[1] == "latitude"){
-    double xx = latitude;
-    std::stringstream ss;   //convert the int height1 to a string
+        return j;
+    }    
+    else if(list1[1] == "latitude")
+    {
+        double xx = latitude;
+        std::stringstream ss;   //convert the int height1 to a string
         ss << xx;
         string str1;
-            ss >> str1;
+        ss >> str1;
 
-    string j = "        The latitude is " + str1 + " feet ";
-    cout<<j<<endl;
-    voce::synthesize(j);
-    return j;
+        string j = "The latitude is " + str1 + " feet ";
+        cout<<j<<endl;
+        voce::synthesize(j);
+
+        return j;
     }
-    if(list1[1] == "longitude"){
-    double xx = longitude;
-    std::stringstream ss;   //convert the int height1 to a string
+    else if(list1[1] == "longitude")
+    {
+        double xx = longitude;
+        std::stringstream ss;   //convert the int height1 to a string
         ss << xx;
         string str1;
-            ss>> str1;
+        ss>> str1;
 
-    string j = "        The longitude is " + str1 + " feet ";
-    cout<<j<<endl;
-    voce::synthesize(j);
-    return j;
+        string j = "The longitude is " + str1 + " feet ";
+        cout<<j<<endl;
+        voce::synthesize(j);
+
+        return j;
     }
-    if(list1[1] == "destination"){
+    else if(list1[1] == "destination")
+    {
         cout<<latitude<<" "<<longitude;
         double xx = latitude;
         std::stringstream ss;   //convert the int height1 to a string
-            ss << xx;
-            string str1;
-                ss >> str1;
-
+        ss << xx;
+        string str1;
+        ss >> str1;
 
         double xy = longitude;
-        if(longitude < 0){
+
+        if(longitude < 0)
+        {
             minuss = true;
         }
+
         std::stringstream sy;   //convert the int height1 to a string
-            sy << xy;
-            string stry;
-                sy >> stry;
-                string j = "        The latitude is " + str1 + " degrees " + "\n The longitude is" + stry + " degrees.";
+        sy << xy;
+        string stry;
+        sy >> stry;
 
-        if(minuss){
-             j = "        The latitude is " + str1 + " degrees " + "\n The longitude is negative" + stry + " degrees.";
+        string j = "The latitude is " + str1 + " degrees " + "\n The longitude is" + stry + " degrees.";
 
+        if(minuss)
+        {
+             j = "The latitude is " + str1 + " degrees " + "\n The longitude is negative" + stry + " degrees.";
         }
+
         cout<<j<<endl;
-        //voce::synthesize(j);
+        voce::synthesize(j);
+
         return j;
     }
+
+    return "Invalid report input.";
 }
 
 void manipSet(QString str)
@@ -508,7 +579,7 @@ void manipSet(QString str)
 
     if(qsl[0] == "latitude")
     {
-        latitude = true;
+         latitude = true;
     }
 
     if(qsl[0] == "longitude")
@@ -556,13 +627,14 @@ string manipString(QString x)
 {
     QString word = getFirstWord(x);
 
-    if      (word == "emergency")
+    if (word == "emergency")
     {
-
+        voce::synthesize("E L P not configured.");
+        return "ELP not configured.";
     }
     else if (word == "change"||word == "fly"||word == "ascend"||word == "descend")
     {
-        QStringList list1 = x.split(QRegExp("\\s"));             //split it by every space and store each word into QStringList
+        QStringList list1 = x.split(QRegExp("\\s"));    //split it by every space and store each word into QStringList
         string pTense = Out(list1);
         cout<<pTense<<endl;
         voce::synthesize(pTense);
@@ -586,11 +658,12 @@ string manipString(QString x)
     }
     else
     {
+        voce::synthesize("Invalid input.");
         return "Invalid input.";
     }
 }
 
-//********************************************************************************
+//***** Main Window ***************************************************************
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -703,8 +776,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //m_graphicsLayer->addGraphic(graphic1);
     //m_map->addLayer(m_graphicsLayer);
 
-
-    //*************************************************************************************************
+    //***** END MAP ********************************************************************************************
 }
 
 void MainWindow::onMapReady()
@@ -736,7 +808,8 @@ void MainWindow::move()
     qDebug() << longitude;
     */
 
-    if(set){
+    if(set)
+    {
        // coord(latitude,longitude);
         setDestination(longitude,latitude);
         set = false;
@@ -749,24 +822,30 @@ void MainWindow::move()
     int var_y = (int)y;
     int var_y2 = (int)newY;
 
-    if(var_x == var_x2 && var_y == var_y2){
+    if(var_x == var_x2 && var_y == var_y2)
+    {
         land = true;
         qDebug()<<"INSIDE";
-        if(!landCounter){
+
+        if(!landCounter)
+        {
             latitude = 0;
             longitude = 0;
         }
+
         landCounter = true;
     }
 
-    if(!land){
+    if(!land)
+    {
         landCounter = false;
         // Graphics Layer
 
         EsriRuntimeQt::Graphic *graphic1;
         //qDebug() << m_map->spatialReference().wkid();
 
-        if(steps >= 0){
+        if(steps >= 0)
+        {
             m_graphicsLayer->removeGraphics(m_graphicsLayer->graphicIds());
             EsriRuntimeQt::Point point1(x, y, m_map->spatialReference());
             //qDebug() << x + " " + y;
@@ -784,33 +863,43 @@ void MainWindow::move()
            // x += .1; y += SLOPE*(.1);
             x += xStep; y += yStep;
         }
+
         steps--;
-        if(steps == 0){
+
+        if(steps == 0)
+        {
             land = true;
             qDebug()<<"INSIDE";
-            if(!landCounter){
+
+            if(!landCounter)
+            {
                 latitude = 0;
                 longitude = 0;
             }
+
             landCounter = true;
         }
     }
 }
 
- void MainWindow::coord(double lat, double lon){
+ void MainWindow::coord(double lat, double lon)
+{
     newY = lat;
     newX = lon;
     qDebug()<<"coord has been called";
     SLOPE = (latitude - y) / (lon - x);
 }
- void MainWindow::setDestination(double destX, double destY){//destX = long, destY = lat
+
+ void MainWindow::setDestination(double destX, double destY)
+{
+     //destX = long, destY = lat
      steps = 450;//greater = faster, smaller = slower
      dx = destX;
      dy = destY;
      //double totalDist = sqrt(pow((dx - x),2) + pow((dy - y),2));
      xStep = (dx-x)/steps;
      yStep = (dy-y)/steps;
- }
+}
 
 
 MainWindow::~MainWindow()
@@ -841,11 +930,12 @@ void MainWindow::on_pushButton_released()
 
     if (s.empty() == false)
     {
-    ui->textBrowser->QTextBrowser::append("You said: " + QString::fromStdString(s));
-    string temp = manipString(QString::fromStdString(s));
-    ui->textBrowser->QTextBrowser::append("Cayley: " + QString::fromStdString(temp));
+        ui->textBrowser->QTextBrowser::append("You said: " + QString::fromStdString(s));
+        string temp = manipString(QString::fromStdString(s));
+        ui->textBrowser->QTextBrowser::append("Cayley: " + QString::fromStdString(temp));
     }
-    else {
+    else
+    {
         ui->textBrowser->QTextBrowser::append("Cayley: I didn't hear what you said.");
         voce::synthesize("I didn't hear what you said.");
     }
@@ -859,39 +949,17 @@ bool MainWindow::eventFilter(QObject *object, QEvent *event)
 
         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
 
-        if (keyEvent->key() == Qt::Key_Return)
+        if ((keyEvent->key() == Qt::Key_Return) || (keyEvent->key() == Qt::Key_Enter))
         {
             QString r = ui->textEdit->toPlainText();
             s = r.toStdString();
 
-            if (s != "")
-            {
-                QStringList list = r.split("\n");
-                int length = list.length();
-
-                for (int i = 0; i < length; i++)
-                {
-                    if (list[i] != "")
-                    {
-                        QStringList list2 = list[i].split(" ");
-                        int length2 = list2.length();
-
-                        for (int j = 0; j < length; j++)
-                        {
-                            if (list2[j] != "")
-                            {
-                                ui->textBrowser->QTextBrowser::append("You typed: " + QString::fromStdString(s));
-                                ui->textEdit->QTextEdit::setText("");
-                                string temp = manipString(QString::fromStdString(s));
-                                ui->textBrowser->QTextBrowser::append("Cayley: " + QString::fromStdString(temp));
-
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
+            ui->textBrowser->QTextBrowser::append("You typed: " + QString::fromStdString(s));
             ui->textEdit->QTextEdit::setText("");
+            string temp = manipString(QString::fromStdString(s));
+            ui->textBrowser->QTextBrowser::append("Cayley: " + QString::fromStdString(temp));
+
+            return true;
         }
         else
         {
@@ -902,4 +970,6 @@ bool MainWindow::eventFilter(QObject *object, QEvent *event)
     {
         return QMainWindow::eventFilter(object, event);
     }
+
+    return QMainWindow::eventFilter(object, event);
 }
