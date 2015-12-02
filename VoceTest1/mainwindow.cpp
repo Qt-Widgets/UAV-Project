@@ -210,27 +210,35 @@ double transformNums(QStringList nums, string x){
     return number;
 }
 
-void transformL(QStringList L,boolean lat, boolean lon){
+void transformL(QStringList L,boolean lat, boolean lon)
+{
     //setD++;
     //either two digits before the decimal or three digits before the decimal
     boolean execute2,execute10,execute11 = false;
-    if(L.count() == 3){
+
+    if(L.count() == 3)
+    {
         execute2 = true;
     }
-    if(L.count() == 10){
+    if(L.count() == 10)
+    {
         execute10 = true;
     }
-    if(L.count() == 11){
+    if(L.count() == 11)
+    {
         execute11 = true;
     }
-    if(execute2){
-
+    if(execute2)
+    {
         //qDebug()<<"this is the qstring before everything"<<L;
         boolean minus = false;
-        if(L[0] == "minus"){
+
+        if(L[0] == "minus")
+        {
             minus = true;
             qDebug()<<L[0];
         }
+
         L.removeFirst();
         QStringList bL;
         bL.append(L[0]);
@@ -244,130 +252,157 @@ void transformL(QStringList L,boolean lat, boolean lon){
         double d = b;
         //qDebug()<<bL;
         //qDebug()<<aL;
-       // cout<<b<<endl;
+        //cout<<b<<endl;
         //cout<<a<<endl;
 
-        if(minus){
+        if(minus)
+        {
             d -= d*2;
         }
+
         cout<<"YOU HAVE SET IT TO "<<d;
         voce::synthesize("it has been set");
-        if(lat){
+
+        if(lat)
+        {
             latitude = d;
         }
-        if(lon){
+        if(lon)
+        {
             longitude = d;
         }
-
     }
 
     if(execute10)
     {
-    //qDebug()<<"this is the qstring before everything"<<L;
-    boolean minus = false;
-    if(L[0] == "minus"){
-        minus = true;
-    }
-    L.removeFirst();
-    QStringList bL;
-    QStringList aL;
-    bL.append(L[0]);
-    bL.append(L[1]);
-    double b = transformNums(bL,"");
-    //qDebug()<<"THE SIZE OF AL before population"<<aL.count();
-    aL.append(L[3]);
-    aL.append(L[4]);
-    aL.append(L[5]);
-    aL.append(L[6]);
-    aL.append(L[7]);
-    L[8].chop(1);
-    aL.append(L[8]);
-    //qDebug()<<"the L[8] is "<<L[8];
-    //qDebug()<<"THE SIZE OF AL after population"<<aL.count();
-    double a = transformNums(aL,"");
-    //cout<<transformNums(aL,"");
-    //cout<<a;
-    a = a * .000001;
-    //cout<<a;
-    double d = a+b;
-    //qDebug()<<bL;
-    //qDebug()<<aL;
-    //cout<<b<<endl;
-    //cout<<a<<endl;
-    cout.precision(8);
-    if(minus){
-        d -= d*2;
-    }
-    cout<<"YOU HAVE SET IT TO "<<d;
-    voce::synthesize("it has been set");
-    if(lat){
-        latitude = d;
-    }
-    if(lon){
-        longitude = d;
+        //qDebug()<<"this is the qstring before everything"<<L;
+        boolean minus = false;
+
+        if(L[0] == "minus")
+        {
+            minus = true;
+        }
+
+        L.removeFirst();
+        QStringList bL;
+        QStringList aL;
+        bL.append(L[0]);
+        bL.append(L[1]);
+        double b = transformNums(bL,"");
+        //qDebug()<<"THE SIZE OF AL before population"<<aL.count();
+        aL.append(L[3]);
+        aL.append(L[4]);
+        aL.append(L[5]);
+        aL.append(L[6]);
+        aL.append(L[7]);
+        L[8].chop(1);
+        aL.append(L[8]);
+        //qDebug()<<"the L[8] is "<<L[8];
+        //qDebug()<<"THE SIZE OF AL after population"<<aL.count();
+        double a = transformNums(aL,"");
+        //cout<<transformNums(aL,"");
+        //cout<<a;
+        a = a * .000001;
+        //cout<<a;
+        double d = a+b;
+        //qDebug()<<bL;
+        //qDebug()<<aL;
+        //cout<<b<<endl;
+        //cout<<a<<endl;
+        cout.precision(8);
+
+        if(minus)
+        {
+            d -= d*2;
+        }
+
+        cout<<"YOU HAVE SET IT TO "<<d;
+        voce::synthesize("it has been set");
+        if(lat)
+        {
+            latitude = d;
+        }
+
+        if(lon)
+        {
+            longitude = d;
+        }
     }
 
-  }
     //**********************************************************
+
     if(execute11)
     {
-    //qDebug()<<"this is the qstring before everything"<<L;
-    boolean minus = false;
-    if(L[0] == "minus"){
-        minus = true;
-    }
-    L.removeFirst();
-    QStringList bL;
-    QStringList aL;
-    bL.append(L[0]);
-    bL.append(L[1]);
-    bL.append(L[2]);
-    double b = transformNums(bL,"");
-    //qDebug()<<"THE SIZE OF AL before population"<<aL.count();
-    aL.append(L[4]);
-    aL.append(L[5]);
-    aL.append(L[6]);
-    aL.append(L[7]);
-    aL.append(L[8]);
-    L[9].chop(1);
-    aL.append(L[9]);
-    //qDebug()<<"the L[8] is "<<L[8];
-    //qDebug()<<"THE SIZE OF AL after population"<<aL.count();
-    double a = transformNums(aL,"");
-    //cout<<transformNums(aL,"");
-    //cout<<a;
-    a = a * .000001;
-    //cout<<a;
-    double d = a+b;
-    //qDebug()<<bL;
-    //qDebug()<<aL;
-    //cout<<b<<endl;
-    //cout<<a<<endl;
-    cout.precision(9);
-    if(minus){
-        d -= d*2;
-    }
-    cout<<"YOU HAVE SET IT TO "<<d;
-    voce::synthesize("it has been set");
-    if(lat){
-        latitude = d;
-    }
-    if(lon){
-        longitude = d;
-    }
-  }
+        //qDebug()<<"this is the qstring before everything"<<L;
+        boolean minus = false;
 
+        if(L[0] == "minus")
+        {
+            minus = true;
+        }
+
+        L.removeFirst();
+        QStringList bL;
+        QStringList aL;
+        bL.append(L[0]);
+        bL.append(L[1]);
+        bL.append(L[2]);
+        double b = transformNums(bL,"");
+        //qDebug()<<"THE SIZE OF AL before population"<<aL.count();
+        aL.append(L[4]);
+        aL.append(L[5]);
+        aL.append(L[6]);
+        aL.append(L[7]);
+        aL.append(L[8]);
+        L[9].chop(1);
+        aL.append(L[9]);
+        //qDebug()<<"the L[8] is "<<L[8];
+        //qDebug()<<"THE SIZE OF AL after population"<<aL.count();
+        double a = transformNums(aL,"");
+        //cout<<transformNums(aL,"");
+        //cout<<a;
+        a = a * .000001;
+        //cout<<a;
+        double d = a+b;
+        //qDebug()<<bL;
+        //qDebug()<<aL;
+        //cout<<b<<endl;
+        //cout<<a<<endl;
+        cout.precision(9);
+
+        if(minus)
+        {
+            d -= d*2;
+        }
+
+        cout<<"YOU HAVE SET IT TO "<<d;
+        voce::synthesize("it has been set");
+
+        if(lat)
+        {
+            latitude = d;
+        }
+
+        if(lon)
+        {
+            longitude = d;
+        }
+    }
 
     //**********************************************************
-    else{
-    cout<<"Invalid input. Format = +/- dd.dddddd";
-  }
-    if(longitude != 0 && latitude != 0){
+
+    else
+    {
+        cout<<"Invalid input. Format = +/- dd.dddddd";
+    }
+
+    if(longitude != 0 && latitude != 0)
+    {
         //CALL THE SETDESTINATION ON THE MAP
         cout<<"setDEST()";
         set = true;
-//        MainWindow::land = false;
-//MainWindow::coord(latitude,longitude);
+        //MainWindow::land = false;
+        //MainWindow::coord(latitude,longitude);
     }
 }
 
@@ -463,17 +498,30 @@ string manipReport(QString str){
         return j;
     }
 }
-void manipSet(QString str){
+
+void manipSet(QString str)
+{
     boolean latitude = false;
     boolean longitude = false;
     str = removeFirstWord(str);
     QStringList qsl = str.split(QRegExp("\\s"));
-    if(qsl[0] == "latitude"){latitude = true;}
-    if(qsl[0] == "longitude"){longitude = true;}
+
+    if(qsl[0] == "latitude")
+    {
+        latitude = true;
+    }
+
+    if(qsl[0] == "longitude")
+    {
+        longitude = true;
+    }
+
     QString L = "";
+
     for(int i = 0; i<qsl.count()-2;i++)
     {
         L += qsl[i+2]+" ";
+
         if(i == qsl.count()-3)
         {
             L.chop(2);
@@ -483,26 +531,37 @@ void manipSet(QString str){
     transformL(L.split(QRegExp("\\s")),latitude,longitude);
 }
 
-string Out(QStringList strL){
+string Out(QStringList strL)
+{
     //this function we will be recieving the QSlist and making the sentence past tense
     //returns the string in past tense and std string format.
 
     //DELETE THE LAST LETTER OF A QSTRING with this if statement
-    if(strL[0][strL[0].count()-1] == 'e'){
+    if(strL[0][strL[0].count()-1] == 'e')
+    {
         strL[0].chop(1);
     }
+
     //create the past tense output
-    QString x = "       Roger that " + strL[0] + "ing";
-    for(int i = 1; i < strL.count(); i++){
+    QString x = "Roger that. " + strL[0] + "ing";
+
+    for(int i = 1; i < strL.count(); i++)
+    {
         x += (" " + strL[i]);
     }
     return x.toStdString();
 }
 
-string manipString(QString x){
+string manipString(QString x)
+{
     QString word = getFirstWord(x);
-    if      (word == "emergency"){}
-    else if (word == "change"||word == "fly"||word == "ascend"||word == "descend"){
+
+    if      (word == "emergency")
+    {
+
+    }
+    else if (word == "change"||word == "fly"||word == "ascend"||word == "descend")
+    {
         QStringList list1 = x.split(QRegExp("\\s"));             //split it by every space and store each word into QStringList
         string pTense = Out(list1);
         cout<<pTense<<endl;
@@ -510,7 +569,8 @@ string manipString(QString x){
         manipCommand(x);
         return pTense;
     }
-    else if (word == "report"){
+    else if (word == "report")
+    {
         qDebug()<<"made it here";
         string temp = manipReport(x);
         qDebug()<<"made it here";
@@ -519,12 +579,14 @@ string manipString(QString x){
         qDebug()<<QString::fromStdString(temp);
         return temp;
     }
-    else if(word == "set"){
+    else if(word == "set")
+    {
         manipSet(x);
         return " ";
     }
-    else {
-    return "Invalid input.";
+    else
+    {
+        return "Invalid input.";
     }
 }
 
@@ -643,7 +705,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     //*************************************************************************************************
-
 }
 
 void MainWindow::onMapReady()
@@ -659,12 +720,10 @@ void MainWindow::onMapReady()
 
     m_graphicsLayer->addGraphic(graphic1);
     m_map->addLayer(m_graphicsLayer);
-
 }
 
 void MainWindow::move()
 {
-
     ui->textBrowser_2->QTextBrowser::setText("Height: " + QString::number(height1)+
                                              "\n" "Destination Lat: " + QString::number(latitude)+
                                              "\n" "Destination Lon: " +QString::number(longitude)+
