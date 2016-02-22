@@ -11,15 +11,16 @@ class Wind : public QObject
 private:
 	int degree;
 	float speed;
+	bool gale;
 
 public:
 	Wind();
 
 public slots: 
-	int getDegree(wind); 
-	int getSpeed(wind); 
-	int triggerGale(wind); 
-	int updateWind(wind);
+	int getDegree(); 
+	int getSpeed(); 
+	int triggerGale(); 
+	int updateWind();
 
 };
 

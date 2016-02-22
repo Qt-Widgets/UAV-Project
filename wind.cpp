@@ -11,8 +11,6 @@ Wind::Wind()
 	bool gale;
 }
 
-wind w;
-bool fast = false;
 
 Wind::initWind(wind a)
 {
@@ -163,13 +161,12 @@ Wind::updateWind(wind a)
 	a.degree = a.degree % 360;
 }
 
-Wind::printWind()
+Wind::printWind(Wind a)
 {
-	cout << w.speed;
+	cout << a.speed;
 	cout << "\n";
-	cout << w.degree;
+	cout << a.degree;
 	cout << "\n";
-	return 0;
 }
 
 
