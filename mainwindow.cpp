@@ -206,14 +206,14 @@ void MainWindow::onMapLoaded()
 
     this->initialize();
 
-    // Launch Initial UAVs (string name, string path, string speed, int fuel index number, int fuel level).
-    addUAV("UAV1", "[[34.239, -118.529],[34.239, -118.554]]", "10000", 1, 4);
-    addUAV("UAV2", "[[34.239, -118.529],[34.183, -118.312]]", "10000", 2, 30);
-    addUAV("UAV3", "[[34.239, -118.529],[34.190, -118.603]]", "10000", 3, 60);
-    addUAV("UAV4", "[[34.239, -118.529],[34.156, -118.437]]", "10000", 4, 20);
+    // Launch Initial UAVs (string name, string path, string speed in mph, int index number, int fuel level).
+    addUAV("UAV1", "[[34.239, -118.529],[34.239, -118.554]]", 70, 1, 100);
+    addUAV("UAV2", "[[34.239, -118.529],[34.183, -118.312]]", 700, 2, 100);
+    addUAV("UAV3", "[[34.239, -118.529],[34.190, -118.603]]", 40, 3, 100);
+    addUAV("UAV4", "[[34.239, -118.529],[34.156, -118.437]]", 30, 4, 100);
 
     // Timer for fuel simulator
-    timer3->start(1000);
+    timer3->start(5000);
 }
 
 // Stores array of USPS locations, emergency mode
@@ -294,8 +294,10 @@ void MainWindow::initialize() {
     emerg[10] = false;
 }
 
-void MainWindow::addUAV(QString name, QString path, QString speed, int index, int fuelLevel) {
-    ui->webView_4->page()->mainFrame()->evaluateJavaScript("addUAV('" + name + "', " + path + ", " + speed + ");");
+void MainWindow::addUAV(QString name, QString path, int speed, int index, int fuelLevel) {
+    int timeInterval = calcTimeInterval(speed, path);
+
+    ui->webView_4->page()->mainFrame()->evaluateJavaScript("addUAV('" + name + "', " + path + ", " + QString::number(timeInterval) + ");");
     fuel[index] = fuelLevel;
     connect(timer3, &QTimer::timeout, this, [=]{ fuelSim(name, index); });
 }
@@ -724,18 +726,17 @@ void MainWindow::showInfo(QString name)
     }
 }
 
-int MainWindow::calcDistance(QString path) {
-    QRegExp rx ("[(),]");
-    QStringList list = latlng.split(rx, QString::SkipEmptyParts);
-    QString lat = list.at(1);
-    QString lng = list.at(2);
-
-    QString lat2;
-    QString lng2;
-    QStringList list2;
+//Calculates distance between two latlong values (path [[lat,long],[lat,long]])
+ double MainWindow::calcDistance(QString path) {
+    QRegExp rx ("[][,]");
+    QStringList list = path.split(rx, QString::SkipEmptyParts);
+    QString lat = list.at(0);
+    QString lng = list.at(1);
+    QString lat2 = list.at(2);
+    QString lng2 = list.at(3);
 
     double r = 3961;
-    int dist;
+    double dist;
     double dlat;
     double dlon;
     double a;
@@ -752,8 +753,21 @@ int MainWindow::calcDistance(QString path) {
     return dist;
 }
 
-int MainWindow::calcTimeInterval(int speed, QString destination) {
+int MainWindow::calcTimeInterval(int speed, QString path) {
+    double distance = calcDistance(path);
+    double time = distance/speed;
 
+    QRegExp rx ("[.]");
+    QStringList list = QString::number(time).split(rx, QString::SkipEmptyParts);
+    QString hour = list.at(0);
+    QString minute = "0." + list.at(1);
+
+    double hourToMs = hour.toDouble() * 60 * 60 * 1000;
+    double minToMs = minute.toDouble() * 60 * 60 * 1000;
+    double ms = hourToMs + minToMs;
+
+    return ms;
 }
 
 // END UI Functions =====================================================================================================
+

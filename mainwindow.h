@@ -31,9 +31,9 @@ private slots:
     int closestUSPS(QString latlng);
     void initialize();
     QString getLatLng(QString name);
-    void addUAV(QString name, QString path, QString speed, int fuel, int fuelLevel);
-    void calcTimeInterval(int speed, QString destination);
-    calcDistance(QString path);
+    void addUAV(QString name, QString path, int speed, int fuel, int fuelLevel);
+    int calcTimeInterval(int speed, QString destination);
+    double calcDistance(QString path);
 
 private:
     Ui::MainWindow *ui;
