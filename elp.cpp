@@ -1,180 +1,94 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <iostream>
+#include <stdlib.h>
+#include <cmath>
+//#include <wind.cpp>
 
 using namespace std;
 
-struct wind
-{
-	int degree;
-	float speed;
-};
+double batteryPercent;//this will be replaced with a UAV call
 
-wind w;
-bool fast = false;
+double destXcord;//destination coodinates
+double destYcord;//destination coodinates
 
-int initWind()
+double uavXcord; //current UAV coodinates
+double uavYcord; //current UAV coodinates
+/*We are going to need a list of the coodinates of safe landing locations*/
+
+
+double distance(double x1, double y1, double x2, double y2)
 {
-	w.degree = rand() % 360 + 1;
-	w.speed = rand() % 10 + 1;
-	return 0;
+	return sqrt((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1));
 }
 
-int updateWind(wind a)
+double getdestXcord()
 {
-	int hold = rand() % 100;
-	cout << hold;
-	cout << "\n";
-	bool pos;
-	int change;
-	if(hold % 2 == 0)
-	{//determin if wind is changeing or not
-		pos = true;
-	}
-	else
-	{
-		pos = false;
-	}
-	
-	if(hold < 50)
-	{//determin speed of change in wind
-		cout << "50 speed";
-		cout << "\n";
-		change = 1;
-	}
-	else if(hold < 75)
-	{
-		cout << "75 speed";
-		cout << "\n";
-		change = 2;
-	}
-	else if(hold < 90)
-	{
-		cout << "90 speed";
-		cout << "\n";
-		change = 3;
-	}
-	else if(hold < 95)
-	{
-		cout << "95 speed";
-		cout << "\n";
-		change = 4;
-	}
-	else
-	{
-		cout << hold;
-		cout << "\n";
-		change = 5;
-	}
-
-	if(pos == true)
-	{//applies change to wind speed
-		a.speed = a.speed + change;
-	}
-	else
-	{
-		a.speed = a.speed - change;
-	}
-	a.speed = abs(a.speed);
-	if(a.speed > 20)
-	{
-		fast = true;
-	}
-//for change in direction
-	hold = rand() %  100;
-	if(hold % 2 == 0)
-		{pos = true;}
-	else
-		{pos = false;}
-	if(hold < 40)
-	{
-		if(pos == true)
-		{
-			a.degree = a.degree + 2;
-		} 
-		else
-		{
-			a.degree = a.degree - 2;
-		}
-	}
-	else if(hold < 60)
-	{
-		if(pos == true)
-		{
-			a.degree = a.degree + 5;
-		} 
-		else
-		{
-			a.degree = a.degree - 5;
-		}
-	}
-	else if(hold < 80)
-	{
-		if(pos == true)
-		{
-			a.degree = a.degree + 10;
-		} 
-		else
-		{
-			a.degree = a.degree - 10;
-		}
-	}
-	else if(hold < 95)
-	{
-		if(pos == true)
-		{
-			a.degree = a.degree + 15;
-		} 
-		else
-		{
-			a.degree = a.degree - 15;
-		}
-	}
-	else if(hold < 98)
-	{
-		if(pos == true)
-		{
-			a.degree = a.degree + 30;
-		} 
-		else
-		{
-			a.degree = a.degree - 30;
-		}
-	}
-	else 
-	{
-		if(pos == true)
-		{
-			a.degree = a.degree + 45;
-		} 
-		else
-		{
-			a.degree = a.degree - 45;
-		}
-	}
-	a.degree = a.degree % 360;
+	return getdestXcord;
+}
+double getdestYcord()
+{
+	return getdestYcord;
+}
+double getuavXcord()
+{
+	return getuavXcord;
+}
+double getuavYcord()
+{
+	return getuavYcord;
 }
 
-int printWind()
+bool enoughPower()
 {
-	cout << w.speed;
-	cout << "\n";
-	cout << w.degree;
-	cout << "\n";
-	return 0;
+	int mpp;//this is the amount of distance we can expect per percent of battery remaining.
+	//stands for miles per percent	
+	if(distance(destXcord, destYcord, uavXcord, uavYcord) > batteryPercent * mpp)
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
+
+bool droneDamage()
+{//need timer
+	bool damage = false;
+	int severity = 0;
+	int per = rand() % 100;
+	if(per < 99)
+	{
+		damage = true;
+		severity = rand() % 5 + 1;
+	}
+	return damage;
+}
+
+
+bool emergency()
+{
+	if(enoughPower() == false)
+	{
+		return true;
+	}
+	//else if(w.gale)
+	//{
+	//	return true;
+	//}
+	else if(droneDamage())
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 int main()
-{//this is to test how to simulate wind
-	initWind();
-	printWind();
-	int arv = 9;
-	while(arv != 0)
-	{
-		arv--;
-		updateWind(w);
-	//	printWind();
-	}
+{
+
+	cout << emergency();
 	return 0;
 }
-

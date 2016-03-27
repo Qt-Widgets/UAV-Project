@@ -84,7 +84,7 @@ Wind::updateWind(wind a)
 	a.speed = abs(a.speed);
 	if(a.speed > 20)
 	{
-		fast = true;
+		a.gale = true;
 	}
 //for change in direction
 	hold = rand() %  100;
