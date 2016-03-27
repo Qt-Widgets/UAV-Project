@@ -18,9 +18,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    // VOCE Init
     voce::init("C:/Users/Ernest Curioso/Documents/Voce/voce-0.9.1/voce-0.9.1/lib", true, true,
                "file:/C:/Users/Ernest Curioso/Documents/GitHub/teamcayley/OldWork/VOCE/lib", "digits");
-    voce::synthesize("Hello.");
 
     // Map Setup
     ui->webView_4->hide();
@@ -108,7 +108,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(timer, SIGNAL(timeout()), this, SLOT(showTime()));
 
 
-// BEGIN Arduino Pulse Sensor ==============================================================================
+    // BEGIN Arduino Pulse Sensor ==============================================================================
 
 //    ui->lcdNumber_5->display(999);
     arduino = new QSerialPort(this);
@@ -185,7 +185,11 @@ void MainWindow::readSerial()
     qDebug()<<bpm;
 }
 
-// END Arduino ======================================================================================================
+// END Arduino =======================================================================================================
+
+// BEGIN VOCE Functions
+
+
 
 // BEGIN UI Functions ================================================================================================
 
