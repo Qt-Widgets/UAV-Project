@@ -6,7 +6,7 @@
  
 grammar digits;
 
-public <command>	= (<verb> <noun> <article> <number> <measure>)|(<report>)|(launch)|(thank you)|(emergency) |(<bool>);
+public <command>	= (<verb> <noun> <article> <number> <measure>)|(<report>)|(begin)|(emergency) |(<bool>);
 <report>			= (report <snoun>);
 <verb>	 			= (change | alter | ascend | descend | fly );
 <noun>  		 	= (height | drone);

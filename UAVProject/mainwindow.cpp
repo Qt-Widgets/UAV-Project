@@ -220,13 +220,18 @@ std::string s;
 
 void MainWindow::manipString(QString heard)
 {
-    if (heard == "launch") {
+    if (heard == "begin") {
         start();
     }
 }
 
+QTimer *timer3 = new QTimer();
+
 void MainWindow::start() {
     ui->webView_4->page()->mainFrame()->evaluateJavaScript("start();");
+
+    // Timer for fuel simulator
+    timer3->start(5000);
 }
 
 // END VOCE Functions ================================================================================================
@@ -265,7 +270,6 @@ void MainWindow::showTime()
     ui->lcdNumber_4->display(timeString);
 }
 
-QTimer *timer3 = new QTimer();
 int mainIndex = 1;
 
 void MainWindow::onMapLoaded()
@@ -279,15 +283,12 @@ void MainWindow::onMapLoaded()
     this->initialize();
 
     // Launch Initial UAVs (string name, string origin, string destination, string speed in mph, int index number, int fuel level).
-    addUAV("UAV1", "Van Nuys", "Porter Ranch", 70, mainIndex, 100);
+    addUAV("UAV1", "Van Nuys", "Porter Ranch", 70, mainIndex, 12);
     addUAV("UAV2", "Van Nuys", "West Hills", 70, mainIndex, 100);
     addUAV("UAV3", "Van Nuys", "Calabasas", 40, mainIndex, 100);
     addUAV("UAV4", "Van Nuys", "Studio City", 30, mainIndex, 100);
     addUAV("UAV5", "Van Nuys", "Downtown Burbank", 30, mainIndex, 100);
     addUAV("UAV6", "Van Nuys", "San Fernando", 30, mainIndex, 100);
-
-    // Timer for fuel simulator
-    timer3->start(5000);
 }
 
 // Stores array of USPS locations, emergency mode
@@ -386,7 +387,39 @@ void MainWindow::addUAV(QString name, QString origin, QString destination, int s
     int timeInterval = calcTimeInterval(speed, path);
 
     ui->webView_4->page()->mainFrame()->evaluateJavaScript("addUAV('" + name + "', " + path + ", " + QString::number(timeInterval) + ");");
+
     fuel[index] = fuelLevel;
+    if (index == 1) {
+       ui->progressBar_1->setValue(fuel[index]);
+    }
+    else if (index == 2) {
+        ui->progressBar_2->setValue(fuel[index]);
+    }
+    else if (index == 3) {
+        ui->progressBar_3->setValue(fuel[index]);
+    }
+    else if (index == 4) {
+        ui->progressBar_4->setValue(fuel[index]);
+    }
+    else if (index == 5) {
+        ui->progressBar_5->setValue(fuel[index]);
+    }
+    else if (index == 6) {
+        ui->progressBar_6->setValue(fuel[index]);
+    }
+    else if (index == 7) {
+        ui->progressBar_7->setValue(fuel[index]);
+    }
+    else if (index == 8) {
+        ui->progressBar_8->setValue(fuel[index]);
+    }
+    else if (index == 9) {
+        ui->progressBar_9->setValue(fuel[index]);
+    }
+    else if (index == 10) {
+        ui->progressBar_10->setValue(fuel[index]);
+    }
+
     connect(timer3, &QTimer::timeout, this, [=]{ fuelSim(name, index); });
 
     mainIndex++;
@@ -486,7 +519,7 @@ void MainWindow::fuelSim(QString name, int index)
     }
 }
 
-// Getter for latlng
+// Getter for latlng. Returns string "LatLng([latValue],[longValue])
 QString MainWindow::getLatLng(int index)
 {
     QVariant a = ui->webView_4->page()->mainFrame()->evaluateJavaScript("getLatLng('" + QString::number(index) +  "');");
