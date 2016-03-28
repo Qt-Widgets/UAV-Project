@@ -2,7 +2,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <cmath>
-//#include <wind.cpp>
+//#include <wind.h>
 
 using namespace std;
 
@@ -16,7 +16,7 @@ double uavYcord; //current UAV coodinates
 /*We are going to need a list of the coodinates of safe landing locations*/
 
 
-double distance(double x1, double y1, double x2, double y2)
+ELP::distance(double x1, double y1, double x2, double y2)
 {
 	return sqrt((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1));
 }
@@ -38,7 +38,7 @@ double getuavYcord()
 	return getuavYcord;
 }
 
-bool enoughPower()
+ELP::enoughPower()
 {
 	int mpp;//this is the amount of distance we can expect per percent of battery remaining.
 	//stands for miles per percent	
@@ -52,7 +52,7 @@ bool enoughPower()
 	}
 }
 
-bool droneDamage()
+ELP::droneDamage()
 {//need timer
 	bool damage = false;
 	int severity = 0;
@@ -66,7 +66,7 @@ bool droneDamage()
 }
 
 
-bool emergency()
+ELP::emergency()
 {
 	if(enoughPower() == false)
 	{
@@ -86,9 +86,3 @@ bool emergency()
 	}
 }
 
-int main()
-{
-
-	cout << emergency();
-	return 0;
-}
