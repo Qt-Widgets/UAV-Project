@@ -50,7 +50,6 @@ void Uav::update()
 void Uav::elp()
 {
     //add elp code here
-    
 }
 
 //setters and getters:

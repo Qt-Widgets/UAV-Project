@@ -40,7 +40,6 @@ private slots:
 
     void onTalkPressed();
     void onTalkReleased();
-    //void buttonDelay();
 
     void manipString(QString heard);
     void start();

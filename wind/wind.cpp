@@ -11,13 +11,11 @@ Wind::Wind()
 	bool gale;
 }
 
-
 Wind::initWind(wind a)
 {
 	a.degree = rand() % 360 + 1;
 	a.speed = rand() % 10 + 1;
-	a.gale = false;
-	
+        a.gale = false
 }
 
 Wind::triggerGale(wind a)
