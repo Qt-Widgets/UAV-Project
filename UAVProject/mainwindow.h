@@ -25,15 +25,17 @@ private slots:
     void readSerial();
     void showTime();
     void onMapLoaded();
-    void showInfo(QString name);
+    void showInfo(QString name, int index);
     void fuelSim(QString name, int fuel);
     //void test(QString name, int fuel);
     int closestUSPS(QString latlng);
     void initialize();
-    QString getLatLng(QString name);
-    void addUAV(QString name, QString path, int speed, int fuel, int fuelLevel);
+    QString getLatLng(int index);
+    void addUAV(QString name, QString origin, QString destinatino, int speed, int fuel, int fuelLevel);
     int calcTimeInterval(int speed, QString destination);
     double calcDistance(QString path);
+    void setDefaultColor(int index);
+    void focus(int index);
 
 private:
     Ui::MainWindow *ui;

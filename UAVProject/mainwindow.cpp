@@ -87,6 +87,17 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->label_9->hide();
     ui->label_10->hide();
 
+    ui->focusButton_1->hide();
+    ui->focusButton_2->hide();
+    ui->focusButton_3->hide();
+    ui->focusButton_4->hide();
+    ui->focusButton_5->hide();
+    ui->focusButton_6->hide();
+    ui->focusButton_7->hide();
+    ui->focusButton_8->hide();
+    ui->focusButton_9->hide();
+    ui->focusButton_10->hide();
+
     // User Interface Appearance
     ui->pushButton->setText("X");
     ui->pushButton_2->setText("X");
@@ -100,6 +111,21 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->pushButton_10->setText("X");
 
     ui->pushButton_11->setText("Talk");
+
+    ui->focusButton_1->setText("Focus");
+    ui->focusButton_2->setText("Focus");
+    ui->focusButton_3->setText("Focus");
+    ui->focusButton_4->setText("Focus");
+    ui->focusButton_5->setText("Focus");
+    ui->focusButton_6->setText("Focus");
+    ui->focusButton_7->setText("Focus");
+    ui->focusButton_8->setText("Focus");
+    ui->focusButton_9->setText("Focus");
+    ui->focusButton_10->setText("Focus");
+
+    ui->textBrowser_11->setStyleSheet("color: #FF0000;"
+                                      "background-color: #000000;"
+                                      "font-size: 16px;");
 
     // Timer to update clock
     QTimer *timer = new QTimer(this);
@@ -201,6 +227,7 @@ void MainWindow::showTime()
 }
 
 QTimer *timer3 = new QTimer();
+int mainIndex = 1;
 
 void MainWindow::onMapLoaded()
 {
@@ -210,11 +237,13 @@ void MainWindow::onMapLoaded()
 
     this->initialize();
 
-    // Launch Initial UAVs (string name, string path, string speed in mph, int index number, int fuel level).
-    addUAV("UAV1", "[[34.239, -118.529],[34.239, -118.554]]", 70, 1, 100);
-    addUAV("UAV2", "[[34.239, -118.529],[34.183, -118.312]]", 700, 2, 100);
-    addUAV("UAV3", "[[34.239, -118.529],[34.190, -118.603]]", 40, 3, 100);
-    addUAV("UAV4", "[[34.239, -118.529],[34.156, -118.437]]", 30, 4, 100);
+    // Launch Initial UAVs (string name, string origin, string destination, string speed in mph, int index number, int fuel level).
+    addUAV("UAV1", "Van Nuys", "Porter Ranch", 70, mainIndex, 21);
+    addUAV("UAV2", "Van Nuys", "West Hills", 70, mainIndex, 12);
+    addUAV("UAV3", "Van Nuys", "Calabasas", 40, mainIndex, 4);
+    addUAV("UAV4", "Van Nuys", "Studio City", 30, mainIndex, 100);
+    addUAV("UAV5", "Van Nuys", "Downtown Burbank", 30, mainIndex, 100);
+    addUAV("UAV6", "Van Nuys", "San Fernando", 30, mainIndex, 100);
 
     // Timer for fuel simulator
     timer3->start(5000);
@@ -222,38 +251,6 @@ void MainWindow::onMapLoaded()
 
 // Stores array of USPS locations, emergency mode
 void MainWindow::initialize() {
-    USPSArray[0] = "34.243689,-118.535640";
-    USPSArray[1] = "34.210034,-118.571521";
-    USPSArray[2] = "34.265814,-118.526196";
-    USPSArray[3] = "34.273601,-118.554922";
-    USPSArray[4] = "34.203311,-118.535677";
-    USPSArray[5] = "34.256726,-118.600793";
-    USPSArray[6] = "34.218416,-118.598400";
-    USPSArray[7] = "34.236373,-118.466520";
-    USPSArray[8] = "34.172675,-118.541652";
-    USPSArray[9] = "34.176279,-118.519337";
-    USPSArray[10] = "34.200541,-118.630173";
-    USPSArray[11] = "34.268628,-118.468120";
-    USPSArray[12] = "34.202057,-118.476116";
-    USPSArray[13] = "34.170057,-118.608636";
-    USPSArray[14] = "34.224525,-118.447225";
-    USPSArray[15] = "34.160040,-118.500507";
-    USPSArray[16] = "34.189540,-118.448980";
-    USPSArray[17] = "34.282136,-118.442553";
-    USPSArray[18] = "34.154324,-118.641864";
-    USPSArray[19] = "34.164363,-118.458005";
-    USPSArray[20] = "34.164719,-118.404642";
-    USPSArray[21] = "34.187314,-118.398483";
-    USPSArray[22] = "34.198664,-118.397087";
-    USPSArray[23] = "34.241801,-118.425418";
-    USPSArray[24] = "34.262476,-118.427655";
-    USPSArray[25] = "34.142350,-118.394123";
-    USPSArray[26] = "34.152470,-118.350381";
-    USPSArray[27] = "34.167841,-118.377927";
-    USPSArray[28] = "34.187958,-118.348218";
-    USPSArray[29] = "34.217020,-118.368881";
-    USPSArray[30] = "34.180514,-118.309706";
-
     USPSNames[0] = "Northridge";
     USPSNames[1] = "Winnetka";
     USPSNames[2] = "Granada Hills";
@@ -286,6 +283,38 @@ void MainWindow::initialize() {
     USPSNames[29] = "Sun Valley";
     USPSNames[30] = "Downtown Burbank";
 
+    USPSArray[0] = "34.243689,-118.535640";
+    USPSArray[1] = "34.210034,-118.571521";
+    USPSArray[2] = "34.265814,-118.526196";
+    USPSArray[3] = "34.273601,-118.554922";
+    USPSArray[4] = "34.203311,-118.535677";
+    USPSArray[5] = "34.256726,-118.600793";
+    USPSArray[6] = "34.218416,-118.598400";
+    USPSArray[7] = "34.236373,-118.466520";
+    USPSArray[8] = "34.172675,-118.541652";
+    USPSArray[9] = "34.176279,-118.519337";
+    USPSArray[10] = "34.200541,-118.630173";
+    USPSArray[11] = "34.268628,-118.468120";
+    USPSArray[12] = "34.202057,-118.476116";
+    USPSArray[13] = "34.170057,-118.608636";
+    USPSArray[14] = "34.224525,-118.447225";
+    USPSArray[15] = "34.160040,-118.500507";
+    USPSArray[16] = "34.189540,-118.448980";
+    USPSArray[17] = "34.282136,-118.442553";
+    USPSArray[18] = "34.154324,-118.641864";
+    USPSArray[19] = "34.164363,-118.458005";
+    USPSArray[20] = "34.164719,-118.404642";
+    USPSArray[21] = "34.187314,-118.398483";
+    USPSArray[22] = "34.198664,-118.397087";
+    USPSArray[23] = "34.241801,-118.425418";
+    USPSArray[24] = "34.262476,-118.427655";
+    USPSArray[25] = "34.142350,-118.394123";
+    USPSArray[26] = "34.152470,-118.350381";
+    USPSArray[27] = "34.167841,-118.377927";
+    USPSArray[28] = "34.187958,-118.348218";
+    USPSArray[29] = "34.217020,-118.368881";
+    USPSArray[30] = "34.180514,-118.309706";
+
     emerg[1] = false;
     emerg[2] = false;
     emerg[3] = false;
@@ -298,12 +327,26 @@ void MainWindow::initialize() {
     emerg[10] = false;
 }
 
-void MainWindow::addUAV(QString name, QString path, int speed, int index, int fuelLevel) {
+void MainWindow::addUAV(QString name, QString origin, QString destination, int speed, int index, int fuelLevel) {
+    QString path;
+
+    for (int i=0; i<=30; i++) {
+        if (origin == USPSNames[i]) {
+            for (int j=0; j<=30; j++) {
+                if (destination == USPSNames[j]) {
+                    path = "[[" + USPSArray[i] + "],[" + USPSArray[j] + "]]";
+                }
+            }
+        }
+    }
+
     int timeInterval = calcTimeInterval(speed, path);
 
     ui->webView_4->page()->mainFrame()->evaluateJavaScript("addUAV('" + name + "', " + path + ", " + QString::number(timeInterval) + ");");
     fuel[index] = fuelLevel;
     connect(timer3, &QTimer::timeout, this, [=]{ fuelSim(name, index); });
+
+    mainIndex++;
 }
 
 // Simulates constant fuel decrementation
@@ -312,9 +355,6 @@ void MainWindow::fuelSim(QString name, int index)
     //for (int i = 1; i < 4; i++) {
     //    ui->webView_4->page()->mainFrame()->evaluateJavaScript("popup(" + QString::number(i) + ");");
     //}
-
-    QMessageBox* msgBox = new QMessageBox();
-    msgBox->setWindowTitle("ALERT");
 
     QVariant stopped = ui->webView_4->page()->mainFrame()->evaluateJavaScript("isStopped('" + name + "');");
 
@@ -361,8 +401,7 @@ void MainWindow::fuelSim(QString name, int index)
         showUAVWindow(name, index);
         ui->webView_4->page()->mainFrame()->evaluateJavaScript("popup('" + QString::number(index) + "', 'Battery at 20%');");
 
-        msgBox->setText(name + "\n Low Battery at 20%. \n Will emergency land at nearest USPS at 10%.");
-        msgBox->show();
+        ui->textBrowser_11->append("\n" + name + "\nLow Battery at 20%. \nWill emergency land at nearest USPS at 10%.");
         voce::synthesize("U A V" + QString::number(index).toStdString() + "Low Battery at 20%");
 
         fuel[index]--;
@@ -371,15 +410,14 @@ void MainWindow::fuelSim(QString name, int index)
         showUAVWindow(name, index);
         ui->webView_4->page()->mainFrame()->evaluateJavaScript("popup('" + QString::number(index) + "', 'Emergency Landing!');");
 
-        temp = getLatLng(name);
+        temp = getLatLng(index);
         i = closestUSPS(temp);
 
         emerg[index] = true;
 
-        msgBox->setText(name +
+        ui->textBrowser_11->append("\n" + name +
                         "\nLow Battery at 10% \n"
                         "Emergency landing at " + USPSNames[i] + " post office.");
-        msgBox->show();
         voce::synthesize("U A V" + QString::number(index).toStdString() + "Low Battery at 10%. Emergency landing at" + USPSNames[i].toStdString() + "post office.");
 
         ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute('" + name + "', [" + USPSArray[i] + "], 7000);");
@@ -392,10 +430,9 @@ void MainWindow::fuelSim(QString name, int index)
 
         emerg[index] = true;
 
-        msgBox->setText(name +
+        ui->textBrowser_11->append("\n" + name +
                         "\nDid not make it to nearest USPS. \n" +
                         "Landed at current location.");
-        msgBox->show();
 
         voce::synthesize("U A V" + QString::number(index).toStdString() + "did not make it to the nearest U S P S. Landed at current location.");
 
@@ -407,8 +444,8 @@ void MainWindow::fuelSim(QString name, int index)
 }
 
 // Getter for latlng
-QString MainWindow::getLatLng(QString name) {
-    QVariant a = ui->webView_4->page()->mainFrame()->evaluateJavaScript("getLatLng('" + name +  "');");
+QString MainWindow::getLatLng(int index) {
+    QVariant a = ui->webView_4->page()->mainFrame()->evaluateJavaScript("getLatLng('" + QString::number(index) +  "');");
     return a.toString();
 }
 
@@ -462,13 +499,14 @@ QTimer *timer2 = new QTimer();
 void MainWindow::showUAVWindow(QString name, int index)
 {
     // Timer for live update of UAV info ie latlong values
-    connect(timer2, &QTimer::timeout, this, [=]{ showInfo(name); });
+    connect(timer2, &QTimer::timeout, this, [=]{ showInfo(name, index); });
     timer2->start(100);
+
+    // Turns uav window original after half a second of being red.
+    QTimer::singleShot(500, this, [=]{ setDefaultColor(index); });
 
     // Shows/hides UAV box UI elements    
     if (index == 1){
-        //ui->textBrowser->setStyleSheet("background-color: #33ff00;");
-
         ui->scrollArea->show();
         ui->scrollArea->ensureWidgetVisible(ui->label_1);
         ui->scrollArea->ensureWidgetVisible(ui->progressBar_1);
@@ -478,11 +516,17 @@ void MainWindow::showUAVWindow(QString name, int index)
         ui->line_1->show();
         ui->label_1->show();
         ui->label_1->setText(name);
+        ui->label_1->setStyleSheet("color: #FF0000;");
+        ui->textBrowser->setStyleSheet("background-color: #FF0000;");
         connect(ui->pushButton, SIGNAL(pressed()), ui->textBrowser, SLOT(hide()));
         connect(ui->pushButton, SIGNAL(pressed()), ui->pushButton, SLOT(hide()));
         connect(ui->pushButton, SIGNAL(pressed()), ui->progressBar_1, SLOT(hide()));
         connect(ui->pushButton, SIGNAL(pressed()), ui->line_1, SLOT(hide()));
         connect(ui->pushButton, SIGNAL(pressed()), ui->label_1, SLOT(hide()));
+
+        ui->focusButton_1->show();
+        connect(ui->pushButton, SIGNAL(pressed()), ui->focusButton_1, SLOT(hide()));
+        connect(ui->focusButton_1, &QPushButton::pressed, this, [=]{ focus(index); });
     }
     else if (index == 2){
         ui->scrollArea->show();
@@ -494,11 +538,17 @@ void MainWindow::showUAVWindow(QString name, int index)
         ui->line_2->show();
         ui->label_2->show();
         ui->label_2->setText(name);
+        ui->label_2->setStyleSheet("color: #FF0000;");
+        ui->textBrowser_2->setStyleSheet("background-color: #FF0000;");
         connect(ui->pushButton_2, SIGNAL(pressed()), ui->textBrowser_2, SLOT(hide()));
         connect(ui->pushButton_2, SIGNAL(pressed()), ui->pushButton_2, SLOT(hide()));
         connect(ui->pushButton_2, SIGNAL(pressed()), ui->progressBar_2, SLOT(hide()));
         connect(ui->pushButton_2, SIGNAL(pressed()), ui->line_2, SLOT(hide()));
         connect(ui->pushButton_2, SIGNAL(pressed()), ui->label_2, SLOT(hide()));
+
+        ui->focusButton_2->show();
+        connect(ui->pushButton_2, SIGNAL(pressed()), ui->focusButton_2, SLOT(hide()));
+        connect(ui->focusButton_2, &QPushButton::pressed, this, [=]{ focus(index); });
     }
     else if (index == 3){
         ui->scrollArea->show();
@@ -510,11 +560,17 @@ void MainWindow::showUAVWindow(QString name, int index)
         ui->line_3->show();
         ui->label_3->show();
         ui->label_3->setText(name);
+        ui->label_3->setStyleSheet("color: #FF0000;");
+        ui->textBrowser_3->setStyleSheet("background-color: #FF0000;");
         connect(ui->pushButton_3, SIGNAL(pressed()), ui->textBrowser_3, SLOT(hide()));
         connect(ui->pushButton_3, SIGNAL(pressed()), ui->pushButton_3, SLOT(hide()));
         connect(ui->pushButton_3, SIGNAL(pressed()), ui->progressBar_3, SLOT(hide()));
         connect(ui->pushButton_3, SIGNAL(pressed()), ui->line_3, SLOT(hide()));
         connect(ui->pushButton_3, SIGNAL(pressed()), ui->label_3, SLOT(hide()));
+
+        ui->focusButton_3->show();
+        connect(ui->pushButton_3, SIGNAL(pressed()), ui->focusButton_3, SLOT(hide()));
+        connect(ui->focusButton_3, &QPushButton::pressed, this, [=]{ focus(index); });
     }
     else if (index == 4){
         ui->scrollArea->show();
@@ -526,11 +582,17 @@ void MainWindow::showUAVWindow(QString name, int index)
         ui->line_4->show();
         ui->label_4->show();
         ui->label_4->setText(name);
+        ui->label_4->setStyleSheet("color: #FF0000;");
+        ui->textBrowser_4->setStyleSheet("background-color: #FF0000;");
         connect(ui->pushButton_4, SIGNAL(pressed()), ui->textBrowser_4, SLOT(hide()));
         connect(ui->pushButton_4, SIGNAL(pressed()), ui->pushButton_4, SLOT(hide()));
         connect(ui->pushButton_4, SIGNAL(pressed()), ui->progressBar_4, SLOT(hide()));
         connect(ui->pushButton_4, SIGNAL(pressed()), ui->line_4, SLOT(hide()));
         connect(ui->pushButton_4, SIGNAL(pressed()), ui->label_4, SLOT(hide()));
+
+        ui->focusButton_4->show();
+        connect(ui->pushButton_4, SIGNAL(pressed()), ui->focusButton_4, SLOT(hide()));
+        connect(ui->focusButton_4, &QPushButton::pressed, this, [=]{ focus(index); });
     }
     else if (index == 5){
         ui->scrollArea->show();
@@ -542,27 +604,39 @@ void MainWindow::showUAVWindow(QString name, int index)
         ui->line_5->show();
         ui->label_5->show();
         ui->label_5->setText(name);
+        ui->label_5->setStyleSheet("color: #FF0000;");
+        ui->textBrowser_5->setStyleSheet("background-color: #FF0000;");
         connect(ui->pushButton_5, SIGNAL(pressed()), ui->textBrowser_5, SLOT(hide()));
         connect(ui->pushButton_5, SIGNAL(pressed()), ui->pushButton_5, SLOT(hide()));
         connect(ui->pushButton_5, SIGNAL(pressed()), ui->progressBar_5, SLOT(hide()));
         connect(ui->pushButton_5, SIGNAL(pressed()), ui->line_5, SLOT(hide()));
         connect(ui->pushButton_5, SIGNAL(pressed()), ui->label_5, SLOT(hide()));
+
+        ui->focusButton_5->show();
+        connect(ui->pushButton_5, SIGNAL(pressed()), ui->focusButton_5, SLOT(hide()));
+        connect(ui->focusButton_5, &QPushButton::pressed, this, [=]{ focus(index); });
     }
     else if (index == 6){
-        ui->scrollArea->show();
         ui->scrollArea->ensureWidgetVisible(ui->label_6);
         ui->scrollArea->ensureWidgetVisible(ui->progressBar_6);
+        ui->scrollArea->show();
         ui->textBrowser_6->show();
         ui->pushButton_6->show();
         ui->progressBar_6->show();
         ui->line_6->show();
         ui->label_6->show();
         ui->label_6->setText(name);
+        ui->label_6->setStyleSheet("color: #FF0000;");
+        ui->textBrowser_6->setStyleSheet("background-color: #FF0000;");
         connect(ui->pushButton_6, SIGNAL(pressed()), ui->textBrowser_6, SLOT(hide()));
         connect(ui->pushButton_6, SIGNAL(pressed()), ui->pushButton_6, SLOT(hide()));
         connect(ui->pushButton_6, SIGNAL(pressed()), ui->progressBar_6, SLOT(hide()));
         connect(ui->pushButton_6, SIGNAL(pressed()), ui->line_6, SLOT(hide()));
         connect(ui->pushButton_6, SIGNAL(pressed()), ui->label_6, SLOT(hide()));
+
+        ui->focusButton_6->show();
+        connect(ui->pushButton_6, SIGNAL(pressed()), ui->focusButton_6, SLOT(hide()));
+        connect(ui->focusButton_6, &QPushButton::pressed, this, [=]{ focus(index); });
     }
     else if (index == 7){
         ui->scrollArea->show();
@@ -574,11 +648,17 @@ void MainWindow::showUAVWindow(QString name, int index)
         ui->line_7->show();
         ui->label_7->show();
         ui->label_7->setText(name);
+        ui->label_7->setStyleSheet("color: #FF0000;");
+        ui->textBrowser_7->setStyleSheet("background-color: #FF0000;");
         connect(ui->pushButton_7, SIGNAL(pressed()), ui->textBrowser_7, SLOT(hide()));
         connect(ui->pushButton_7, SIGNAL(pressed()), ui->pushButton_7, SLOT(hide()));
         connect(ui->pushButton_7, SIGNAL(pressed()), ui->progressBar_7, SLOT(hide()));
         connect(ui->pushButton_7, SIGNAL(pressed()), ui->line_7, SLOT(hide()));
         connect(ui->pushButton_7, SIGNAL(pressed()), ui->label_7, SLOT(hide()));
+
+        ui->focusButton_7->show();
+        connect(ui->pushButton_7, SIGNAL(pressed()), ui->focusButton_7, SLOT(hide()));
+        connect(ui->focusButton_7, &QPushButton::pressed, this, [=]{ focus(index); });
     }
     else if (index == 8){
         ui->scrollArea->show();
@@ -590,11 +670,17 @@ void MainWindow::showUAVWindow(QString name, int index)
         ui->line_8->show();
         ui->label_8->show();
         ui->label_8->setText(name);
+        ui->label_8->setStyleSheet("color: #FF0000;");
+        ui->textBrowser_8->setStyleSheet("background-color: #FF0000;");
         connect(ui->pushButton_8, SIGNAL(pressed()), ui->textBrowser_8, SLOT(hide()));
         connect(ui->pushButton_8, SIGNAL(pressed()), ui->pushButton_8, SLOT(hide()));
         connect(ui->pushButton_8, SIGNAL(pressed()), ui->progressBar_8, SLOT(hide()));
         connect(ui->pushButton_8, SIGNAL(pressed()), ui->line_8, SLOT(hide()));
         connect(ui->pushButton_8, SIGNAL(pressed()), ui->label_8, SLOT(hide()));
+
+        ui->focusButton_8->show();
+        connect(ui->pushButton_8, SIGNAL(pressed()), ui->focusButton_8, SLOT(hide()));
+        connect(ui->focusButton_8, &QPushButton::pressed, this, [=]{ focus(index); });
     }
     else if (index == 9){
         ui->scrollArea->show();
@@ -606,11 +692,17 @@ void MainWindow::showUAVWindow(QString name, int index)
         ui->line_9->show();
         ui->label_9->show();
         ui->label_9->setText(name);
+        ui->label_9->setStyleSheet("color: #FF0000;");
+        ui->textBrowser_9->setStyleSheet("background-color: #FF0000;");
         connect(ui->pushButton_9, SIGNAL(pressed()), ui->textBrowser_9, SLOT(hide()));
         connect(ui->pushButton_9, SIGNAL(pressed()), ui->pushButton_9, SLOT(hide()));
         connect(ui->pushButton_9, SIGNAL(pressed()), ui->progressBar_9, SLOT(hide()));
         connect(ui->pushButton_9, SIGNAL(pressed()), ui->line_9, SLOT(hide()));
         connect(ui->pushButton_9, SIGNAL(pressed()), ui->label_9, SLOT(hide()));
+
+        ui->focusButton_9->show();
+        connect(ui->pushButton_9, SIGNAL(pressed()), ui->focusButton_9, SLOT(hide()));
+        connect(ui->focusButton_9, &QPushButton::pressed, this, [=]{ focus(index); });
     }
     else if (index == 10){
         ui->scrollArea->show();
@@ -622,18 +714,24 @@ void MainWindow::showUAVWindow(QString name, int index)
         //ui->line_10->show();
         ui->label_10->show();
         ui->label_10->setText(name);
+        ui->label_10->setStyleSheet("color: #FF0000;");
+        ui->textBrowser_10->setStyleSheet("background-color: #FF0000;");
         connect(ui->pushButton_10, SIGNAL(pressed()), ui->textBrowser_10, SLOT(hide()));
         connect(ui->pushButton_10, SIGNAL(pressed()), ui->pushButton_10, SLOT(hide()));
         connect(ui->pushButton_10, SIGNAL(pressed()), ui->progressBar_10, SLOT(hide()));
         //connect(ui->pushButton_10, SIGNAL(pressed()), ui->line_10, SLOT(hide()));
         connect(ui->pushButton_10, SIGNAL(pressed()), ui->label_10, SLOT(hide()));
+
+        ui->focusButton_10->show();
+        connect(ui->pushButton_10, SIGNAL(pressed()), ui->focusButton_10, SLOT(hide()));
+        connect(ui->focusButton_10, &QPushButton::pressed, this, [=]{ focus(index); });
     }
 }
 
 // Live update of information within UAV Window.
-void MainWindow::showInfo(QString name)
+void MainWindow::showInfo(QString name, int index)
 {
-    QVariant a = ui->webView_4->page()->mainFrame()->evaluateJavaScript("getLatLng('" + name +  "');");
+    QVariant a = ui->webView_4->page()->mainFrame()->evaluateJavaScript("getLatLng('" + QString::number(index) +  "');");
     QVariant started = ui->webView_4->page()->mainFrame()->evaluateJavaScript("isStarted('" + name +  "');");
     QVariant running = ui->webView_4->page()->mainFrame()->evaluateJavaScript("isRunning('" + name +  "');");
     QVariant paused = ui->webView_4->page()->mainFrame()->evaluateJavaScript("isPaused('" + name +  "');");
@@ -728,6 +826,60 @@ void MainWindow::showInfo(QString name)
             ) {
         ui->scrollArea->hide();
     }
+}
+
+void MainWindow::setDefaultColor(int index) {
+    if (index == 1) {
+        ui->textBrowser->setStyleSheet("background-color: #FFFFFF;");
+        ui->label_1->setStyleSheet("color: #000000;");
+    }
+    else if (index == 2) {
+        ui->textBrowser_2->setStyleSheet("background-color: #FFFFFF;");
+        ui->label_2->setStyleSheet("color: #000000;");
+    }
+    else if (index == 3) {
+        ui->textBrowser_3->setStyleSheet("background-color: #FFFFFF;");
+        ui->label_3->setStyleSheet("color: #000000;");
+    }
+    else if (index == 4) {
+        ui->textBrowser_4->setStyleSheet("background-color: #FFFFFF;");
+        ui->label_4->setStyleSheet("color: #000000;");
+    }
+    else if (index == 5) {
+        ui->textBrowser_5->setStyleSheet("background-color: #FFFFFF;");
+        ui->label_5->setStyleSheet("color: #000000;");
+    }
+    else if (index == 6) {
+        ui->textBrowser_6->setStyleSheet("background-color: #FFFFFF;");
+        ui->label_6->setStyleSheet("color: #000000;");
+    }
+    else if (index == 7) {
+        ui->textBrowser_7->setStyleSheet("background-color: #FFFFFF;");
+        ui->label_7->setStyleSheet("color: #000000;");
+    }
+    else if (index == 8) {
+        ui->textBrowser_8->setStyleSheet("background-color: #FFFFFF;");
+        ui->label_8->setStyleSheet("color: #000000;");
+    }
+    else if (index == 9) {
+        ui->textBrowser_9->setStyleSheet("background-color: #FFFFFF;");
+        ui->label_9->setStyleSheet("color: #000000;");
+    }
+    else if (index == 20) {
+        ui->textBrowser_10->setStyleSheet("background-color: #FFFFFF;");
+        ui->label_10->setStyleSheet("color: #000000;");
+    }
+}
+
+void MainWindow::focus(int index) {
+    QString temp = getLatLng(index);
+
+    QRegExp rx ("[(),]");
+    QStringList list = temp.split(rx, QString::SkipEmptyParts);
+    QString lat = list.at(1);
+    QString lng = list.at(2);
+
+    ui->webView_4->page()->mainFrame()->evaluateJavaScript("focus('" + lat + "','" + lng + "');");
 }
 
 //Calculates distance between two latlong values (path [[lat,long],[lat,long]])

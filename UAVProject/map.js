@@ -40,6 +40,7 @@ var UAVPolylines = [];
 var UAVNames = [];
 var UAVPaths = [];
 var UAVSpeeds = [];
+var UAVListenerArray = [];
 
 //name {string}, path {[lat, lng], [lat, lng] , ... , [lat, lng]}, speed {number}
 function addUAV(name, path, speed) {
@@ -119,6 +120,11 @@ function popup(i, status) {
     }
 }
 
+function focus(lat, lng) {
+    map.setView([lat,lng]);
+    map.setZoom(15);
+}
+
 
 function getUAVIndexFromName(name) {
   for(var i = 0; i < UAVNames.length; i++) {
@@ -128,9 +134,8 @@ function getUAVIndexFromName(name) {
   return -1;
 }
 
-function getLatLng(name) {
-    var u = getUAVIndexFromName(name);
-    latlng = UAVs[u].getLatLng();
+function getLatLng(index) {
+    var latlng = UAVs[index].getLatLng();
     return latlng.toString();
 }
 
