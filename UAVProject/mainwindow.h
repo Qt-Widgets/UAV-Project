@@ -23,6 +23,7 @@ public:
 
 private slots:
     void readSerial();
+
     void showTime();
     void onMapLoaded();
     void showInfo(QString name, int index);
@@ -36,6 +37,13 @@ private slots:
     double calcDistance(QString path);
     void setDefaultColor(int index);
     void focus(int index);
+
+    void onTalkPressed();
+    void onTalkReleased();
+    //void buttonDelay();
+
+    void manipString(QString heard);
+    void start();
 
 private:
     Ui::MainWindow *ui;

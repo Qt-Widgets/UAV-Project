@@ -20,7 +20,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // VOCE Init
     voce::init("C:/Users/Ernest Curioso/Documents/Voce/voce-0.9.1/voce-0.9.1/lib", true, true,
-               "file:/C:/Users/Ernest Curioso/Documents/GitHub/teamcayley/OldWork/VOCE/lib", "digits");
+               "file:/C:/Users/Ernest Curioso/Documents/Qt Projects/UAVProject/UAVProject/gram", "digits");
+    voce::setRecognizerEnabled(false);
 
     // Map Setup
     ui->webView_4->hide();
@@ -134,7 +135,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(timer, SIGNAL(timeout()), this, SLOT(showTime()));
 
 
-    // BEGIN Arduino Pulse Sensor ==============================================================================
+    // BEGIN Arduino Pulse Sensor  ==============================================================================
 
 //    ui->lcdNumber_5->display(999);
     arduino = new QSerialPort(this);
@@ -213,11 +214,49 @@ void MainWindow::readSerial()
 
 // END Arduino =======================================================================================================
 
-// BEGIN VOCE Functions
+// BEGIN VOCE Functions ==============================================================================================
 
+std::string s;
 
+void MainWindow::manipString(QString heard)
+{
+    if (heard == "launch") {
+        start();
+    }
+}
+
+void MainWindow::start() {
+    ui->webView_4->page()->mainFrame()->evaluateJavaScript("start();");
+}
+
+// END VOCE Functions ================================================================================================
 
 // BEGIN UI Functions ================================================================================================
+
+void MainWindow::onTalkPressed()
+{
+    ui->pushButton_11->setStyleSheet("background-color: #33ff00;");
+    voce::stopSynthesizing();
+    voce::setRecognizerEnabled(true);
+}
+
+void MainWindow::onTalkReleased()
+{
+    ui->pushButton_11->setStyleSheet("background-color: FF2222;");
+    s = voce::popRecognizedString();
+    voce::setRecognizerEnabled(false);
+    voce::stopSynthesizing();
+
+    if (s.empty() == false)
+    {
+        manipString(QString::fromStdString(s));
+        ui->textBrowser_11->append(QString::fromStdString(s));
+    }
+    else
+    {
+        voce::synthesize("I didn't hear what you said.");
+    }
+}
 
 void MainWindow::showTime()
 {
@@ -234,13 +273,15 @@ void MainWindow::onMapLoaded()
     ui->progressBar->hide();
     ui->webView_4->show();
     ui->webView_4->page()->mainFrame()->addToJavaScriptWindowObject("JSBridge", this);
+    connect(ui->pushButton_11, SIGNAL(pressed()), this, SLOT(onTalkPressed()));
+    connect(ui->pushButton_11, SIGNAL(released()), this, SLOT(onTalkReleased()));
 
     this->initialize();
 
     // Launch Initial UAVs (string name, string origin, string destination, string speed in mph, int index number, int fuel level).
-    addUAV("UAV1", "Van Nuys", "Porter Ranch", 70, mainIndex, 21);
-    addUAV("UAV2", "Van Nuys", "West Hills", 70, mainIndex, 12);
-    addUAV("UAV3", "Van Nuys", "Calabasas", 40, mainIndex, 4);
+    addUAV("UAV1", "Van Nuys", "Porter Ranch", 70, mainIndex, 100);
+    addUAV("UAV2", "Van Nuys", "West Hills", 70, mainIndex, 100);
+    addUAV("UAV3", "Van Nuys", "Calabasas", 40, mainIndex, 100);
     addUAV("UAV4", "Van Nuys", "Studio City", 30, mainIndex, 100);
     addUAV("UAV5", "Van Nuys", "Downtown Burbank", 30, mainIndex, 100);
     addUAV("UAV6", "Van Nuys", "San Fernando", 30, mainIndex, 100);
@@ -250,7 +291,8 @@ void MainWindow::onMapLoaded()
 }
 
 // Stores array of USPS locations, emergency mode
-void MainWindow::initialize() {
+void MainWindow::initialize()
+{
     USPSNames[0] = "Northridge";
     USPSNames[1] = "Winnetka";
     USPSNames[2] = "Granada Hills";
@@ -327,7 +369,8 @@ void MainWindow::initialize() {
     emerg[10] = false;
 }
 
-void MainWindow::addUAV(QString name, QString origin, QString destination, int speed, int index, int fuelLevel) {
+void MainWindow::addUAV(QString name, QString origin, QString destination, int speed, int index, int fuelLevel)
+{
     QString path;
 
     for (int i=0; i<=30; i++) {
@@ -444,13 +487,15 @@ void MainWindow::fuelSim(QString name, int index)
 }
 
 // Getter for latlng
-QString MainWindow::getLatLng(int index) {
+QString MainWindow::getLatLng(int index)
+{
     QVariant a = ui->webView_4->page()->mainFrame()->evaluateJavaScript("getLatLng('" + QString::number(index) +  "');");
     return a.toString();
 }
 
 // Determines closest USPS for given latlng
-int MainWindow::closestUSPS(QString latlng) {
+int MainWindow::closestUSPS(QString latlng)
+{
 
     QRegExp rx ("[(),]");
     QStringList list = latlng.split(rx, QString::SkipEmptyParts);
@@ -828,7 +873,8 @@ void MainWindow::showInfo(QString name, int index)
     }
 }
 
-void MainWindow::setDefaultColor(int index) {
+void MainWindow::setDefaultColor(int index)
+{
     if (index == 1) {
         ui->textBrowser->setStyleSheet("background-color: #FFFFFF;");
         ui->label_1->setStyleSheet("color: #000000;");
@@ -871,7 +917,8 @@ void MainWindow::setDefaultColor(int index) {
     }
 }
 
-void MainWindow::focus(int index) {
+void MainWindow::focus(int index)
+{
     QString temp = getLatLng(index);
 
     QRegExp rx ("[(),]");
@@ -883,7 +930,8 @@ void MainWindow::focus(int index) {
 }
 
 //Calculates distance between two latlong values (path [[lat,long],[lat,long]])
- double MainWindow::calcDistance(QString path) {
+ double MainWindow::calcDistance(QString path)
+ {
     QRegExp rx ("[][,]");
     QStringList list = path.split(rx, QString::SkipEmptyParts);
     QString lat = list.at(0);
@@ -909,7 +957,8 @@ void MainWindow::focus(int index) {
     return dist;
 }
 
-int MainWindow::calcTimeInterval(int speed, QString path) {
+int MainWindow::calcTimeInterval(int speed, QString path)
+{
     double distance = calcDistance(path);
     double time = distance/speed;
 
@@ -926,4 +975,3 @@ int MainWindow::calcTimeInterval(int speed, QString path) {
 }
 
 // END UI Functions =====================================================================================================
-

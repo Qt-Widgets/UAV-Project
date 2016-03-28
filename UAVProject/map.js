@@ -51,13 +51,19 @@ function addUAV(name, path, speed) {
                         .addTo(map)
                         .bindPopup(UAVNames[n]);
   UAVPolylines[n] = L.polyline(UAVPaths[n]).addTo(map);
-  UAVs[n].start();
+  //UAVs[n].start();
 
   var tempStr = "listener";
   var tempStr2 = tempStr.concat(n.toString());
      var fn = window[tempStr2];
       if (typeof fn === "function") fn();
   n++;
+}
+
+function start() {
+    for (i=1; i<=n; i++) {
+        UAVs[i].start();
+    }
 }
 
 //Click listeners for each UAV
