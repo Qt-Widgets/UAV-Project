@@ -58,6 +58,7 @@ function addUAV(name, path, speed) {
      var fn = window[tempStr2];
       if (typeof fn === "function") fn();
   n++;
+
 }
 
 function start() {

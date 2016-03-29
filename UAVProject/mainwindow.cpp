@@ -99,6 +99,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->focusButton_9->hide();
     ui->focusButton_10->hide();
 
+    ui->closeAllButton->hide();
+
     // User Interface Appearance
     ui->pushButton->setText("X");
     ui->pushButton_2->setText("X");
@@ -112,6 +114,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->pushButton_10->setText("X");
 
     ui->pushButton_11->setText("Talk");
+    ui->pushButton_11->setStyleSheet("background-color: #9FF781;");
+
+    ui->closeAllButton->setText("Hide All");
 
     ui->focusButton_1->setText("Focus");
     ui->focusButton_2->setText("Focus");
@@ -124,9 +129,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->focusButton_9->setText("Focus");
     ui->focusButton_10->setText("Focus");
 
+    ui->centralWidget->setStyleSheet("color: #848484;");
+
     ui->textBrowser_11->setStyleSheet("color: #FF0000;"
-                                      "background-color: #000000;"
-                                      "font-size: 16px;");
+                                      "background-color: #2E2E2E;"
+                                      "font-size: 16px;"
+                                      "font-weight: bold;");
 
     // Timer to update clock
     QTimer *timer = new QTimer(this);
@@ -247,7 +255,7 @@ void MainWindow::onTalkPressed()
 
 void MainWindow::onTalkReleased()
 {
-    ui->pushButton_11->setStyleSheet("background-color: FF2222;");
+    ui->pushButton_11->setStyleSheet("background-color: #9FF781;");
     s = voce::popRecognizedString();
     voce::setRecognizerEnabled(false);
     voce::stopSynthesizing();
@@ -284,9 +292,9 @@ void MainWindow::onMapLoaded()
 
     // Launch Initial UAVs (string name, string origin, string destination, string speed in mph, int index number, int fuel level).
     addUAV("UAV1", "Van Nuys", "Porter Ranch", 70, mainIndex, 12);
-    addUAV("UAV2", "Van Nuys", "West Hills", 70, mainIndex, 100);
-    addUAV("UAV3", "Van Nuys", "Calabasas", 40, mainIndex, 100);
-    addUAV("UAV4", "Van Nuys", "Studio City", 30, mainIndex, 100);
+    addUAV("UAV2", "Van Nuys", "West Hills", 70, mainIndex, 13);
+    addUAV("UAV3", "Van Nuys", "Calabasas", 110, mainIndex, 14);
+    addUAV("UAV4", "Van Nuys", "Studio City", 200, mainIndex, 15);
     addUAV("UAV5", "Van Nuys", "Downtown Burbank", 30, mainIndex, 100);
     addUAV("UAV6", "Van Nuys", "San Fernando", 30, mainIndex, 100);
 }
@@ -539,12 +547,9 @@ int MainWindow::closestUSPS(QString latlng)
     QString lng2;
     QStringList list2;
 
-    double r = 3961;
+    QString path;
+
     double dist = 1000000;
-    double dlat;
-    double dlon;
-    double a;
-    double c;
     double temp;
     int position = 0;
 
@@ -553,14 +558,8 @@ int MainWindow::closestUSPS(QString latlng)
         lat2 = list2.at(0);
         lng2 = list2.at(1);
 
-        // Formula for determing distance between to latlng values
-        dlat = lat2.toDouble() - lat.toDouble();
-        dlat = (dlat * pi)/180;
-        dlon = lng2.toDouble() - lng.toDouble();
-        dlon = (dlon * pi)/180;
-        a = ((sin(dlat/2))*(sin(dlat/2))) + cos(lat.toDouble()) * cos(lat2.toDouble()) * ((sin(dlon/2))*(sin(dlon/2)));
-        c = 2 * atan2(sqrt(a), sqrt(1-a));
-        temp = r * c;
+        path = "[[" + lat + "," + lng + "],[" + lat2 + "," + lng2 + "]]";
+        temp = calcDistance(path);
 
         if (temp < dist) {
             dist = temp;
@@ -582,6 +581,10 @@ void MainWindow::showUAVWindow(QString name, int index)
 
     // Turns uav window original after half a second of being red.
     QTimer::singleShot(500, this, [=]{ setDefaultColor(index); });
+
+    ui->closeAllButton->show();
+    connect(ui->closeAllButton, SIGNAL(pressed()), ui->scrollArea, SLOT(hide()));
+    connect(ui->closeAllButton, SIGNAL(pressed()), ui->closeAllButton, SLOT(hide()));
 
     // Shows/hides UAV box UI elements    
     if (index == 1){
@@ -903,6 +906,7 @@ void MainWindow::showInfo(QString name, int index)
             ui->textBrowser_10->isHidden()
             ) {
         ui->scrollArea->hide();
+        ui->closeAllButton->hide();
     }
 }
 

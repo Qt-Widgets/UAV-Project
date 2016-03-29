@@ -68,7 +68,7 @@
         <widget class="QWidget" name="scrollAreaWidgetContents_6">
          <property name="geometry">
           <rect>
-           <x>-11</x>
+           <x>0</x>
            <y>0</y>
            <width>242</width>
            <height>2247</height>
@@ -1341,6 +1341,25 @@
           </item>
          </layout>
         </widget>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="closeAllButton">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>PushButton</string>
+        </property>
        </widget>
       </item>
      </layout>
