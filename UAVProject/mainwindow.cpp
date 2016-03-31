@@ -9,6 +9,7 @@
 #include <math.h>
 #include <windows.h>
 #include <voce.h>
+#include <test.h>
 
 #define pi 3.14159265358979323846
 
@@ -136,6 +137,9 @@ MainWindow::MainWindow(QWidget *parent) :
                                       "font-size: 16px;"
                                       "font-weight: bold;");
 
+    //test x;
+    //ui->textBrowser_11->setText(QString::number(r));
+
     // Timer to update clock
     QTimer *timer = new QTimer(this);
     timer->start(1000);
@@ -228,7 +232,7 @@ std::string s;
 
 void MainWindow::manipString(QString heard)
 {
-    if (heard == "begin") {
+    if (heard == "start") {
         start();
     }
 }
@@ -251,6 +255,11 @@ void MainWindow::onTalkPressed()
     ui->pushButton_11->setStyleSheet("background-color: #33ff00;");
     voce::stopSynthesizing();
     voce::setRecognizerEnabled(true);
+}
+
+void MainWindow::lag()
+{
+    QTimer::singleShot(1500, this, SLOT(onTalkReleased()));
 }
 
 void MainWindow::onTalkReleased()
@@ -286,15 +295,15 @@ void MainWindow::onMapLoaded()
     ui->webView_4->show();
     ui->webView_4->page()->mainFrame()->addToJavaScriptWindowObject("JSBridge", this);
     connect(ui->pushButton_11, SIGNAL(pressed()), this, SLOT(onTalkPressed()));
-    connect(ui->pushButton_11, SIGNAL(released()), this, SLOT(onTalkReleased()));
+    connect(ui->pushButton_11, SIGNAL(released()), this, SLOT(lag()));
 
     this->initialize();
 
     // Launch Initial UAVs (string name, string origin, string destination, string speed in mph, int index number, int fuel level).
-    addUAV("UAV1", "Van Nuys", "Porter Ranch", 70, mainIndex, 12);
-    addUAV("UAV2", "Van Nuys", "West Hills", 70, mainIndex, 13);
-    addUAV("UAV3", "Van Nuys", "Calabasas", 110, mainIndex, 14);
-    addUAV("UAV4", "Van Nuys", "Studio City", 200, mainIndex, 15);
+    addUAV("UAV1", "Van Nuys", "Porter Ranch", 500, mainIndex, 15);
+    addUAV("UAV2", "Van Nuys", "West Hills", 70, mainIndex, 100);
+    addUAV("UAV3", "Van Nuys", "Calabasas", 110, mainIndex, 100);
+    addUAV("UAV4", "Van Nuys", "Studio City", 200, mainIndex, 100);
     addUAV("UAV5", "Van Nuys", "Downtown Burbank", 30, mainIndex, 100);
     addUAV("UAV6", "Van Nuys", "San Fernando", 30, mainIndex, 100);
 }

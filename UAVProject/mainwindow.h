@@ -43,6 +43,7 @@ private slots:
 
     void manipString(QString heard);
     void start();
+    void lag();
 
 private:
     Ui::MainWindow *ui;
