@@ -9,7 +9,6 @@
 #include <math.h>
 #include <windows.h>
 #include <voce.h>
-#include <test.h>
 
 #define pi 3.14159265358979323846
 
