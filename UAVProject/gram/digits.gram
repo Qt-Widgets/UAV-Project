@@ -6,9 +6,9 @@
  
 grammar digits;
 
-public <command>	= (<verb> <noun> <article> <number> <measure>)|(report <noun> for U A V <digit>)|(start)|(emergency) |(<bool>);
+public <command>	= (<verb> <noun> <article> <number> <measure>) | (report <noun> for U A V <digit>) | (<verb> U A V <digit>) | (start) | (emergency land all U A V) | (<bool>);
 <report>			= (report <snoun>);
-<verb>	 			= (change | alter | ascend | descend | fly );
+<verb>	 			= (change | alter | ascend | descend | fly | hover in place | resume flight for | emergency land | return to origin | emergency land );
 <noun>  		 	= (speed | destination | status | mission status | height | drone);
 <snoun>				= (height | latitude | longitude | destination);
 <article>			= (to);

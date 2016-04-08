@@ -264,6 +264,35 @@ void MainWindow::manipString(QString heard)
             voce::synthesize(temp3.toStdString());
         }
     }
+    else if (heardList [0] == "hover") {
+        temp = numStringToInt(heardList[6]);
+        ui->webView_4->page()->mainFrame()->evaluateJavaScript("pauseFlight('" + QString::number(temp) + "');");
+    }
+    else if (heardList[0] == "resume") {
+        temp = numStringToInt(heardList[6]);
+        ui->webView_4->page()->mainFrame()->evaluateJavaScript("resumeFlight('" + QString::number(temp) + "');");
+    }
+    else if (heardList[0] == "return") {
+        temp = numStringToInt(heardList[6]);
+        ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute('" + QString::number(temp) + "', [" + USPSArray[12] + "], 7000);");
+    }
+    else if (heardList[0] == "emergency") {
+        if (heardList[2] == "all") {
+            for (int i=1; i<=mainIndex-1; i++) {
+                temp3 = getLatLng(i);
+                int j = closestUSPS(temp3);
+                emerg[i];
+                ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute('" + QString::number(i) + "', [" + USPSArray[j] + "], 7000);");
+            }
+        }
+        else {
+            temp = numStringToInt(heardList[5]);
+            temp3 = getLatLng(temp);
+            int i = closestUSPS(temp3);
+            emerg[temp] = true;
+            ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute('" + QString::number(temp) + "', [" + USPSArray[i] + "], 7000);");
+        }
+    }
 }
 
 int MainWindow::numStringToInt(QString num)
@@ -354,7 +383,7 @@ void MainWindow::onMapLoaded()
     this->initialize();
 
     // Launch Initial UAVs (string name, string origin, string destination, string speed in mph, int index number, int fuel level).
-    addUAV("UAV1", "Van Nuys", "Porter Ranch", 500, mainIndex, 15);
+    addUAV("UAV1", "Van Nuys", "Porter Ranch", 500, mainIndex, 100);
     addUAV("UAV2", "Van Nuys", "West Hills", 70, mainIndex, 100);
     addUAV("UAV3", "Van Nuys", "Calabasas", 110, mainIndex, 100);
     addUAV("UAV4", "Van Nuys", "Studio City", 200, mainIndex, 100);
@@ -569,7 +598,7 @@ void MainWindow::fuelSim(QString name, int index)
                         "Emergency landing at " + USPSNames[i] + " post office.");
         voce::synthesize("U A V" + QString::number(index).toStdString() + "Low Battery at 10%. Emergency landing at" + USPSNames[i].toStdString() + "post office.");
 
-        ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute('" + name + "', [" + USPSArray[i] + "], 7000);");
+        ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute('" + QString::number(index) + "', [" + USPSArray[i] + "], 7000);");
 
         fuel[index]--;
     }

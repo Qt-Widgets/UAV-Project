@@ -158,21 +158,16 @@ function stopFlight(name) {
       UAVs[u].stop();
 }
 
-function pauseFlight(name) {
-    var u = getUAVIndexFromName(name);
-    if(u != 0)
-        UAVs[u].pause();
+function pauseFlight(index) {
+        UAVs[index].pause();
 }
 
-function resumeFlight(name) {
-  var u = getUAVIndexFromName(name);
-  if(u != 0)
-    UAVs[u].resume();
+function resumeFlight(index) {
+    UAVs[index].resume();
 }
 
-function reroute (name, newDestination, speed) {
-    var u = getUAVIndexFromName(name);
-    UAVs[u].moveTo(newDestination, speed);
+function reroute (index, newDestination, speed) {
+    UAVs[index].moveTo(newDestination, speed);
 }
 
 function isStarted(name) {
@@ -187,7 +182,7 @@ function isRunning (name) {
 
 function isPaused (name) {
     var u = getUAVIndexFromName(name);
-    return UAVs[u].isPaused;
+    return UAVs[u].isPaused();
 }
 
 function isStopped(name) {
