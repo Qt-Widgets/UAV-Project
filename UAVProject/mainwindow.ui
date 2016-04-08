@@ -71,7 +71,7 @@
            <x>0</x>
            <y>0</y>
            <width>242</width>
-           <height>2247</height>
+           <height>2747</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -179,13 +179,13 @@
               <property name="minimumSize">
                <size>
                 <width>200</width>
-                <height>150</height>
+                <height>200</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
                 <width>230</width>
-                <height>150</height>
+                <height>200</height>
                </size>
               </property>
               <property name="font">
@@ -301,13 +301,13 @@
               <property name="minimumSize">
                <size>
                 <width>200</width>
-                <height>150</height>
+                <height>200</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
                 <width>230</width>
-                <height>150</height>
+                <height>200</height>
                </size>
               </property>
               <property name="font">
@@ -423,13 +423,13 @@
               <property name="minimumSize">
                <size>
                 <width>0</width>
-                <height>150</height>
+                <height>200</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
                 <width>230</width>
-                <height>150</height>
+                <height>200</height>
                </size>
               </property>
               <property name="font">
@@ -545,13 +545,13 @@
               <property name="minimumSize">
                <size>
                 <width>0</width>
-                <height>150</height>
+                <height>200</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
                 <width>230</width>
-                <height>150</height>
+                <height>200</height>
                </size>
               </property>
               <property name="font">
@@ -667,13 +667,13 @@
               <property name="minimumSize">
                <size>
                 <width>0</width>
-                <height>150</height>
+                <height>200</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
                 <width>230</width>
-                <height>150</height>
+                <height>200</height>
                </size>
               </property>
               <property name="font">
@@ -789,13 +789,13 @@
               <property name="minimumSize">
                <size>
                 <width>0</width>
-                <height>150</height>
+                <height>200</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
                 <width>230</width>
-                <height>150</height>
+                <height>200</height>
                </size>
               </property>
               <property name="font">
@@ -917,13 +917,13 @@
               <property name="minimumSize">
                <size>
                 <width>0</width>
-                <height>150</height>
+                <height>200</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
                 <width>230</width>
-                <height>150</height>
+                <height>200</height>
                </size>
               </property>
               <property name="font">
@@ -1051,13 +1051,13 @@
               <property name="minimumSize">
                <size>
                 <width>0</width>
-                <height>150</height>
+                <height>200</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
                 <width>230</width>
-                <height>150</height>
+                <height>200</height>
                </size>
               </property>
               <property name="font">
@@ -1173,13 +1173,13 @@
               <property name="minimumSize">
                <size>
                 <width>0</width>
-                <height>150</height>
+                <height>200</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
                 <width>230</width>
-                <height>150</height>
+                <height>200</height>
                </size>
               </property>
               <property name="font">
@@ -1295,13 +1295,13 @@
               <property name="minimumSize">
                <size>
                 <width>0</width>
-                <height>150</height>
+                <height>200</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
                 <width>230</width>
-                <height>150</height>
+                <height>200</height>
                </size>
               </property>
               <property name="font">

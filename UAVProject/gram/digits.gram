@@ -6,10 +6,10 @@
  
 grammar digits;
 
-public <command>	= (<verb> <noun> <article> <number> <measure>)|(<report>)|(begin)|(start)|(emergency) |(<bool>);
+public <command>	= (<verb> <noun> <article> <number> <measure>)|(report <noun> for U A V <digit>)|(start)|(emergency) |(<bool>);
 <report>			= (report <snoun>);
 <verb>	 			= (change | alter | ascend | descend | fly );
-<noun>  		 	= (height | drone);
+<noun>  		 	= (speed | destination | status | mission status | height | drone);
 <snoun>				= (height | latitude | longitude | destination);
 <article>			= (to);
 <number>			= (<digit> | <digit><number>);

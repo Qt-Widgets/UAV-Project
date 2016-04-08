@@ -42,7 +42,7 @@ private slots:
     void onTalkReleased();
 
     void manipString(QString heard);
-    void start();
+    int numStringToInt(QString num);
     void lag();
 
 private:
@@ -55,6 +55,11 @@ private:
     QString mission[11];
     bool emerg[11];
     int fuel[11];
+    QString destinationArray[11];
+    int speedArray[11];
+    int mainIndex = 1;
+    std::string s;
+
 };
 
 #endif // MAINWINDOW_H

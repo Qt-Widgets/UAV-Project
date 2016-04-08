@@ -227,25 +227,82 @@ void MainWindow::readSerial()
 
 // BEGIN VOCE Functions ==============================================================================================
 
-std::string s;
+QTimer *timer3 = new QTimer();
 
 void MainWindow::manipString(QString heard)
 {
+    QStringList heardList = heard.split(" ", QString::SkipEmptyParts);
+    int temp = -1;
+    int temp2 = -1;
+    QString temp3;
+
     if (heard == "start") {
-        start();
+        ui->webView_4->page()->mainFrame()->evaluateJavaScript("start();");
+
+        // Timer for fuel simulator
+        timer3->start(5000);
+    }
+    else if (heardList[0] == "report") {
+
+        temp = numStringToInt(heardList[6]);
+
+        if (heardList[1] == "speed") {
+            temp2 = speedArray[temp];
+            voce::synthesize(QString::number(temp2).toStdString() + "miles per hour");
+        }
+        else if (heardList[1] == "destination") {
+            temp3 = destinationArray[temp];
+            voce::synthesize(temp3.toStdString());
+        }
+        else if (heardList[1] == "status") {
+            temp3 = status[temp];
+            voce::synthesize(temp3.toStdString());
+        }
+        else if (heardList[1] == "mission") {
+            temp = numStringToInt(heardList[7]);
+            temp3 = mission[temp];
+            voce::synthesize(temp3.toStdString());
+        }
     }
 }
 
-QTimer *timer3 = new QTimer();
-
-void MainWindow::start() {
-    ui->webView_4->page()->mainFrame()->evaluateJavaScript("start();");
-
-    // Timer for fuel simulator
-    timer3->start(5000);
+int MainWindow::numStringToInt(QString num)
+{
+    if (num == "one") {
+        return 1;
+    }
+    else if (num == "two") {
+        return 2;
+    }
+    else if (num == "three") {
+        return 3;
+    }
+    else if (num == "four") {
+        return 4;
+    }
+    else if (num == "five") {
+        return 5;
+    }
+    else if (num == "six") {
+        return 6;
+    }
+    else if (num == "seven") {
+        return 7;
+    }
+    else if (num == "eight") {
+        return 8;
+    }
+    else if (num == "nine") {
+        return 9;
+    }
 }
 
 // END VOCE Functions ================================================================================================
+
+// BEGIN Getters =====================================================================================================
+
+
+// END Getters =======================================================================================================
 
 // BEGIN UI Functions ================================================================================================
 
@@ -256,7 +313,7 @@ void MainWindow::onTalkPressed()
     voce::setRecognizerEnabled(true);
 }
 
-void MainWindow::lag()
+void MainWindow::lag() // makes up for VOCE lag in recognizing what you said.
 {
     QTimer::singleShot(1500, this, SLOT(onTalkReleased()));
 }
@@ -286,8 +343,6 @@ void MainWindow::showTime()
     ui->lcdNumber_4->display(timeString);
 }
 
-int mainIndex = 1;
-
 void MainWindow::onMapLoaded()
 {
     ui->progressBar->hide();
@@ -304,7 +359,7 @@ void MainWindow::onMapLoaded()
     addUAV("UAV3", "Van Nuys", "Calabasas", 110, mainIndex, 100);
     addUAV("UAV4", "Van Nuys", "Studio City", 200, mainIndex, 100);
     addUAV("UAV5", "Van Nuys", "Downtown Burbank", 30, mainIndex, 100);
-    addUAV("UAV6", "Van Nuys", "San Fernando", 30, mainIndex, 100);
+    //addUAV("UAV6", "Van Nuys", "San Fernando", 30, mainIndex, 100);
 }
 
 // Stores array of USPS locations, emergency mode
@@ -401,6 +456,8 @@ void MainWindow::addUAV(QString name, QString origin, QString destination, int s
     }
 
     int timeInterval = calcTimeInterval(speed, path);
+    speedArray[index] = speed;
+    destinationArray[index] = destination;
 
     ui->webView_4->page()->mainFrame()->evaluateJavaScript("addUAV('" + name + "', " + path + ", " + QString::number(timeInterval) + ");");
 
@@ -854,51 +911,71 @@ void MainWindow::showInfo(QString name, int index)
     if (name == "UAV1") {        
         ui->textBrowser->setText("MISSION STATUS: " + mission[g] + "\n\n" +
                                  "UAV STATUS: " + status[g] + "\n\n" +
+                                 "DESTINATION: " + destinationArray[index] + "\n\n" +
+                                 "SPEED: " + QString::number(speedArray[index]) + " MPH\n\n" +
                                  "LOCATION: " + a.toString());
     }
     else if (name == "UAV2") {
         ui->textBrowser_2->setText("MISSION STATUS: " + mission[g] + "\n\n" +
                                  "UAV STATUS: " + status[g] + "\n\n" +
+                                   "DESTINATION: " + destinationArray[index] + "\n\n" +
+                                 "SPEED: " + QString::number(speedArray[index]) + " MPH\n\n" +
                                  "LOCATION: " + a.toString());
     }
     else if (name == "UAV3") {
         ui->textBrowser_3->setText("MISSION STATUS: " + mission[g] + "\n\n" +
                                  "UAV STATUS: " + status[g] + "\n\n" +
+                                   "DESTINATION: " + destinationArray[index] + "\n\n" +
+                                   "SPEED: " + QString::number(speedArray[index]) + " MPH\n\n" +
                                  "LOCATION: " + a.toString());
     }
     else if (name == "UAV4") {
         ui->textBrowser_4->setText("MISSION STATUS: " + mission[g] + "\n\n" +
                                  "UAV STATUS: " + status[g] + "\n\n" +
+                                   "DESTINATION: " + destinationArray[index] + "\n\n" +
+                                   "SPEED: " + QString::number(speedArray[index]) + " MPH\n\n" +
                                  "LOCATION: " + a.toString());
     }
     else if (name == "UAV5") {
         ui->textBrowser_5->setText("MISSION STATUS: " + mission[g] + "\n\n" +
                                  "UAV STATUS: " + status[g] + "\n\n" +
+                                   "DESTINATION: " + destinationArray[index] + "\n\n" +
+                                   "SPEED: " + QString::number(speedArray[index]) + " MPH\n\n" +
                                  "LOCATION: " + a.toString());
     }
     else if (name == "UAV6") {
         ui->textBrowser_6->setText("MISSION STATUS: " + mission[g] + "\n\n" +
                                  "UAV STATUS: " + status[g] + "\n\n" +
+                                   "DESTINATION: " + destinationArray[index] + "\n\n" +
+                                   "SPEED: " + QString::number(speedArray[index]) + " MPH\n\n" +
                                  "LOCATION: " + a.toString());
     }
     else if (name == "UAV7") {
         ui->textBrowser_7->setText("MISSION STATUS: " + mission[g] + "\n\n" +
                                  "UAV STATUS: " + status[g] + "\n\n" +
+                                   "DESTINATION: " + destinationArray[index] + "\n\n" +
+                                   "SPEED: " + QString::number(speedArray[index]) + " MPH\n\n" +
                                  "LOCATION: " + a.toString());
     }
     else if (name == "UAV8") {
         ui->textBrowser_8->setText("MISSION STATUS: " + mission[g] + "\n\n" +
                                  "UAV STATUS: " + status[g] + "\n\n" +
+                                   "DESTINATION: " + destinationArray[index] + "\n\n" +
+                                   "SPEED: " + QString::number(speedArray[index]) + " MPH\n\n" +
                                  "LOCATION: " + a.toString());
     }
     else if (name == "UAV9") {
         ui->textBrowser_9->setText("MISSION STATUS: " + mission[g] + "\n\n" +
                                  "UAV STATUS: " + status[g] + "\n\n" +
+                                   "DESTINATION: " + destinationArray[index] + "\n\n" +
+                                   "SPEED: " + QString::number(speedArray[index]) + " MPH\n\n" +
                                  "LOCATION: " + a.toString());
     }
     else if (name == "UAV10") {
         ui->textBrowser_10->setText("MISSION STATUS: " + mission[g] + "\n\n" +
                                  "UAV STATUS: " + status[g] + "\n\n" +
+                                    "DESTINATION: " + destinationArray[index] + "\n\n" +
+                                    "SPEED: " + QString::number(speedArray[index]) + " MPH\n\n" +
                                  "LOCATION: " + a.toString());
     }
 
