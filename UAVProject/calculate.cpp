@@ -1,10 +1,12 @@
 #include "calculate.h"
+#include "mainwindow.h"
 #include <QString>
 #include <QStringList>
 #include <QRegExp>
 
 #define pi 3.14159265358979323846
 
+//converts speed in mph given in adduav parameter to time interval for adding marker parameter in movingmarker.js
 int calculate::speedToTimeInterval(int speed, QString path)
 {
     double distance = distToUSPS(path);
@@ -22,6 +24,7 @@ int calculate::speedToTimeInterval(int speed, QString path)
     return ms;
 }
 
+// Calculates distance to each USPS
 double calculate::distToUSPS(QString path)
 {
    QRegExp rx ("[][,]");

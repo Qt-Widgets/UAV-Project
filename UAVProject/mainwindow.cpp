@@ -137,15 +137,30 @@ MainWindow::MainWindow(QWidget *parent) :
                                       "font-size: 16px;"
                                       "font-weight: bold;");
 
-    //test x;
-    //ui->textBrowser_11->setText(QString::number(r));
-
     // Timer to update clock
     QTimer *timer = new QTimer(this);
     timer->start(1000);
-
     connect(timer, SIGNAL(timeout()), this, SLOT(showTime()));
 
+    // Reads text file containing usps locations and stores them in array
+    QFile inputFile("C:/Users/Ernest Curioso/Desktop/SFVUSPS.txt");
+    if (inputFile.open(QIODevice::ReadOnly)) {
+        QTextStream in(&inputFile);
+        int i = 0;
+        while (!in.atEnd()) {
+            QString line = in.readLine();
+            QStringList pair = line.split(":");
+            USPSNames[i] = pair[0];
+            USPSArray[i] = pair[1];
+            i++;
+        }
+        inputFile.close();
+    }
+
+    // Initalizes emergency flag for each UAV to false
+    for (int i=1; i<=10; i++) {
+        emerg[i] = false;
+    }
 
     // BEGIN Arduino Pulse Sensor  ==============================================================================
 
@@ -378,8 +393,6 @@ void MainWindow::onMapLoaded()
     connect(ui->pushButton_11, SIGNAL(pressed()), this, SLOT(onTalkPressed()));
     connect(ui->pushButton_11, SIGNAL(released()), this, SLOT(lag()));
 
-    this->initialize();
-
     // Launch Initial UAVs (string name, string origin, string destination, string speed in mph, int index number, int fuel level).
     addUAV("UAV1", "Van Nuys", "Porter Ranch", 500, mainIndex, 100);
     addUAV("UAV2", "Van Nuys", "West Hills", 70, mainIndex, 100);
@@ -387,85 +400,6 @@ void MainWindow::onMapLoaded()
     addUAV("UAV4", "Van Nuys", "Studio City", 200, mainIndex, 100);
     addUAV("UAV5", "Van Nuys", "Downtown Burbank", 30, mainIndex, 100);
     //addUAV("UAV6", "Van Nuys", "San Fernando", 30, mainIndex, 100);
-}
-
-// Stores array of USPS locations, emergency mode
-void MainWindow::initialize()
-{
-    USPSNames[0] = "Northridge";
-    USPSNames[1] = "Winnetka";
-    USPSNames[2] = "Granada Hills";
-    USPSNames[3] = "Porter Ranch";
-    USPSNames[4] = "Reseda";
-    USPSNames[5] = "Chatsworth";
-    USPSNames[6] = "Canoga Park";
-    USPSNames[7] = "North Hills";
-    USPSNames[8] = "Tarzana";
-    USPSNames[9] = "Encino";
-    USPSNames[10] = "West Hills";
-    USPSNames[11] = "Mission Hills";
-    USPSNames[12] = "Van Nuys";
-    USPSNames[13] = "Woodland Hills";
-    USPSNames[14] = "Panorama City";
-    USPSNames[15] = "Balboa Van Nuys";
-    USPSNames[16] = "Civic Center Van Nuys";
-    USPSNames[17] = "San Fernando";
-    USPSNames[18] = "Calabasas";
-    USPSNames[19] = "Sherman Oaks";
-    USPSNames[20] = "Valley Village";
-    USPSNames[21] = "Valley Plaza";
-    USPSNames[22] = "North Hollywood";
-    USPSNames[23] = "Arleta";
-    USPSNames[24] = "Pacoima";
-    USPSNames[25] = "Studio City";
-    USPSNames[26] = "Toluca Lake";
-    USPSNames[27] = "Chandler";
-    USPSNames[28] = "Burbank";
-    USPSNames[29] = "Sun Valley";
-    USPSNames[30] = "Downtown Burbank";
-
-    USPSArray[0] = "34.243689,-118.535640";
-    USPSArray[1] = "34.210034,-118.571521";
-    USPSArray[2] = "34.265814,-118.526196";
-    USPSArray[3] = "34.273601,-118.554922";
-    USPSArray[4] = "34.203311,-118.535677";
-    USPSArray[5] = "34.256726,-118.600793";
-    USPSArray[6] = "34.218416,-118.598400";
-    USPSArray[7] = "34.236373,-118.466520";
-    USPSArray[8] = "34.172675,-118.541652";
-    USPSArray[9] = "34.176279,-118.519337";
-    USPSArray[10] = "34.200541,-118.630173";
-    USPSArray[11] = "34.268628,-118.468120";
-    USPSArray[12] = "34.202057,-118.476116";
-    USPSArray[13] = "34.170057,-118.608636";
-    USPSArray[14] = "34.224525,-118.447225";
-    USPSArray[15] = "34.160040,-118.500507";
-    USPSArray[16] = "34.189540,-118.448980";
-    USPSArray[17] = "34.282136,-118.442553";
-    USPSArray[18] = "34.154324,-118.641864";
-    USPSArray[19] = "34.164363,-118.458005";
-    USPSArray[20] = "34.164719,-118.404642";
-    USPSArray[21] = "34.187314,-118.398483";
-    USPSArray[22] = "34.198664,-118.397087";
-    USPSArray[23] = "34.241801,-118.425418";
-    USPSArray[24] = "34.262476,-118.427655";
-    USPSArray[25] = "34.142350,-118.394123";
-    USPSArray[26] = "34.152470,-118.350381";
-    USPSArray[27] = "34.167841,-118.377927";
-    USPSArray[28] = "34.187958,-118.348218";
-    USPSArray[29] = "34.217020,-118.368881";
-    USPSArray[30] = "34.180514,-118.309706";
-
-    emerg[1] = false;
-    emerg[2] = false;
-    emerg[3] = false;
-    emerg[4] = false;
-    emerg[5] = false;
-    emerg[6] = false;
-    emerg[7] = false;
-    emerg[8] = false;
-    emerg[9] = false;
-    emerg[10] = false;
 }
 
 void MainWindow::addUAV(QString name, QString origin, QString destination, int speed, int index, int fuelLevel)
@@ -619,13 +553,6 @@ void MainWindow::fuelSim(QString name, int index)
     }
 }
 
-// Getter for latlng. Returns string "LatLng([latValue],[longValue])
-QString MainWindow::getLatLng(int index)
-{
-    QVariant a = ui->webView_4->page()->mainFrame()->evaluateJavaScript("getLatLng('" + QString::number(index) +  "');");
-    return a.toString();
-}
-
 // Determines closest USPS for given latlng
 int MainWindow::closestUSPS(QString latlng)
 {
@@ -660,6 +587,13 @@ int MainWindow::closestUSPS(QString latlng)
     }
 
     return position;
+}
+
+// Getter for latlng. Returns string "LatLng([latValue],[longValue])
+QString MainWindow::getLatLng(int index)
+{
+    QVariant a = ui->webView_4->page()->mainFrame()->evaluateJavaScript("getLatLng('" + QString::number(index) +  "');");
+    return a.toString();
 }
 
 QTimer *timer2 = new QTimer();
