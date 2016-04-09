@@ -143,7 +143,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(timer, SIGNAL(timeout()), this, SLOT(showTime()));
 
     // Reads text file containing usps locations and stores them in array
-    QFile inputFile("C:/Users/Ernest Curioso/Desktop/SFVUSPS.txt");
+    QFile inputFile("C:/Users/Ernest Curioso/Documents/Qt Projects/UAVProject/UAVProject/SFVUSPS.txt");
     if (inputFile.open(QIODevice::ReadOnly)) {
         QTextStream in(&inputFile);
         int i = 0;
