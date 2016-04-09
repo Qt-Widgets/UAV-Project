@@ -33,8 +33,8 @@ private slots:
     void initialize();
     QString getLatLng(int index);
     void addUAV(QString name, QString origin, QString destinatino, int speed, int fuel, int fuelLevel);
-    int calcTimeInterval(int speed, QString destination);
-    double calcDistance(QString path);
+    //int calcTimeInterval(int speed, QString destination);
+    //double calcDistance(QString path);
     void setDefaultColor(int index);
     void focus(int index);
 

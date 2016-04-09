@@ -9,6 +9,7 @@
 #include <math.h>
 #include <windows.h>
 #include <voce.h>
+#include "calculate.h"
 
 #define pi 3.14159265358979323846
 
@@ -281,7 +282,7 @@ void MainWindow::manipString(QString heard)
             for (int i=1; i<=mainIndex-1; i++) {
                 temp3 = getLatLng(i);
                 int j = closestUSPS(temp3);
-                emerg[i];
+                emerg[i] = true;
                 ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute('" + QString::number(i) + "', [" + USPSArray[j] + "], 7000);");
             }
         }
@@ -324,14 +325,11 @@ int MainWindow::numStringToInt(QString num)
     else if (num == "nine") {
         return 9;
     }
+    else
+        return 0;
 }
 
 // END VOCE Functions ================================================================================================
-
-// BEGIN Getters =====================================================================================================
-
-
-// END Getters =======================================================================================================
 
 // BEGIN UI Functions ================================================================================================
 
@@ -484,7 +482,7 @@ void MainWindow::addUAV(QString name, QString origin, QString destination, int s
         }
     }
 
-    int timeInterval = calcTimeInterval(speed, path);
+    int timeInterval = calculate::speedToTimeInterval(speed, path);
     speedArray[index] = speed;
     destinationArray[index] = destination;
 
@@ -653,7 +651,7 @@ int MainWindow::closestUSPS(QString latlng)
         lng2 = list2.at(1);
 
         path = "[[" + lat + "," + lng + "],[" + lat2 + "," + lng2 + "]]";
-        temp = calcDistance(path);
+        temp = calculate::distToUSPS(path);
 
         if (temp < dist) {
             dist = temp;
@@ -1078,51 +1076,6 @@ void MainWindow::focus(int index)
     QString lng = list.at(2);
 
     ui->webView_4->page()->mainFrame()->evaluateJavaScript("focus('" + lat + "','" + lng + "');");
-}
-
-//Calculates distance between two latlong values (path [[lat,long],[lat,long]])
- double MainWindow::calcDistance(QString path)
- {
-    QRegExp rx ("[][,]");
-    QStringList list = path.split(rx, QString::SkipEmptyParts);
-    QString lat = list.at(0);
-    QString lng = list.at(1);
-    QString lat2 = list.at(2);
-    QString lng2 = list.at(3);
-
-    double r = 3961;
-    double dist;
-    double dlat;
-    double dlon;
-    double a;
-    double c;
-
-    dlat = lat2.toDouble() - lat.toDouble();
-    dlat = (dlat * pi)/180;
-    dlon = lng2.toDouble() - lng.toDouble();
-    dlon = (dlon * pi)/180;
-    a = ((sin(dlat/2))*(sin(dlat/2))) + cos(lat.toDouble()) * cos(lat2.toDouble()) * ((sin(dlon/2))*(sin(dlon/2)));
-    c = 2 * atan2(sqrt(a), sqrt(1-a));
-    dist = r * c;
-
-    return dist;
-}
-
-int MainWindow::calcTimeInterval(int speed, QString path)
-{
-    double distance = calcDistance(path);
-    double time = distance/speed;
-
-    QRegExp rx ("[.]");
-    QStringList list = QString::number(time).split(rx, QString::SkipEmptyParts);
-    QString hour = list.at(0);
-    QString minute = "0." + list.at(1);
-
-    double hourToMs = hour.toDouble() * 60 * 60 * 1000;
-    double minToMs = minute.toDouble() * 60 * 60 * 1000;
-    double ms = hourToMs + minToMs;
-
-    return ms;
 }
 
 // END UI Functions =====================================================================================================
