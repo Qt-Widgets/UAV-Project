@@ -30,9 +30,7 @@ var uavBaseIcon = L.Icon.extend({
 
 var uavIcon = new uavBaseIcon({iconUrl: "Map_Icons/uav-icon.png"});
 
-
-
-////////UAV Stuff
+// UAV Stuff ================================================================
 
 var n = 1; //number of UAVs
 var UAVs = [];
@@ -225,34 +223,35 @@ function changeDestination(name, destination) {
 }
 
 var USPS = [];
-USPS[0] = L.marker([34.243689,-118.535640]).addTo(map);
-USPS[1] = L.marker([34.210034,-118.571521]).addTo(map);
-USPS[2] = L.marker([34.265814,-118.526196]).addTo(map);
-USPS[3] = L.marker([34.273601,-118.554922]).addTo(map);
-USPS[4] = L.marker([34.203311,-118.535677]).addTo(map);
-USPS[5] = L.marker([34.256726,-118.600793]).addTo(map);
-USPS[6] = L.marker([34.218416,-118.598400]).addTo(map);
-USPS[7] = L.marker([34.236373,-118.466520]).addTo(map);
-USPS[8] = L.marker([34.172675,-118.541652]).addTo(map);
-USPS[9] = L.marker([34.176279,-118.519337]).addTo(map);
-USPS[10] = L.marker([34.200541,-118.630173]).addTo(map);
-USPS[11] = L.marker([34.268628,-118.468120]).addTo(map);
-USPS[12] = L.marker([34.202057,-118.476116]).addTo(map);
-USPS[13] = L.marker([34.170057,-118.608636]).addTo(map);
-USPS[14] = L.marker([34.224525,-118.447225]).addTo(map);
-USPS[15] = L.marker([34.160040,-118.500507]).addTo(map);
-USPS[16] = L.marker([34.189540,-118.448980]).addTo(map);
-USPS[17] = L.marker([34.282136,-118.442553]).addTo(map);
-USPS[18] = L.marker([34.154324,-118.641864]).addTo(map);
-USPS[19] = L.marker([34.164363,-118.458005]).addTo(map);
-USPS[20] = L.marker([34.164719,-118.404642]).addTo(map);
-USPS[21] = L.marker([34.187314,-118.398483]).addTo(map);
-USPS[22] = L.marker([34.198664,-118.397087]).addTo(map);
-USPS[23] = L.marker([34.241801,-118.425418]).addTo(map);
-USPS[24] = L.marker([34.262476,-118.427655]).addTo(map);
-USPS[25] = L.marker([34.142350,-118.394123]).addTo(map);
-USPS[26] = L.marker([34.152470,-118.350381]).addTo(map);
-USPS[27] = L.marker([34.167841,-118.377927]).addTo(map);
-USPS[28] = L.marker([34.187958,-118.348218]).addTo(map);
-USPS[29] = L.marker([34.217020,-118.368881]).addTo(map);
-USPS[30] = L.marker([34.180514,-118.309706]).addTo(map);
+
+USPS[0] = L.marker([34.243689,-118.535640]).addTo(map).bindPopup("Northridge");
+USPS[1] = L.marker([34.210034,-118.571521]).addTo(map).bindPopup("Winnetka");
+USPS[2] = L.marker([34.265814,-118.526196]).addTo(map).bindPopup("Granada Hills");
+USPS[3] = L.marker([34.273601,-118.554922]).addTo(map).bindPopup("Porter Ranch");
+USPS[4] = L.marker([34.203311,-118.535677]).addTo(map).bindPopup("Reseda");
+USPS[5] = L.marker([34.256726,-118.600793]).addTo(map).bindPopup("Chatsworth");
+USPS[6] = L.marker([34.218416,-118.598400]).addTo(map).bindPopup("Canoga Park");
+USPS[7] = L.marker([34.236373,-118.466520]).addTo(map).bindPopup("North Hills");
+USPS[8] = L.marker([34.172675,-118.541652]).addTo(map).bindPopup("Tarzana");
+USPS[9] = L.marker([34.176279,-118.519337]).addTo(map).bindPopup("Encino");
+USPS[10] = L.marker([34.200541,-118.630173]).addTo(map).bindPopup("West Hills");
+USPS[11] = L.marker([34.268628,-118.468120]).addTo(map).bindPopup("Mission Hills");
+USPS[12] = L.marker([34.202057,-118.476116]).addTo(map).bindPopup("Van Nuys");
+USPS[13] = L.marker([34.170057,-118.608636]).addTo(map).bindPopup("Woodland Hills");
+USPS[14] = L.marker([34.224525,-118.447225]).addTo(map).bindPopup("Panorama City");
+USPS[15] = L.marker([34.160040,-118.500507]).addTo(map).bindPopup("Balboa Van Nuys");
+USPS[16] = L.marker([34.189540,-118.448980]).addTo(map).bindPopup("Civic Center Van Nuys");
+USPS[17] = L.marker([34.282136,-118.442553]).addTo(map).bindPopup("San Fernando");
+USPS[18] = L.marker([34.154324,-118.641864]).addTo(map).bindPopup("Calabasas");
+USPS[19] = L.marker([34.164363,-118.458005]).addTo(map).bindPopup("Sherman Oaks");
+USPS[20] = L.marker([34.164719,-118.404642]).addTo(map).bindPopup("Valley Village");
+USPS[21] = L.marker([34.187314,-118.398483]).addTo(map).bindPopup("Valley Plaza");
+USPS[22] = L.marker([34.198664,-118.397087]).addTo(map).bindPopup("North Hollywood");
+USPS[23] = L.marker([34.241801,-118.425418]).addTo(map).bindPopup("Arleta");
+USPS[24] = L.marker([34.262476,-118.427655]).addTo(map).bindPopup("Pacoima");
+USPS[25] = L.marker([34.142350,-118.394123]).addTo(map).bindPopup("Studio City");
+USPS[26] = L.marker([34.152470,-118.350381]).addTo(map).bindPopup("Toluca Lake");
+USPS[27] = L.marker([34.167841,-118.377927]).addTo(map).bindPopup("Chandler");
+USPS[28] = L.marker([34.187958,-118.348218]).addTo(map).bindPopup("Burbank");
+USPS[29] = L.marker([34.217020,-118.368881]).addTo(map).bindPopup("Sun Valley");
+USPS[30] = L.marker([34.180514,-118.309706]).addTo(map).bindPopup("Downtown Burbank");
