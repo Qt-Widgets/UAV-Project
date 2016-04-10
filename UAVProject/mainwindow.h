@@ -59,10 +59,10 @@ private:
     int speedArray[9];
     int mainIndex = 1;
     std::string s;
-    QTimer *timer2 = new QTimer(); // timer for uav info
+    QTimer *timer2 = new QTimer(); // timer for uav info & corner of van nuys airport
     QTimer *timer3 = new QTimer(); // timer for fuel simulation
     QTimer *timer4 = new QTimer(); // timer for avoidCheck;
-    QTimer *timer5 = new QTimer(); // timer to check if at corner of van nuys airport
+    QTimer *timer5 = new QTimer();
     QString USPSName[30];
 };
 

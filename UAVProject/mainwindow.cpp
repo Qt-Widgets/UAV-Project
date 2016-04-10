@@ -10,6 +10,7 @@
 #include <windows.h>
 #include <voce.h>
 #include "calculate.h"
+#include "uav.h"
 
 #define pi 3.14159265358979323846
 
@@ -241,7 +242,7 @@ USPSLatLng[30] = "34.180514,-118.309706";*/
         emerg[i] = false;
     }
 
-    timer4->start(50);
+    timer4->start(250);
 
     // BEGIN Arduino Pulse Sensor  ==============================================================================
 
@@ -473,12 +474,15 @@ void MainWindow::onMapLoaded()
     connect(ui->pushButton_11, SIGNAL(released()), this, SLOT(lag()));
 
     // Launch Initial UAVs (string name, string origin, string destination, string speed in mph, int index number, int fuel level).
-    addUAV("UAV1", "Van Nuys", "Canoga Park", 700, mainIndex, 12);
+    addUAV("UAV1", "Van Nuys", "Canoga Park", 700, mainIndex, 100);
     addUAV("UAV2", "Van Nuys", "West Hills", 700, mainIndex, 100);
     addUAV("UAV3", "Van Nuys", "Calabasas", 700, mainIndex, 100);
     addUAV("UAV4", "Van Nuys", "Studio City", 700, mainIndex, 100);
     //addUAV("UAV5", "Van Nuys", "Downtown Burbank", 30, mainIndex, 100);
     //addUAV("UAV6", "Van Nuys", "San Fernando", 30, mainIndex, 100);
+
+    //UAV UAV1 ("UAV1", "Van Nuys", "Canoga Park", 700, mainIndex, 12);
+    //addUAV(UAV1.getName(), UAV1.getOrigin(), UAV1.getDestination(), UAV1.getSpeed(), UAV1.getMainIndex(), UAV1.getBattery());
 }
 
 void MainWindow::addUAV(QString name, QString origin, QString destination, int speed, int index, int fuelLevel)
@@ -698,7 +702,7 @@ void MainWindow::showUAVWindow(QString name, int index)
 {
     // Timer for live update of UAV info ie latlong values
     connect(timer2, &QTimer::timeout, this, [=]{ showInfo(name, index); });
-    timer2->start(50);
+    timer2->start(250);
 
     // Turns uav window original after half a second of being red.
     QTimer::singleShot(500, this, [=]{ setDefaultColor(index); });
@@ -1066,7 +1070,7 @@ void MainWindow::avoidCheck(int index)
     if (lat < 34.224 && lat > 34.190 && lng < -118.479 && lng > -118.501) {
         avoidVanNuysAirport(lat, lng, index);
         timer4->stop();
-        QTimer::singleShot(1000, this, [=]{ timer4->start(50); });
+        QTimer::singleShot(1000, this, [=]{ timer4->start(100); });
     }
 }
 
@@ -1078,7 +1082,7 @@ void MainWindow::avoidVanNuysAirport(double lat, double lng, int index)
     double dist2;
 
     connect(timer5, &QTimer::timeout, this, [=]{ atVNACorner(index); });
-    timer5->start(100);
+    timer5->start(250);
 
     if (lat < 34.224 && lat > 34.222) {
         for (int i = 0; i<=30; i++) {
@@ -1092,11 +1096,12 @@ void MainWindow::avoidVanNuysAirport(double lat, double lng, int index)
         dist2 = calculate::distanceInMiles(path2);
 
         if (dist1 < dist2) {
-            reroute(index, "Van Nuys");
-            ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [34.226,-118.477], 7000);");
+            reroute(index, "34.226,-118.477");
+            //ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [34.226,-118.477], 7000);");
         }
         else {
-            ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [34.226,-118.503], 7000);");
+            reroute(index, "34.226,-118.503");
+            //ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [34.226,-118.503], 7000);");
         }
     }
 
@@ -1112,10 +1117,12 @@ void MainWindow::avoidVanNuysAirport(double lat, double lng, int index)
         dist2 = calculate::distanceInMiles(path2);
 
         if (dist1 < dist2) {
-            ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [34.188,-118.477], 7000);");
+            reroute(index, "34.188,-118.477");
+            //ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [34.188,-118.477], 7000);");
         }
         else {
-            ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [34.188,-118.503], 7000);");
+            reroute(index, "34.188,-118.503");
+            //ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [34.188,-118.503], 7000);");
         }
     }
     else if (lng > -118.501 && lng < -118.499) {
@@ -1130,10 +1137,12 @@ void MainWindow::avoidVanNuysAirport(double lat, double lng, int index)
         dist2 = calculate::distanceInMiles(path2);
 
         if (dist1 < dist2) {
-            ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [34.226,-118.503], 7000);");
+            reroute(index, "34.226,-118.503");
+            //ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [34.226,-118.503], 7000);");
         }
         else {
-            ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [34.188,-118.503], 7000);");
+            reroute(index, "34.188,-118.503");
+            //ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [34.188,-118.503], 7000);");
         }
     }
     else if (lng < -118.479 && lng > -118.481) {
@@ -1148,10 +1157,12 @@ void MainWindow::avoidVanNuysAirport(double lat, double lng, int index)
         dist2 = calculate::distanceInMiles(path2);
 
         if (dist1 < dist2) {
-            ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [34.226,-118.477], 7000);");
+            reroute(index, "34.226,-118.477");
+            //ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [34.226,-118.477], 7000);");
         }
         else {
-            ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [34.188,-118.477], 7000);");
+            reroute(index, "34.188,-118.477");
+            //ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [34.188,-118.477], 7000);");
         }
     }
 }
@@ -1178,14 +1189,16 @@ void MainWindow::atVNACorner(int index)
         if (emerg[index] == false) {
             for (int i = 0; i<=30; i++) {
                 if (destinationArray[index] == USPSName[i]) {
-                    ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [" + USPSLatLng[i] + "], 7000);");
+                    reroute(index, USPSLatLng[i]);
+                    //ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [" + USPSLatLng[i] + "], 7000);");
                 }
             }
         }
         else {
             for (int i = 0; i<=30; i++) {
                 if (destinationArray[index] == USPSName[i]) {
-                    ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [" + USPSLatLng[i] + "], 7000);");
+                    reroute(index, USPSLatLng[i]);
+                    //ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [" + USPSLatLng[i] + "], 7000);");
                 }
             }
         }

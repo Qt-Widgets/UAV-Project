@@ -14,10 +14,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    calculate.cpp
+    calculate.cpp \
+    uav.cpp
 
 HEADERS  += mainwindow.h \
-    calculate.h
+    calculate.h \
+    uav.h
 
 FORMS    += mainwindow.ui
 
