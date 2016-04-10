@@ -36,6 +36,7 @@ private slots:
     void avoidCheck(int index);
     void avoidVanNuysAirport (double lat, double lng, int index);
     void atVNACorner(int index);
+    void reroute(int index, QString newDestination);
 
     void onTalkPressed();
     void onTalkReleased();
@@ -48,21 +49,21 @@ private:
     Ui::MainWindow *ui;
     static const quint16 arduino_uno_vendor_id = 6790;
     static const quint16 arduino_uno_product_id = 29987;
-    QString USPSArray[40];
-    QString USPSNames[40];
-    QString status[11];
-    QString mission[11];
-    bool emerg[11];
-    int fuel[11];
-    QString destinationArray[11];
-    int speedArray[11];
+    QString USPSLatLng[30];
+    QString USPSNames[30];
+    QString status[9];
+    QString mission[9];
+    bool emerg[9];
+    int fuel[9];
+    QString destinationArray[9];
+    int speedArray[9];
     int mainIndex = 1;
     std::string s;
     QTimer *timer2 = new QTimer(); // timer for uav info
     QTimer *timer3 = new QTimer(); // timer for fuel simulation
     QTimer *timer4 = new QTimer(); // timer for avoidCheck;
-    QTimer *timer5 = new QTimer;
-
+    QTimer *timer5 = new QTimer(); // timer to check if at corner of van nuys airport
+    QString USPSName[30];
 };
 
 #endif // MAINWINDOW_H

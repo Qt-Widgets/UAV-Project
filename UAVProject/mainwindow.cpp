@@ -142,6 +142,71 @@ MainWindow::MainWindow(QWidget *parent) :
     timer->start(1000);
     connect(timer, SIGNAL(timeout()), this, SLOT(showTime()));
 
+/*USPSName[0] = "Northridge";
+USPSName[1] = "Winnetka";
+USPSName[2] = "Granada Hills";
+USPSName[3] = "Porter Ranch";
+USPSName[4] = "Reseda";
+USPSName[5] = "Chatsworth";
+USPSName[6] = "Canoga Park";
+USPSName[7] = "North Hills";
+USPSName[8] = "Tarzana";
+USPSName[9] = "Encino";
+USPSName[10] = "West Hills";
+USPSName[11] = "Mission Hills";
+USPSName[12] = "Van Nuys";
+USPSName[13] = "Woodland Hills";
+USPSName[14] = "Panorama City";
+USPSName[15] = "Balboa Van Nuys";
+USPSName[16] = "Civic Center Van Nuys";
+USPSName[17] = "San Fernando";
+USPSName[18] = "Calabasas";
+USPSName[19] = "Sherman Oaks";
+USPSName[20] = "Valley Village";
+USPSName[21] = "Valley Plaza";
+USPSName[22] = "North Hollywood";
+USPSName[23] = "Arleta";
+USPSName[24] = "Pacoima";
+USPSName[25] = "Studio City";
+USPSName[26] = "Toluca Lake";
+USPSName[27] = "Chandler";
+USPSName[28] = "Burbank";
+USPSName[29] = "Sun Valley";
+USPSName[30] = "Downtown Burbank";
+
+USPSLatLng[0] = "34.243689,-118.535640";
+USPSLatLng[1] = "34.210034,-118.571521";
+USPSLatLng[2] = "34.265814,-118.526196";
+USPSLatLng[3] = "34.273601,-118.554922";
+USPSLatLng[4] = "34.203311,-118.535677";
+USPSLatLng[5] = "34.256726,-118.600793";
+USPSLatLng[6] = "34.218416,-118.598400";
+USPSLatLng[7] = "34.236373,-118.466520";
+USPSLatLng[8] = "34.172675,-118.541652";
+USPSLatLng[9] = "34.176279,-118.519337";
+USPSLatLng[10] = "34.200541,-118.630173";
+USPSLatLng[11] = "34.268628,-118.468120";
+USPSLatLng[12] = "34.202057,-118.476116";
+USPSLatLng[13] = "34.170057,-118.608636";
+USPSLatLng[14] = "34.224525,-118.447225";
+USPSLatLng[15] = "34.160040,-118.500507";
+USPSLatLng[16] = "34.189540,-118.448980";
+USPSLatLng[17] = "34.282136,-118.442553";
+USPSLatLng[18] = "34.154324,-118.641864";
+USPSLatLng[19] = "34.164363,-118.458005";
+USPSLatLng[20] = "34.164719,-118.404642";
+USPSLatLng[21] = "34.187314,-118.398483";
+USPSLatLng[22] = "34.198664,-118.397087";
+USPSLatLng[23] = "34.241801,-118.425418";
+USPSLatLng[24] = "34.262476,-118.427655";
+USPSLatLng[25] = "34.142350,-118.394123";
+USPSLatLng[26] = "34.152470,-118.350381";
+USPSLatLng[27] = "34.167841,-118.377927";
+USPSLatLng[28] = "34.187958,-118.348218";
+USPSLatLng[29] = "34.217020,-118.368881";
+USPSLatLng[30] = "34.180514,-118.309706";*/
+
+
     // Reads text file containing usps locations and stores them in array
     QFile inputFile("C:/Users/Ernest Curioso/Documents/Qt Projects/UAVProject/UAVProject/SFVUSPS.txt");
     if (inputFile.open(QIODevice::ReadOnly)) {
@@ -150,12 +215,26 @@ MainWindow::MainWindow(QWidget *parent) :
         while (!in.atEnd()) {
             QString line = in.readLine();
             QStringList pair = line.split(":");
-            USPSNames[i] = pair[0];
-            USPSArray[i] = pair[1];
+            //USPSNames[i] = pair[0];
+            USPSName[i]  = pair[0];
+            USPSLatLng[i] = pair[1];
             i++;
         }
         inputFile.close();
     }
+
+    //for (int i =0; i<=30; i++) {
+    //    ui->textBrowser_11->append(USPSName[i]);
+    //}
+
+    //for (int i =0; i<=30; i++) {
+    //    ui->textBrowser_11->append(USPSLatLng[i]);
+    //}
+
+    //for (int i =0; i<=30; i++) {
+    //    ui->textBrowser_11->append(USPSName[i]);
+    //}
+
 
     // Initalizes emergency flag for each UAV to false
     for (int i=1; i<=10; i++) {
@@ -290,7 +369,7 @@ void MainWindow::manipString(QString heard)
     }
     else if (heardList[0] == "return") {
         temp = numStringToInt(heardList[6]);
-        ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute('" + QString::number(temp) + "', [" + USPSArray[12] + "], 7000);");
+        reroute(temp, "Van Nuys");
     }
     else if (heardList[0] == "emergency") {
         if (heardList[2] == "all") {
@@ -298,7 +377,7 @@ void MainWindow::manipString(QString heard)
                 temp3 = getLatLng(i);
                 int j = closestUSPS(temp3);
                 emerg[i] = true;
-                ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute('" + QString::number(i) + "', [" + USPSArray[j] + "], 7000);");
+                reroute(i, USPSName[j]);
             }
         }
         else {
@@ -306,7 +385,7 @@ void MainWindow::manipString(QString heard)
             temp3 = getLatLng(temp);
             int i = closestUSPS(temp3);
             emerg[temp] = true;
-            ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute('" + QString::number(temp) + "', [" + USPSArray[i] + "], 7000);");
+            reroute(temp, USPSName[i]);
         }
     }
 }
@@ -394,10 +473,10 @@ void MainWindow::onMapLoaded()
     connect(ui->pushButton_11, SIGNAL(released()), this, SLOT(lag()));
 
     // Launch Initial UAVs (string name, string origin, string destination, string speed in mph, int index number, int fuel level).
-    addUAV("UAV1", "Van Nuys", "Porter Ranch", 300, mainIndex, 100);
-    addUAV("UAV2", "Van Nuys", "West Hills", 70, mainIndex, 100);
-    addUAV("UAV3", "Van Nuys", "Calabasas", 110, mainIndex, 100);
-    addUAV("UAV4", "Van Nuys", "Studio City", 200, mainIndex, 100);
+    addUAV("UAV1", "Van Nuys", "Canoga Park", 700, mainIndex, 12);
+    addUAV("UAV2", "Van Nuys", "West Hills", 700, mainIndex, 100);
+    addUAV("UAV3", "Van Nuys", "Calabasas", 700, mainIndex, 100);
+    addUAV("UAV4", "Van Nuys", "Studio City", 700, mainIndex, 100);
     //addUAV("UAV5", "Van Nuys", "Downtown Burbank", 30, mainIndex, 100);
     //addUAV("UAV6", "Van Nuys", "San Fernando", 30, mainIndex, 100);
 }
@@ -407,10 +486,10 @@ void MainWindow::addUAV(QString name, QString origin, QString destination, int s
     QString path;
 
     for (int i=0; i<=30; i++) {
-        if (origin == USPSNames[i]) {
+        if (origin == USPSName[i]) {
             for (int j=0; j<=30; j++) {
-                if (destination == USPSNames[j]) {
-                    path = "[[" + USPSArray[i] + "],[" + USPSArray[j] + "]]";
+                if (destination == USPSName[j]) {
+                    path = "[[" + USPSLatLng[i] + "],[" + USPSLatLng[j] + "]]";
                 }
             }
         }
@@ -460,13 +539,29 @@ void MainWindow::addUAV(QString name, QString origin, QString destination, int s
     mainIndex++;
 }
 
+void MainWindow::reroute(int index, QString newDestination)
+{
+    QString latlng = getLatLng(index);
+    QRegExp rx ("[(),]");
+    QStringList list = latlng.split(rx, QString::SkipEmptyParts);
+    QString lat = list.at(1);
+    QString lng = list.at(2);
+
+    for (int i=0; i<=30; i++) {
+        if (newDestination == USPSName[i]) {
+            newDestination = USPSLatLng[i];
+        }
+    }
+
+    QString path = "[[" + lat + "," + lng + "],[" + newDestination + "]]";
+    int speed = speedArray[index];
+    int timeInterval = calculate::speedToTimeInterval(speed, path);
+    ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [" + newDestination + "], " + QString::number(timeInterval) + ");");
+}
+
 // Simulates constant fuel decrementation
 void MainWindow::fuelSim(QString name, int index)
 {
-    //for (int i = 1; i < 4; i++) {
-    //    ui->webView_4->page()->mainFrame()->evaluateJavaScript("popup(" + QString::number(i) + ");");
-    //}
-
     QVariant stopped = ui->webView_4->page()->mainFrame()->evaluateJavaScript("isStopped('" + name + "');");
 
     if (stopped == false) {
@@ -523,15 +618,16 @@ void MainWindow::fuelSim(QString name, int index)
 
         temp = getLatLng(index);
         i = closestUSPS(temp);
+        destinationArray[index] = USPSName[i];
 
         emerg[index] = true;
 
         ui->textBrowser_11->append("\n" + name +
                         "\nLow Battery at 10% \n"
-                        "Emergency landing at " + USPSNames[i] + " post office.");
-        voce::synthesize("U A V" + QString::number(index).toStdString() + "Low Battery at 10%. Emergency landing at" + USPSNames[i].toStdString() + "post office.");
+                        "Emergency landing at " + USPSName[i] + " post office.");
+        voce::synthesize("U A V" + QString::number(index).toStdString() + "Low Battery at 10%. Emergency landing at" + USPSName[i].toStdString() + "post office.");
 
-        ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute('" + QString::number(index) + "', [" + USPSArray[i] + "], 7000);");
+        reroute(index, USPSName[i]);
 
         fuel[index]--;
     }
@@ -574,7 +670,7 @@ int MainWindow::closestUSPS(QString latlng)
     int position = 0;
 
     for (int i=0; i<=30; i++) {
-        list2 = USPSArray[i].split(rx, QString::SkipEmptyParts);
+        list2 = USPSLatLng[i].split(rx, QString::SkipEmptyParts);
         lat2 = list2.at(0);
         lng2 = list2.at(1);
 
@@ -837,6 +933,7 @@ void MainWindow::showUAVWindow(QString name, int index)
 // Live update of information within UAV Window.
 void MainWindow::showInfo(QString name, int index)
 {
+    //ui->textBrowser_11->append(USPSName[0]);
     QVariant a = ui->webView_4->page()->mainFrame()->evaluateJavaScript("getLatLng('" + QString::number(index) +  "');");
     QVariant started = ui->webView_4->page()->mainFrame()->evaluateJavaScript("isStarted('" + name +  "');");
     QVariant running = ui->webView_4->page()->mainFrame()->evaluateJavaScript("isRunning('" + name +  "');");
@@ -968,7 +1065,6 @@ void MainWindow::avoidCheck(int index)
 
     if (lat < 34.224 && lat > 34.190 && lng < -118.479 && lng > -118.501) {
         avoidVanNuysAirport(lat, lng, index);
-        std::cout << "success." << std::endl;
         timer4->stop();
         QTimer::singleShot(1000, this, [=]{ timer4->start(50); });
     }
@@ -986,9 +1082,9 @@ void MainWindow::avoidVanNuysAirport(double lat, double lng, int index)
 
     if (lat < 34.224 && lat > 34.222) {
         for (int i = 0; i<=30; i++) {
-            if (destinationArray[index] == USPSNames[i]) {
-                path1 = "[[34.226,-118.477],[" + USPSArray[i] + "]]";
-                path2 = "[[34.226,-118.503],[" + USPSArray[i] + "]]";
+            if (destinationArray[index] == USPSName[i]) {
+                path1 = "[[34.226,-118.477],[" + USPSLatLng[i] + "]]";
+                path2 = "[[34.226,-118.503],[" + USPSLatLng[i] + "]]";
             }
         }
 
@@ -996,6 +1092,7 @@ void MainWindow::avoidVanNuysAirport(double lat, double lng, int index)
         dist2 = calculate::distanceInMiles(path2);
 
         if (dist1 < dist2) {
+            reroute(index, "Van Nuys");
             ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [34.226,-118.477], 7000);");
         }
         else {
@@ -1005,9 +1102,9 @@ void MainWindow::avoidVanNuysAirport(double lat, double lng, int index)
 
     else if (lat > 34.190 && lat < 34.192) {
         for (int i = 0; i<=30; i++) {
-            if (destinationArray[index] == USPSNames[i]) {
-                path1 = "[[34.188,-118.477],[" + USPSArray[i] + "]]";
-                path2 = "[[34.188,-118.503],[" + USPSArray[i] + "]]";
+            if (destinationArray[index] == USPSName[i]) {
+                path1 = "[[34.188,-118.477],[" + USPSLatLng[i] + "]]";
+                path2 = "[[34.188,-118.503],[" + USPSLatLng[i] + "]]";
             }
         }
 
@@ -1023,9 +1120,9 @@ void MainWindow::avoidVanNuysAirport(double lat, double lng, int index)
     }
     else if (lng > -118.501 && lng < -118.499) {
         for (int i = 0; i<=30; i++) {
-            if (destinationArray[index] == USPSNames[i]) {
-                path1 = "[[34.226,-118.503],[" + USPSArray[i] + "]]";
-                path2 = "[[34.188,-118.503],[" + USPSArray[i] + "]]";
+            if (destinationArray[index] == USPSName[i]) {
+                path1 = "[[34.226,-118.503],[" + USPSLatLng[i] + "]]";
+                path2 = "[[34.188,-118.503],[" + USPSLatLng[i] + "]]";
             }
         }
 
@@ -1041,9 +1138,9 @@ void MainWindow::avoidVanNuysAirport(double lat, double lng, int index)
     }
     else if (lng < -118.479 && lng > -118.481) {
         for (int i = 0; i<=30; i++) {
-            if (destinationArray[index] == USPSNames[i]) {
-                path1 = "[[34.226,-118.477],[" + USPSArray[i] + "]]";
-                path2 = "[[34.188,-118.477],[" + USPSArray[i] + "]]";
+            if (destinationArray[index] == USPSName[i]) {
+                path1 = "[[34.226,-118.477],[" + USPSLatLng[i] + "]]";
+                path2 = "[[34.188,-118.477],[" + USPSLatLng[i] + "]]";
             }
         }
 
@@ -1078,13 +1175,18 @@ void MainWindow::atVNACorner(int index)
         (currentLat < 34.190 && currentLat > 34.186 && currentLng > -118.479 && currentLng < -118.475) ||
         (currentLat < 34.190 && currentLat > 34.186 && currentLng < -118.501 && currentLng > -118.505)) {
 
-        ui->textBrowser_11->append("success4.");
-
-        for (int i = 0; i<=30; i++) {
-            ui->textBrowser_11->append("success5.");
-
-            if (destinationArray[index] == USPSNames[i]) {
-                ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [" + USPSArray[i] + "], 7000);");
+        if (emerg[index] == false) {
+            for (int i = 0; i<=30; i++) {
+                if (destinationArray[index] == USPSName[i]) {
+                    ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [" + USPSLatLng[i] + "], 7000);");
+                }
+            }
+        }
+        else {
+            for (int i = 0; i<=30; i++) {
+                if (destinationArray[index] == USPSName[i]) {
+                    ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [" + USPSLatLng[i] + "], 7000);");
+                }
             }
         }
     }
