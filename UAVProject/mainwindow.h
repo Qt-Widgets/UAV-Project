@@ -33,6 +33,9 @@ private slots:
     void setDefaultColor(int index);
     void focus(int index);
     int closestUSPS(QString latlng);
+    void avoidCheck(int index);
+    void avoidVanNuysAirport (double lat, double lng, int index);
+    void atVNACorner(int index);
 
     void onTalkPressed();
     void onTalkReleased();
@@ -55,6 +58,10 @@ private:
     int speedArray[11];
     int mainIndex = 1;
     std::string s;
+    QTimer *timer2 = new QTimer(); // timer for uav info
+    QTimer *timer3 = new QTimer(); // timer for fuel simulation
+    QTimer *timer4 = new QTimer(); // timer for avoidCheck;
+    QTimer *timer5 = new QTimer;
 
 };
 
