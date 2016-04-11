@@ -48,7 +48,7 @@ function addUAV(name, path, speed) {
   UAVs[n] = L.Marker.movingMarker(UAVPaths[n], [UAVSpeeds[n]], {icon: uavIcon})
                         .addTo(map)
                         .bindPopup(UAVNames[n]);
-  UAVPolylines[n] = L.polyline(UAVPaths[n]).addTo(map);
+  //UAVPolylines[n] = L.polyline(UAVPaths[n]).addTo(map);
   //UAVs[n].start();
 
   var tempStr = "listener";
@@ -144,10 +144,9 @@ function getLatLng(index) {
     return latlng.toString();
 }
 
-function startFlight(name) {
-  var u = getUAVIndexFromName(name);
-  if(u != 0)
-    UAVs[u].start();
+function startFlight(n) {
+  if(n != 0)
+    UAVs[n].start();
 }
 
 function stopFlight(name) {
@@ -183,9 +182,8 @@ function isPaused (name) {
     return UAVs[u].isPaused();
 }
 
-function isStopped(name) {
-    var u = getUAVIndexFromName(name);
-    return UAVs[u].isEnded();
+function isStopped(n) {
+    return UAVs[n].isEnded();
 }
 
 

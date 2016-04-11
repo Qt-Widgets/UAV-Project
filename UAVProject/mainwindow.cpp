@@ -175,6 +175,38 @@ USPSName[28] = "Burbank";
 USPSName[29] = "Sun Valley";
 USPSName[30] = "Downtown Burbank";
 
+Northridge
+Winnetka
+Granada Hills
+Porter Ranch
+Reseda
+Chatsworth
+Canoga Park
+North Hills
+
+Encino
+West Hills
+Mission Hills
+Van Nuys
+Woodland Hills
+Panorama City
+Balboa Van Nuys
+Civic Center Van Nuys
+San Fernando
+Calabasas
+Sherman Oaks
+Valley Village
+Valley Plaza
+North Hollywood
+
+
+Studio City
+
+Chandler
+Burbank
+Sun Valley
+Downtown Burbank
+
 USPSLatLng[0] = "34.243689,-118.535640";
 USPSLatLng[1] = "34.210034,-118.571521";
 USPSLatLng[2] = "34.265814,-118.526196";
@@ -332,7 +364,7 @@ void MainWindow::manipString(QString heard)
     int temp2 = -1;
     QString temp3;
 
-    if (heard == "start") {
+    if (heard == "launch all u a v") {
         ui->webView_4->page()->mainFrame()->evaluateJavaScript("start();");
 
         // Timer for fuel simulator
@@ -350,7 +382,12 @@ void MainWindow::manipString(QString heard)
             temp3 = destinationArray[temp];
             voce::synthesize(temp3.toStdString());
         }
-        else if (heardList[1] == "status") {
+        else if (heardList[1] == "battery") {
+            temp2 = fuel[temp];
+            voce::synthesize(QString::number(temp2).toStdString() + "percent" );
+        }
+        else if (heardList[1] == "U") {
+            temp = numStringToInt(heardList[9]);
             temp3 = status[temp];
             voce::synthesize(temp3.toStdString());
         }
@@ -358,6 +395,12 @@ void MainWindow::manipString(QString heard)
             temp = numStringToInt(heardList[7]);
             temp3 = mission[temp];
             voce::synthesize(temp3.toStdString());
+        }
+        else if (heardList[1] == "closest") {
+            temp = numStringToInt(heardList[8]);
+            temp3 = getLatLng(temp);
+            temp2 = closestUSPS(temp3);
+            voce::synthesize(USPSName[temp2].toStdString());
         }
     }
     else if (heardList [0] == "hover") {
@@ -370,7 +413,9 @@ void MainWindow::manipString(QString heard)
     }
     else if (heardList[0] == "return") {
         temp = numStringToInt(heardList[6]);
-        reroute(temp, "Van Nuys");
+        destinationArray[temp] = origin[temp];
+            reroute(temp, origin[temp]);
+            start(temp, origin[temp]);
     }
     else if (heardList[0] == "emergency") {
         if (heardList[2] == "all") {
@@ -474,7 +519,7 @@ void MainWindow::onMapLoaded()
     connect(ui->pushButton_11, SIGNAL(released()), this, SLOT(lag()));
 
     // Launch Initial UAVs (string name, string origin, string destination, string speed in mph, int index number, int fuel level).
-    addUAV("UAV1", "Van Nuys", "Canoga Park", 700, mainIndex, 100);
+    addUAV("UAV1", "Van Nuys", "Chatsworth", 1500, mainIndex, 100);
     addUAV("UAV2", "Van Nuys", "West Hills", 700, mainIndex, 100);
     addUAV("UAV3", "Van Nuys", "Calabasas", 700, mainIndex, 100);
     addUAV("UAV4", "Van Nuys", "Studio City", 700, mainIndex, 100);
@@ -500,6 +545,7 @@ void MainWindow::addUAV(QString name, QString origin, QString destination, int s
     }
 
     int timeInterval = calculate::speedToTimeInterval(speed, path);
+    this->origin[index] = origin;
     speedArray[index] = speed;
     destinationArray[index] = destination;
 
@@ -543,30 +589,10 @@ void MainWindow::addUAV(QString name, QString origin, QString destination, int s
     mainIndex++;
 }
 
-void MainWindow::reroute(int index, QString newDestination)
-{
-    QString latlng = getLatLng(index);
-    QRegExp rx ("[(),]");
-    QStringList list = latlng.split(rx, QString::SkipEmptyParts);
-    QString lat = list.at(1);
-    QString lng = list.at(2);
-
-    for (int i=0; i<=30; i++) {
-        if (newDestination == USPSName[i]) {
-            newDestination = USPSLatLng[i];
-        }
-    }
-
-    QString path = "[[" + lat + "," + lng + "],[" + newDestination + "]]";
-    int speed = speedArray[index];
-    int timeInterval = calculate::speedToTimeInterval(speed, path);
-    ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [" + newDestination + "], " + QString::number(timeInterval) + ");");
-}
-
 // Simulates constant fuel decrementation
 void MainWindow::fuelSim(QString name, int index)
 {
-    QVariant stopped = ui->webView_4->page()->mainFrame()->evaluateJavaScript("isStopped('" + name + "');");
+    bool stopped = isStopped(index);
 
     if (stopped == false) {
         fuel[index]--;
@@ -942,7 +968,7 @@ void MainWindow::showInfo(QString name, int index)
     QVariant started = ui->webView_4->page()->mainFrame()->evaluateJavaScript("isStarted('" + name +  "');");
     QVariant running = ui->webView_4->page()->mainFrame()->evaluateJavaScript("isRunning('" + name +  "');");
     QVariant paused = ui->webView_4->page()->mainFrame()->evaluateJavaScript("isPaused('" + name +  "');");
-    QVariant stopped = ui->webView_4->page()->mainFrame()->evaluateJavaScript("isStopped('" + name +  "');");
+    bool stopped = isStopped(index);
     QVariant f = ui->webView_4->page()->mainFrame()->evaluateJavaScript("getUAVIndexFromName('" + name + "');");
     int g = f.toInt();
 
@@ -1259,6 +1285,42 @@ void MainWindow::focus(int index)
     QString lng = list.at(2);
 
     ui->webView_4->page()->mainFrame()->evaluateJavaScript("focus('" + lat + "','" + lng + "');");
+}
+
+void MainWindow::reroute(int index, QString newDestination)
+{
+    QString latlng = getLatLng(index);
+    QRegExp rx ("[(),]");
+    QStringList list = latlng.split(rx, QString::SkipEmptyParts);
+    QString lat = list.at(1);
+    QString lng = list.at(2);
+
+    for (int i=0; i<=30; i++) {
+        if (newDestination == USPSName[i]) {
+            newDestination = USPSLatLng[i];
+        }
+    }
+
+    QString path = "[[" + lat + "," + lng + "],[" + newDestination + "]]";
+    int speed = speedArray[index];
+    int timeInterval = calculate::speedToTimeInterval(speed, path);
+    ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [" + newDestination + "], " + QString::number(timeInterval) + ");");
+}
+
+void MainWindow::start(int index) {
+
+    ui->webView_4->page()->mainFrame()->evaluateJavaScript("startFlight(" + QString::number(index) + ");");
+}
+
+bool MainWindow::isStopped(int index)
+{
+    QVariant stopped = ui->webView_4->page()->mainFrame()->evaluateJavaScript("isStopped(" + QString::number(index) +  ");");
+    if (stopped == true) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 // END UI Functions =====================================================================================================

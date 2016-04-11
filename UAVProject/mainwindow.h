@@ -38,6 +38,9 @@ private slots:
     void atVNACorner(int index);
     void reroute(int index, QString newDestination);
 
+    void start(int index);
+    bool isStopped(int index);
+
     void onTalkPressed();
     void onTalkReleased();
 
@@ -53,16 +56,17 @@ private:
     QString USPSNames[30];
     QString status[9];
     QString mission[9];
+    QString origin[9];
     bool emerg[9];
     int fuel[9];
     QString destinationArray[9];
     int speedArray[9];
     int mainIndex = 1;
     std::string s;
-    QTimer *timer2 = new QTimer(); // timer for uav info & corner of van nuys airport
+    QTimer *timer2 = new QTimer(); // timer for uav info
     QTimer *timer3 = new QTimer(); // timer for fuel simulation
     QTimer *timer4 = new QTimer(); // timer for avoidCheck;
-    QTimer *timer5 = new QTimer();
+    QTimer *timer5 = new QTimer(); //corner of van nuys airport
     QString USPSName[30];
 };
 
