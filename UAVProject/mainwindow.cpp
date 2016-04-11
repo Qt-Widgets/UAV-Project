@@ -413,9 +413,9 @@ void MainWindow::manipString(QString heard)
     }
     else if (heardList[0] == "return") {
         temp = numStringToInt(heardList[6]);
-        destinationArray[temp] = origin[temp];
-            reroute(temp, origin[temp]);
-            start(temp, origin[temp]);
+        destinationArray[temp] = originArray[temp];
+            reroute(temp, originArray[temp]);
+            start(temp, originArray[temp]);
     }
     else if (heardList[0] == "emergency") {
         if (heardList[2] == "all") {
@@ -545,7 +545,7 @@ void MainWindow::addUAV(QString name, QString origin, QString destination, int s
     }
 
     int timeInterval = calculate::speedToTimeInterval(speed, path);
-    this->origin[index] = origin;
+    originArray[index] = origin;
     speedArray[index] = speed;
     destinationArray[index] = destination;
 
@@ -593,7 +593,7 @@ void MainWindow::addUAV(QString name, QString origin, QString destination, int s
 void MainWindow::fuelSim(QString name, int index)
 {
     bool stopped = isStopped(index);
-
+;
     if (stopped == false) {
         fuel[index]--;
     }
@@ -1307,7 +1307,21 @@ void MainWindow::reroute(int index, QString newDestination)
     ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [" + newDestination + "], " + QString::number(timeInterval) + ");");
 }
 
-void MainWindow::start(int index) {
+void MainWindow::start(int index, QString destination) {
+    QString current = getLatLng(index);
+    QRegExp rx ("[(),]");
+    QStringList list = current.split(rx, QString::SkipEmptyParts);
+    QString lat = list.at(1);
+    QString lng = list.at(2);
+
+    QString path;
+
+    for (int i=0; i<=30; i++) {
+
+        if (destination == USPSName[i]) {
+            path = "[[" + lat + "," + lng + "],[" + USPSLatLng[i] + "]]";
+        }
+    }
 
     ui->webView_4->page()->mainFrame()->evaluateJavaScript("startFlight(" + QString::number(index) + ");");
 }
