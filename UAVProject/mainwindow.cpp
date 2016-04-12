@@ -519,12 +519,12 @@ void MainWindow::onMapLoaded()
     connect(ui->pushButton_11, SIGNAL(released()), this, SLOT(lag()));
 
     // Launch Initial UAVs (string name, string origin, string destination, string speed in mph, int index number, int fuel level).
-    addUAV("UAV1", "Van Nuys", "Chatsworth", 1500, mainIndex, 100);
-    addUAV("UAV2", "Van Nuys", "West Hills", 700, mainIndex, 100);
-    addUAV("UAV3", "Van Nuys", "Calabasas", 700, mainIndex, 100);
-    addUAV("UAV4", "Van Nuys", "Studio City", 700, mainIndex, 100);
-    //addUAV("UAV5", "Van Nuys", "Downtown Burbank", 30, mainIndex, 100);
-    //addUAV("UAV6", "Van Nuys", "San Fernando", 30, mainIndex, 100);
+    addUAV("UAV1", "Van Nuys", "Porter Ranch", 900, mainIndex, 100);
+    addUAV("UAV2", "Van Nuys", "West Hills", 700, mainIndex, 49);
+    addUAV("UAV3", "Van Nuys", "Calabasas", 700, mainIndex, 95);
+    addUAV("UAV4", "Van Nuys", "Studio City", 700, mainIndex, 63);
+    addUAV("UAV5", "Van Nuys", "Downtown Burbank", 1500, mainIndex, 100);
+    addUAV("UAV6", "Van Nuys", "San Fernando", 1200, mainIndex, 100);
 
     //UAV UAV1 ("UAV1", "Van Nuys", "Canoga Park", 700, mainIndex, 12);
     //addUAV(UAV1.getName(), UAV1.getOrigin(), UAV1.getDestination(), UAV1.getSpeed(), UAV1.getMainIndex(), UAV1.getBattery());
@@ -1123,11 +1123,9 @@ void MainWindow::avoidVanNuysAirport(double lat, double lng, int index)
 
         if (dist1 < dist2) {
             reroute(index, "34.226,-118.477");
-            //ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [34.226,-118.477], 7000);");
         }
         else {
             reroute(index, "34.226,-118.503");
-            //ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [34.226,-118.503], 7000);");
         }
     }
 
@@ -1144,11 +1142,9 @@ void MainWindow::avoidVanNuysAirport(double lat, double lng, int index)
 
         if (dist1 < dist2) {
             reroute(index, "34.188,-118.477");
-            //ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [34.188,-118.477], 7000);");
         }
         else {
             reroute(index, "34.188,-118.503");
-            //ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [34.188,-118.503], 7000);");
         }
     }
     else if (lng > -118.501 && lng < -118.499) {
@@ -1164,11 +1160,9 @@ void MainWindow::avoidVanNuysAirport(double lat, double lng, int index)
 
         if (dist1 < dist2) {
             reroute(index, "34.226,-118.503");
-            //ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [34.226,-118.503], 7000);");
         }
         else {
             reroute(index, "34.188,-118.503");
-            //ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [34.188,-118.503], 7000);");
         }
     }
     else if (lng < -118.479 && lng > -118.481) {
@@ -1184,11 +1178,9 @@ void MainWindow::avoidVanNuysAirport(double lat, double lng, int index)
 
         if (dist1 < dist2) {
             reroute(index, "34.226,-118.477");
-            //ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [34.226,-118.477], 7000);");
         }
         else {
             reroute(index, "34.188,-118.477");
-            //ui->webView_4->page()->mainFrame()->evaluateJavaScript("reroute(" + QString::number(index) + ", [34.188,-118.477], 7000);");
         }
     }
 }

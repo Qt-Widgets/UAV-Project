@@ -48,7 +48,7 @@ function addUAV(name, path, speed) {
   UAVs[n] = L.Marker.movingMarker(UAVPaths[n], [UAVSpeeds[n]], {icon: uavIcon})
                         .addTo(map)
                         .bindPopup(UAVNames[n]);
-  //UAVPolylines[n] = L.polyline(UAVPaths[n]).addTo(map);
+  UAVPolylines[n] = L.polyline(UAVPaths[n]).addTo(map);
   //UAVs[n].start();
 
   var tempStr = "listener";
