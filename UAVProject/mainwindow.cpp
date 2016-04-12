@@ -414,25 +414,59 @@ void MainWindow::manipString(QString heard)
     else if (heardList[0] == "return") {
         temp = numStringToInt(heardList[6]);
         destinationArray[temp] = originArray[temp];
-            reroute(temp, originArray[temp]);
-            start(temp, originArray[temp]);
+        reroute(temp, originArray[temp]);
+        start(temp, originArray[temp]);
     }
     else if (heardList[0] == "emergency") {
-        if (heardList[2] == "all") {
+        temp = numStringToInt(heardList[5]);
+        temp3 = getLatLng(temp);
+        int i = closestUSPS(temp3);
+        emerg[temp] = true;
+        reroute(temp, USPSName[i]);
+    }
+    else if (heardList[0] == "code") {
+        if (heardList[1] == "red") {
+            responseRed = true;
+            voce::synthesize("Land all U A V. Are you sure?");
+        }
+        else if (heardList[1] == "yellow") {
+            responseYellow = true;
+            voce::synthesize("Returning all U A V to origin. Are you sure?");
+        }
+    }
+    else if (heardList[0] == "yes") {
+        if (responseRed == true) {
+            voce::synthesize("Landing all U A V to closest post office.");
             for (int i=1; i<=mainIndex-1; i++) {
                 temp3 = getLatLng(i);
                 int j = closestUSPS(temp3);
+                destinationArray[i] = USPSName[j];
                 emerg[i] = true;
                 reroute(i, USPSName[j]);
             }
         }
-        else {
-            temp = numStringToInt(heardList[5]);
-            temp3 = getLatLng(temp);
-            int i = closestUSPS(temp3);
-            emerg[temp] = true;
-            reroute(temp, USPSName[i]);
+        else if (responseYellow == true) {
+            voce::synthesize("Returning all U A V to origin.");
+            for (int i=1; i<=mainIndex-1; i++) {
+                destinationArray[i] = originArray[i];
+                emerg[i] = true;
+                reroute(i, originArray[i]);
+                start(i, originArray[i]);
+            }
         }
+    }
+    else if (heardList[0] == "no") {
+        if (responseRed == true) {
+            voce::synthesize("Code red aborted.");
+        }
+        else if (responseYellow == true) {
+            voce::synthesize("Code yellow aborted.");
+        }
+    }
+
+    if (heardList[0]!= "code") {
+        responseRed = false;
+        responseYellow = false;
     }
 }
 

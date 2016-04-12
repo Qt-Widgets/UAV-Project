@@ -68,6 +68,8 @@ private:
     QTimer *timer5 = new QTimer(); // corner of van nuys airport
     QString USPSName[30];
     QString originArray[9];
+    bool responseRed = false;
+    bool responseYellow = false;
 };
 
 #endif // MAINWINDOW_H
