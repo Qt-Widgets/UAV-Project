@@ -133,7 +133,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->centralWidget->setStyleSheet("color: #848484;");
 
-    ui->textBrowser_11->setStyleSheet("color: #FF0000;"
+    ui->textBrowser_11->setStyleSheet("color: #FA5858;"
                                       "background-color: #2E2E2E;"
                                       "font-size: 16px;"
                                       "font-weight: bold;");
@@ -376,31 +376,37 @@ void MainWindow::manipString(QString heard)
 
         if (heardList[1] == "speed") {
             temp2 = speedArray[temp];
-            voce::synthesize(QString::number(temp2).toStdString() + "miles per hour");
+            voce::synthesize(QString::number(temp2).toStdString() + "miles per hour.");
+            ui->textBrowser_11->append("Cayley: " + QString::number(temp2) + " mph.");
         }
         else if (heardList[1] == "destination") {
             temp3 = destinationArray[temp];
             voce::synthesize(temp3.toStdString());
+            ui->textBrowser_11->append("Cayley: " + temp3);
         }
         else if (heardList[1] == "battery") {
             temp2 = fuel[temp];
             voce::synthesize(QString::number(temp2).toStdString() + "percent" );
+            ui->textBrowser_11->append("Cayley: " + QString::number(temp2) + "%.");
         }
-        else if (heardList[1] == "U") {
+        else if (heardList[1] == "u") {
             temp = numStringToInt(heardList[9]);
             temp3 = status[temp];
             voce::synthesize(temp3.toStdString());
+            ui->textBrowser_11->append("Cayley: " + temp3 + ".");
         }
         else if (heardList[1] == "mission") {
             temp = numStringToInt(heardList[7]);
             temp3 = mission[temp];
             voce::synthesize(temp3.toStdString());
+            ui->textBrowser_11->append("Cayley: " + temp3 + ".");
         }
         else if (heardList[1] == "closest") {
             temp = numStringToInt(heardList[8]);
             temp3 = getLatLng(temp);
             temp2 = closestUSPS(temp3);
             voce::synthesize(USPSName[temp2].toStdString());
+            ui->textBrowser_11->append("Cayley: " + USPSName[temp2] + ".");
         }
     }
     else if (heardList [0] == "hover") {
@@ -427,16 +433,19 @@ void MainWindow::manipString(QString heard)
     else if (heardList[0] == "code") {
         if (heardList[1] == "red") {
             responseRed = true;
-            voce::synthesize("Land all U A V. Are you sure?");
+            voce::synthesize("Landing all U A V. Are you sure?");
+            ui->textBrowser_11->append("Cayley: Landing all U A V. Are you sure?");
         }
         else if (heardList[1] == "yellow") {
             responseYellow = true;
             voce::synthesize("Returning all U A V to origin. Are you sure?");
+            ui->textBrowser_11->append("Cayley: Returning all U A V to origin. Are you sure?");
         }
     }
     else if (heardList[0] == "yes") {
         if (responseRed == true) {
             voce::synthesize("Landing all U A V to closest post office.");
+            ui->textBrowser_11->append("Cayley: Landing all U A V to closest post office.");
             for (int i=1; i<=mainIndex-1; i++) {
                 temp3 = getLatLng(i);
                 int j = closestUSPS(temp3);
@@ -447,6 +456,7 @@ void MainWindow::manipString(QString heard)
         }
         else if (responseYellow == true) {
             voce::synthesize("Returning all U A V to origin.");
+            ui->textBrowser_11->append("Cayley: Returning all U A V to origin.");
             for (int i=1; i<=mainIndex-1; i++) {
                 destinationArray[i] = originArray[i];
                 emerg[i] = true;
@@ -458,9 +468,11 @@ void MainWindow::manipString(QString heard)
     else if (heardList[0] == "no") {
         if (responseRed == true) {
             voce::synthesize("Code red aborted.");
+            ui->textBrowser_11->append("Cayley: Code red aborted.");
         }
         else if (responseYellow == true) {
             voce::synthesize("Code yellow aborted.");
+            ui->textBrowser_11->append("Cayley: Code yellow aborted.");
         }
     }
 
@@ -528,12 +540,12 @@ void MainWindow::onTalkReleased()
 
     if (s.empty() == false)
     {
+        ui->textBrowser_11->append("<span style = 'color: #9FF781'>ATC: " + QString::fromStdString(s) + "</span>");
         manipString(QString::fromStdString(s));
-        ui->textBrowser_11->append(QString::fromStdString(s));
     }
     else
     {
-        voce::synthesize("I didn't hear what you said.");
+        voce::synthesize("Command not heard.");
     }
 }
 
@@ -553,7 +565,7 @@ void MainWindow::onMapLoaded()
     connect(ui->pushButton_11, SIGNAL(released()), this, SLOT(lag()));
 
     // Launch Initial UAVs (string name, string origin, string destination, string speed in mph, int index number, int fuel level).
-    addUAV("UAV1", "Van Nuys", "Porter Ranch", 900, mainIndex, 100);
+    addUAV("UAV1", "Van Nuys", "Porter Ranch", 900, mainIndex, 12);
     addUAV("UAV2", "Van Nuys", "West Hills", 700, mainIndex, 49);
     addUAV("UAV3", "Van Nuys", "Calabasas", 700, mainIndex, 95);
     addUAV("UAV4", "Van Nuys", "Studio City", 700, mainIndex, 63);
@@ -620,6 +632,10 @@ void MainWindow::addUAV(QString name, QString origin, QString destination, int s
     connect(timer4, &QTimer::timeout, this, [=]{ avoidCheck(index); });
     connect(timer3, &QTimer::timeout, this, [=]{ fuelSim(name, index); });
 
+    // Timer for live update of UAV info ie latlong values
+    connect(timer2, &QTimer::timeout, this, [=]{ showInfo(name, index); });
+    timer2->start(250);
+
     mainIndex++;
 }
 
@@ -671,7 +687,7 @@ void MainWindow::fuelSim(QString name, int index)
         showUAVWindow(name, index);
         ui->webView_4->page()->mainFrame()->evaluateJavaScript("popup('" + QString::number(index) + "', 'Battery at 20%');");
 
-        ui->textBrowser_11->append("\n" + name + "\nLow Battery at 20%. \nWill emergency land at nearest USPS at 10%.");
+        ui->textBrowser_11->append("\n" + name + "\nLow Battery at 20%. \nWill emergency land at nearest USPS at 10%.\n");
         voce::synthesize("U A V" + QString::number(index).toStdString() + "Low Battery at 20%");
 
         fuel[index]--;
@@ -688,7 +704,7 @@ void MainWindow::fuelSim(QString name, int index)
 
         ui->textBrowser_11->append("\n" + name +
                         "\nLow Battery at 10% \n"
-                        "Emergency landing at " + USPSName[i] + " post office.");
+                        "Emergency landing at " + USPSName[i] + " post office.\n");
         voce::synthesize("U A V" + QString::number(index).toStdString() + "Low Battery at 10%. Emergency landing at" + USPSName[i].toStdString() + "post office.");
 
         reroute(index, USPSName[i]);
@@ -703,7 +719,7 @@ void MainWindow::fuelSim(QString name, int index)
 
         ui->textBrowser_11->append("\n" + name +
                         "\nDid not make it to nearest USPS. \n" +
-                        "Landed at current location.");
+                        "Landed at current location.\n");
 
         voce::synthesize("U A V" + QString::number(index).toStdString() + "did not make it to the nearest U S P S. Landed at current location.");
 
@@ -760,10 +776,6 @@ QString MainWindow::getLatLng(int index)
 // Shows UAV Window
 void MainWindow::showUAVWindow(QString name, int index)
 {
-    // Timer for live update of UAV info ie latlong values
-    connect(timer2, &QTimer::timeout, this, [=]{ showInfo(name, index); });
-    timer2->start(250);
-
     // Turns uav window original after half a second of being red.
     QTimer::singleShot(500, this, [=]{ setDefaultColor(index); });
 
@@ -1008,24 +1020,24 @@ void MainWindow::showInfo(QString name, int index)
 
     // Mission and status levels
     if (running == true && emerg[g] == false){
-        status[g] = "En Route.";
-        mission[g] = "In Progress.";
+        status[g] = "En Route";
+        mission[g] = "In Progress";
     }
     else if (paused == true && emerg[g] == false) {
-        status[g] = "En Route. Hovering in place.";
-        mission[g] = "In progress.";
+        status[g] = "En Route - Hovering in place";
+        mission[g] = "In progress";
     }
     else if (stopped == true && emerg[g] == false) {
-        status[g] = "Landed at destination.";
-        mission[g] = "Complete.";
+        status[g] = "Landed at destination";
+        mission[g] = "Complete";
     }
     else if (emerg[g] == true && running == true) {
-        status[g] = "Emergency landing in progress.";
-        mission[g] = "Aborting.";
+        status[g] = "Emergency landing in progress";
+        mission[g] = "Aborting";
     }
     else if (emerg[g] == true && stopped == true) {
-        status[g] = "Emergency landed.";
-        mission[g] = "Incomplete. Aborted.";
+        status[g] = "Emergency landed";
+        mission[g] = "Incomplete - Aborted";
     }
 
     //Displays live update.
