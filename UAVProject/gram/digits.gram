@@ -8,7 +8,7 @@ grammar digits;
 
 public <command>	= (<verb> <noun> <article> <number> <measure>) | (code <color>) | (reset) | (report <noun> for U A V <digit>) | (<verb> U A V <digit>) | (reroute U A V <digit> to <postoffice>) | (launch all U A V) | (emergency land all U A V) | (<bool>);
 <report>			= (report <snoun>);
-<verb>	 			= (change | alter | ascend | descend | fly | hover in place | resume flight for | emergency land | return to origin | emergency land );
+<verb>	 			= (change | alter | ascend | descend | fly | hover | resume flight for | emergency land | return to origin | emergency land );
 <noun>  		 	= (U A V status | mission status | speed | location | destination | battery | closest post office);
 <snoun>				= (height | latitude | longitude | destination);
 <article>			= (to);

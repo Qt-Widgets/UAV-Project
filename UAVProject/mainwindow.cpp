@@ -134,9 +134,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->centralWidget->setStyleSheet("color: #848484;");
 
     ui->textBrowser_11->setStyleSheet("color: #FA5858;"
-                                      "background-color: #2E2E2E;"
+                                      "background-color: #585858;"
                                       "font-size: 16px;"
                                       "font-weight: bold;");
+
+    this->setStyleSheet("background-color: #112E34;");
+
+    ui->scrollAreaWidgetContents_6->setStyleSheet("background-color: #585858;");
+
+    ui->label_6->setStyleSheet("color: 0D8C83;");
 
     // Timer to update clock
     QTimer *timer = new QTimer(this);
@@ -410,7 +416,7 @@ void MainWindow::manipString(QString heard)
         }
     }
     else if (heardList [0] == "hover") {
-        temp = numStringToInt(heardList[6]);
+        temp = numStringToInt(heardList[4]);
         ui->webView_4->page()->mainFrame()->evaluateJavaScript("pauseFlight('" + QString::number(temp) + "');");
     }
     else if (heardList[0] == "resume") {
@@ -449,9 +455,13 @@ void MainWindow::manipString(QString heard)
             for (int i=1; i<=mainIndex-1; i++) {
                 temp3 = getLatLng(i);
                 int j = closestUSPS(temp3);
+                if (destinationArray[i] == USPSName[j]) {
+                }
+                else {
                 destinationArray[i] = USPSName[j];
                 emerg[i] = true;
                 reroute(i, USPSName[j]);
+                }
             }
         }
         else if (responseYellow == true) {
@@ -569,8 +579,8 @@ void MainWindow::onMapLoaded()
     addUAV("UAV2", "Van Nuys", "West Hills", 700, mainIndex, 49);
     addUAV("UAV3", "Van Nuys", "Calabasas", 700, mainIndex, 95);
     addUAV("UAV4", "Van Nuys", "Studio City", 700, mainIndex, 63);
-    addUAV("UAV5", "Van Nuys", "Downtown Burbank", 1500, mainIndex, 100);
-    addUAV("UAV6", "Van Nuys", "San Fernando", 1200, mainIndex, 100);
+    addUAV("UAV5", "Van Nuys", "Downtown Burbank", 1500, mainIndex, 60);
+    addUAV("UAV6", "Van Nuys", "San Fernando", 1200, mainIndex, 60);
 
     //UAV UAV1 ("UAV1", "Van Nuys", "Canoga Park", 700, mainIndex, 12);
     //addUAV(UAV1.getName(), UAV1.getOrigin(), UAV1.getDestination(), UAV1.getSpeed(), UAV1.getMainIndex(), UAV1.getBattery());
@@ -646,6 +656,9 @@ void MainWindow::fuelSim(QString name, int index)
 ;
     if (stopped == false) {
         fuel[index]--;
+    }
+    else {
+        emerg[index] = false;
     }
 
     if (index == 1) {
@@ -1273,43 +1286,43 @@ void MainWindow::setDefaultColor(int index)
 {
     if (index == 1) {
         ui->textBrowser->setStyleSheet("background-color: #FFFFFF;");
-        ui->label_1->setStyleSheet("color: #000000;");
+        ui->label_1->setStyleSheet("color: #D8D8D8;");
     }
     else if (index == 2) {
         ui->textBrowser_2->setStyleSheet("background-color: #FFFFFF;");
-        ui->label_2->setStyleSheet("color: #000000;");
+        ui->label_2->setStyleSheet("color: #D8D8D8;");
     }
     else if (index == 3) {
         ui->textBrowser_3->setStyleSheet("background-color: #FFFFFF;");
-        ui->label_3->setStyleSheet("color: #000000;");
+        ui->label_3->setStyleSheet("color: #D8D8D8;");
     }
     else if (index == 4) {
         ui->textBrowser_4->setStyleSheet("background-color: #FFFFFF;");
-        ui->label_4->setStyleSheet("color: #000000;");
+        ui->label_4->setStyleSheet("color: #D8D8D8;");
     }
     else if (index == 5) {
         ui->textBrowser_5->setStyleSheet("background-color: #FFFFFF;");
-        ui->label_5->setStyleSheet("color: #000000;");
+        ui->label_5->setStyleSheet("color: #D8D8D8;");
     }
     else if (index == 6) {
         ui->textBrowser_6->setStyleSheet("background-color: #FFFFFF;");
-        ui->label_6->setStyleSheet("color: #000000;");
+        ui->label_6->setStyleSheet("color: #D8D8D8;");
     }
     else if (index == 7) {
         ui->textBrowser_7->setStyleSheet("background-color: #FFFFFF;");
-        ui->label_7->setStyleSheet("color: #000000;");
+        ui->label_7->setStyleSheet("color: #D8D8D8;");
     }
     else if (index == 8) {
         ui->textBrowser_8->setStyleSheet("background-color: #FFFFFF;");
-        ui->label_8->setStyleSheet("color: #000000;");
+        ui->label_8->setStyleSheet("color: #D8D8D8;");
     }
     else if (index == 9) {
         ui->textBrowser_9->setStyleSheet("background-color: #FFFFFF;");
-        ui->label_9->setStyleSheet("color: #000000;");
+        ui->label_9->setStyleSheet("color: #D8D8D8;");
     }
-    else if (index == 20) {
+    else if (index == 10) {
         ui->textBrowser_10->setStyleSheet("background-color: #FFFFFF;");
-        ui->label_10->setStyleSheet("color: #000000;");
+        ui->label_10->setStyleSheet("color: #D8D8D8;");
     }
 }
 
