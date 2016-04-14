@@ -70,6 +70,8 @@ private:
     QString originArray[9];
     bool responseRed = false;
     bool responseYellow = false;
+    bool responseName = true;
+    QString atcName;
 };
 
 #endif // MAINWINDOW_H

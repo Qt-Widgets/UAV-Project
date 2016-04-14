@@ -6,7 +6,7 @@
  
 grammar digits;
 
-public <command>	= (<verb> <noun> <article> <number> <measure>) | (code <color>) | (reset) | (report <noun> for U A V <digit>) | (<verb> U A V <digit>) | (reroute U A V <digit> to <postoffice>) | (launch all U A V) | (emergency land all U A V) | (<bool>);
+public <command>	= (<verb> A T C to <atcname>) | (<atcname>) | (code <color>) | (reset) | (report <noun> for U A V <digit>) | (<verb> U A V <digit>) | (reroute U A V <digit> to <postoffice>) | (launch all U A V) | (emergency land all U A V) | (<bool>);
 <report>			= (report <snoun>);
 <verb>	 			= (change | alter | ascend | descend | fly | hover | resume flight for | emergency land | return to origin | emergency land );
 <noun>  		 	= (U A V status | mission status | speed | location | destination | battery | closest post office);
@@ -18,11 +18,5 @@ public <command>	= (<verb> <noun> <article> <number> <measure>) | (code <color>)
 <bool>				= (yes|no);
 <color>				= (red | yellow);
 <postoffice>			= (northridge | winnetka | granada hills | porter ranch | reseda | chatsworth | canoga park | north hills | encino | west hills | mission hills | van nuys | woodland hills | panorama city | balboa van nuys | civic center van nuys | san fernando | calabasas | sherman oaks | valley village | valley plaza | north hollywood | studio city | chandler | burbank | sun valley | downtown burbank );
-
-public<latlong>		= (<V> <L> <article> <value> <number> <P> <number>)|(<V><L><article><value><number>);
-<value>				= (plus|minus);
-<V>					= (set);
-<L>					= (latitude|longitude);
-<P>					= (point);
-
+<atcname>			= (ernest | daniel | blake | aaron | eric | tariq);
 

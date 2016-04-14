@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     voce::init("C:/Users/Ernest Curioso/Documents/Voce/voce-0.9.1/voce-0.9.1/lib", true, true,
                "file:/C:/Users/Ernest Curioso/Documents/Qt Projects/UAVProject/UAVProject/gram", "digits");
     voce::setRecognizerEnabled(false);
+    voce::synthesize("Welcome aboard. Please state your name.");
 
     // Map Setup
     ui->webView_4->hide();
@@ -35,8 +36,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Hide UAV info
     ui->scrollArea->hide();
-
-    voce::synthesize("cay lee");
 
     ui->textBrowser->hide();
     ui->textBrowser_2->hide();
@@ -107,16 +106,16 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // User Interface Appearance
 
-    ui->textBrowser->setStyleSheet("background-color: #BDBDBD;");
-    ui->textBrowser_2->setStyleSheet("background-color: #BDBDBD;");
-    ui->textBrowser_3->setStyleSheet("background-color: #BDBDBD;");
-    ui->textBrowser_4->setStyleSheet("background-color: #BDBDBD;");
-    ui->textBrowser_5->setStyleSheet("background-color: #BDBDBD;");
-    ui->textBrowser_6->setStyleSheet("background-color: #585858;");
-    ui->textBrowser_7->setStyleSheet("background-color: #BDBDBD;");
-    ui->textBrowser_8->setStyleSheet("background-color: #BDBDBD;");
-    ui->textBrowser_9->setStyleSheet("background-color: #BDBDBD;");
-    ui->textBrowser_10->setStyleSheet("background-color: #BDBDBD;");
+    ui->pushButton->setStyleSheet("background-color: #FA5858; color: #000000 ");
+    ui->pushButton_2->setStyleSheet("background-color: #FA5858; color: #000000 ");
+    ui->pushButton_3->setStyleSheet("background-color: #FA5858; color: #000000 ");
+    ui->pushButton_4->setStyleSheet("background-color: #FA5858; color: #000000 ");
+    ui->pushButton_5->setStyleSheet("background-color: #FA5858; color: #000000 ");
+    ui->pushButton_6->setStyleSheet("background-color: #FA5858; color: #000000 ");
+    ui->pushButton_7->setStyleSheet("background-color: #FA5858; color: #000000 ");
+    ui->pushButton_8->setStyleSheet("background-color: #FA5858; color: #000000 ");
+    ui->pushButton_9->setStyleSheet("background-color: #FA5858; color: #000000 ");
+    ui->pushButton_10->setStyleSheet("background-color: #FA5858; color: #000000 ");
 
     ui->pushButton->setText("X");
     ui->pushButton_2->setText("X");
@@ -133,6 +132,18 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->pushButton_11->setStyleSheet("background-color: #9FF781;");
 
     ui->closeAllButton->setText("Hide All");
+    ui->closeAllButton->setStyleSheet("background-color: #FA5858; color: #000000;");
+
+    ui->focusButton_1->setStyleSheet("background-color: #E6E6E6; color: #000000;");
+    ui->focusButton_2->setStyleSheet("background-color: #E6E6E6; color: #000000;");
+    ui->focusButton_3->setStyleSheet("background-color: #E6E6E6; color: #000000;");
+    ui->focusButton_4->setStyleSheet("background-color: #E6E6E6; color: #000000;");
+    ui->focusButton_5->setStyleSheet("background-color: #E6E6E6; color: #000000;");
+    ui->focusButton_6->setStyleSheet("background-color: #E6E6E6; color: #000000;");
+    ui->focusButton_7->setStyleSheet("background-color: #E6E6E6; color: #000000;");
+    ui->focusButton_8->setStyleSheet("background-color: #E6E6E6; color: #000000;");
+    ui->focusButton_9->setStyleSheet("background-color: #E6E6E6; color: #000000;");
+    ui->focusButton_10->setStyleSheet("background-color: #E6E6E6; color: #000000;");
 
     ui->focusButton_1->setText("Focus");
     ui->focusButton_2->setText("Focus");
@@ -155,8 +166,6 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setStyleSheet("background-color: #112E34;");
 
     ui->scrollAreaWidgetContents_6->setStyleSheet("background-color: #585858;");
-
-    ui->label_6->setStyleSheet("color: 0D8C83;");
 
     // Timer to update clock
     QTimer *timer = new QTimer(this);
@@ -384,7 +393,25 @@ void MainWindow::manipString(QString heard)
     int temp2 = -1;
     QString temp3;
 
-    if (heard == "launch all u a v") {
+    if (responseName == true) {
+        if (heard == "ernest" || heard == "daniel" || heard == "blake" || heard == "tariq" || heard == "eric" || heard == "aaron") {
+            atcName = heard;
+            voce::synthesize("Hello" + atcName.toStdString());
+            ui->textBrowser_11->append("Cayley: Hello " + atcName + ".");
+            responseName = false;
+        }
+        else {
+            voce::synthesize("A T C name not recognized. Please restate your name");
+            ui->textBrowser_11->append("Cayley: ATC name not recognized. Please restate your name.");
+        }
+    }
+    else if (responseName == false) {
+    if (heardList[0] == "change") {
+        atcName = heardList[5];
+        voce::synthesize("Hello" + atcName.toStdString());
+        ui->textBrowser_11->append("Hello " + atcName);
+    }
+    else if (heard == "launch all u a v") {
         ui->webView_4->page()->mainFrame()->evaluateJavaScript("start();");
 
         // Timer for fuel simulator
@@ -454,18 +481,18 @@ void MainWindow::manipString(QString heard)
         if (heardList[1] == "red") {
             responseRed = true;
             voce::synthesize("Landing all U A V. Are you sure?");
-            ui->textBrowser_11->append("Cayley: Landing all U A V. Are you sure?");
+            ui->textBrowser_11->append("Cayley: Landing all UAV. Are you sure?");
         }
         else if (heardList[1] == "yellow") {
             responseYellow = true;
             voce::synthesize("Returning all U A V to origin. Are you sure?");
-            ui->textBrowser_11->append("Cayley: Returning all U A V to origin. Are you sure?");
+            ui->textBrowser_11->append("Cayley: Returning all UAV to origin. Are you sure?");
         }
     }
     else if (heardList[0] == "yes") {
         if (responseRed == true) {
             voce::synthesize("Landing all U A V to closest post office.");
-            ui->textBrowser_11->append("Cayley: Landing all U A V to closest post office.");
+            ui->textBrowser_11->append("Cayley: Landing all UAV to closest post office.");
             for (int i=1; i<=mainIndex-1; i++) {
                 temp3 = getLatLng(i);
                 int j = closestUSPS(temp3);
@@ -480,7 +507,7 @@ void MainWindow::manipString(QString heard)
         }
         else if (responseYellow == true) {
             voce::synthesize("Returning all U A V to origin.");
-            ui->textBrowser_11->append("Cayley: Returning all U A V to origin.");
+            ui->textBrowser_11->append("Cayley: Returning all UAV to origin.");
             for (int i=1; i<=mainIndex-1; i++) {
                 destinationArray[i] = originArray[i];
                 emerg[i] = true;
@@ -499,8 +526,9 @@ void MainWindow::manipString(QString heard)
             ui->textBrowser_11->append("Cayley: Code yellow aborted.");
         }
     }
+    }
 
-    if (heardList[0]!= "code") {
+    if (heardList[0] != "code") {
         responseRed = false;
         responseYellow = false;
     }
@@ -547,7 +575,9 @@ void MainWindow::onTalkPressed()
 {
     ui->pushButton_11->setStyleSheet("background-color: #33ff00;");
     voce::stopSynthesizing();
-    voce::setRecognizerEnabled(true);
+    if (voce::isRecognizerEnabled() == false) {
+        voce::setRecognizerEnabled(true);
+    }
 }
 
 void MainWindow::lag() // makes up for VOCE lag in recognizing what you said.
@@ -559,7 +589,9 @@ void MainWindow::onTalkReleased()
 {
     ui->pushButton_11->setStyleSheet("background-color: #9FF781;");
     s = voce::popRecognizedString();
-    voce::setRecognizerEnabled(false);
+    if (voce::isRecognizerEnabled() == true) {
+        voce::setRecognizerEnabled(false);
+    }
     voce::stopSynthesizing();
 
     if (s.empty() == false)
@@ -1299,44 +1331,44 @@ void MainWindow::atVNACorner(int index)
 void MainWindow::setDefaultColor(int index)
 {
     if (index == 1) {
-        ui->textBrowser->setStyleSheet("background-color: #FFFFFF;");
-        ui->label_1->setStyleSheet("color: #D8D8D8;");
+        ui->textBrowser->setStyleSheet("background-color: #E6E6E6;");
+        ui->label_1->setStyleSheet("color: #E6E6E6;");
     }
     else if (index == 2) {
-        ui->textBrowser_2->setStyleSheet("background-color: #FFFFFF;");
-        ui->label_2->setStyleSheet("color: #D8D8D8;");
+        ui->textBrowser_2->setStyleSheet("background-color: #E6E6E6;");
+        ui->label_2->setStyleSheet("color: #E6E6E6;");
     }
     else if (index == 3) {
-        ui->textBrowser_3->setStyleSheet("background-color: #FFFFFF;");
-        ui->label_3->setStyleSheet("color: #D8D8D8;");
+        ui->textBrowser_3->setStyleSheet("background-color: #E6E6E6;");
+        ui->label_3->setStyleSheet("color: #E6E6E6;");
     }
     else if (index == 4) {
-        ui->textBrowser_4->setStyleSheet("background-color: #FFFFFF;");
-        ui->label_4->setStyleSheet("color: #D8D8D8;");
+        ui->textBrowser_4->setStyleSheet("background-color: #E6E6E6;");
+        ui->label_4->setStyleSheet("color: #E6E6E6;");
     }
     else if (index == 5) {
-        ui->textBrowser_5->setStyleSheet("background-color: #FFFFFF;");
-        ui->label_5->setStyleSheet("color: #D8D8D8;");
+        ui->textBrowser_5->setStyleSheet("background-color: #E6E6E6;");
+        ui->label_5->setStyleSheet("color: #E6E6E6;");
     }
     else if (index == 6) {
         ui->textBrowser_6->setStyleSheet("background-color: #E6E6E6;");
-        ui->label_6->setStyleSheet("color: #0D8C83;");
+        ui->label_6->setStyleSheet("color: #E6E6E6;");
     }
     else if (index == 7) {
-        ui->textBrowser_7->setStyleSheet("background-color: #FFFFFF;");
-        ui->label_7->setStyleSheet("color: #D8D8D8;");
+        ui->textBrowser_7->setStyleSheet("background-color: #E6E6E6;");
+        ui->label_7->setStyleSheet("color: #E6E6E6;");
     }
     else if (index == 8) {
-        ui->textBrowser_8->setStyleSheet("background-color: #FFFFFF;");
-        ui->label_8->setStyleSheet("color: #D8D8D8;");
+        ui->textBrowser_8->setStyleSheet("background-color: #E6E6E6;");
+        ui->label_8->setStyleSheet("color: #E6E6E6;");
     }
     else if (index == 9) {
-        ui->textBrowser_9->setStyleSheet("background-color: #FFFFFF;");
-        ui->label_9->setStyleSheet("color: #D8D8D8;");
+        ui->textBrowser_9->setStyleSheet("background-color: #E6E6E6;");
+        ui->label_9->setStyleSheet("color: #E6E6E6;");
     }
     else if (index == 10) {
-        ui->textBrowser_10->setStyleSheet("background-color: #FFFFFF;");
-        ui->label_10->setStyleSheet("color: #D8D8D8;");
+        ui->textBrowser_10->setStyleSheet("background-color: #E6E6E6;");
+        ui->label_10->setStyleSheet("color: #E6E6E6;");
     }
 }
 
