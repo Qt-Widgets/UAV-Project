@@ -36,6 +36,8 @@ MainWindow::MainWindow(QWidget *parent) :
     //Hide UAV info
     ui->scrollArea->hide();
 
+    voce::synthesize("cay lee");
+
     ui->textBrowser->hide();
     ui->textBrowser_2->hide();
     ui->textBrowser_3->hide();
@@ -104,6 +106,18 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->closeAllButton->hide();
 
     // User Interface Appearance
+
+    ui->textBrowser->setStyleSheet("background-color: #BDBDBD;");
+    ui->textBrowser_2->setStyleSheet("background-color: #BDBDBD;");
+    ui->textBrowser_3->setStyleSheet("background-color: #BDBDBD;");
+    ui->textBrowser_4->setStyleSheet("background-color: #BDBDBD;");
+    ui->textBrowser_5->setStyleSheet("background-color: #BDBDBD;");
+    ui->textBrowser_6->setStyleSheet("background-color: #585858;");
+    ui->textBrowser_7->setStyleSheet("background-color: #BDBDBD;");
+    ui->textBrowser_8->setStyleSheet("background-color: #BDBDBD;");
+    ui->textBrowser_9->setStyleSheet("background-color: #BDBDBD;");
+    ui->textBrowser_10->setStyleSheet("background-color: #BDBDBD;");
+
     ui->pushButton->setText("X");
     ui->pushButton_2->setText("X");
     ui->pushButton_3->setText("X");
@@ -1305,8 +1319,8 @@ void MainWindow::setDefaultColor(int index)
         ui->label_5->setStyleSheet("color: #D8D8D8;");
     }
     else if (index == 6) {
-        ui->textBrowser_6->setStyleSheet("background-color: #FFFFFF;");
-        ui->label_6->setStyleSheet("color: #D8D8D8;");
+        ui->textBrowser_6->setStyleSheet("background-color: #E6E6E6;");
+        ui->label_6->setStyleSheet("color: #0D8C83;");
     }
     else if (index == 7) {
         ui->textBrowser_7->setStyleSheet("background-color: #FFFFFF;");
