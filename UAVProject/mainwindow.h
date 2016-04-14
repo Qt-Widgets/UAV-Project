@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QtSerialPort>
 #include <QSerialPortInfo>
+#include <QtMultimedia/QMediaPlayer>
 
 namespace Ui {
 class MainWindow;
@@ -72,6 +73,8 @@ private:
     bool responseYellow = false;
     bool responseName = true;
     QString atcName;
+    QMediaPlayer *player = new QMediaPlayer;
+
 };
 
 #endif // MAINWINDOW_H

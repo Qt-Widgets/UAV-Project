@@ -5,7 +5,7 @@
 #include <QTime>
 #include <QTimer>
 #include <QString>
-#include <QMessageBox>
+#include <QtMultimedia/QMediaPlayer>
 #include <math.h>
 #include <windows.h>
 #include <voce.h>
@@ -24,7 +24,6 @@ MainWindow::MainWindow(QWidget *parent) :
     voce::init("C:/Users/Ernest Curioso/Documents/Voce/voce-0.9.1/voce-0.9.1/lib", true, true,
                "file:/C:/Users/Ernest Curioso/Documents/Qt Projects/UAVProject/UAVProject/gram", "digits");
     voce::setRecognizerEnabled(false);
-    voce::synthesize("Welcome aboard. Please state your name.");
 
     // Map Setup
     ui->webView_4->hide();
@@ -158,7 +157,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->centralWidget->setStyleSheet("color: #848484;");
 
-    ui->textBrowser_11->setStyleSheet("color: #FA5858;"
+    ui->textBrowser_11->setStyleSheet("color: #9FF781;"
                                       "background-color: #585858;"
                                       "font-size: 16px;"
                                       "font-weight: bold;");
@@ -309,13 +308,13 @@ USPSLatLng[30] = "34.180514,-118.309706";*/
 
 //    ui->lcdNumber_5->display(999);
     arduino = new QSerialPort(this);
-//    qDebug() << "Number of ports: " << QSerialPortInfo::availablePorts().length() << "\n";
+//    qDebug() << "Number of ports: " << QSerialPortInfo::availablePorts().length() << "/n";
 //    foreach(const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts()){
-//        qDebug() << "Description: " << serialPortInfo.description() << "\n";
-//        qDebug() << "Has vendor id?: " << serialPortInfo.hasVendorIdentifier() << "\n";
-//        qDebug() << "Vendor ID: " << serialPortInfo.vendorIdentifier() << "\n";
-//        qDebug() << "Has product id?: " << serialPortInfo.hasProductIdentifier() << "\n";
-//        qDebug() << "Product ID: " << serialPortInfo.productIdentifier() << "\n";
+//        qDebug() << "Description: " << serialPortInfo.description() << "/n";
+//        qDebug() << "Has vendor id?: " << serialPortInfo.hasVendorIdentifier() << "/n";
+//        qDebug() << "Vendor ID: " << serialPortInfo.vendorIdentifier() << "/n";
+//        qDebug() << "Has product id?: " << serialPortInfo.hasProductIdentifier() << "/n";
+//        qDebug() << "Product ID: " << serialPortInfo.productIdentifier() << "/n";
 //        }
 
     bool arduino_is_available = false;
@@ -333,7 +332,7 @@ USPSLatLng[30] = "34.180514,-118.309706";*/
                 }
             }
             if(arduino_is_available){
-                    qDebug() << "Found the arduino port...\n";
+                    qDebug() << "Found the arduino port.../n";
                     arduino->setPortName(arduino_uno_port_name);
                     arduino->open(QSerialPort::ReadOnly);
                     arduino->setBaudRate(QSerialPort::Baud115200);
@@ -343,7 +342,7 @@ USPSLatLng[30] = "34.180514,-118.309706";*/
                     arduino->setStopBits(QSerialPort::OneStop);
                     QObject::connect(arduino, SIGNAL(readyRead()), this, SLOT(readSerial()));
                 }else{
-                    qDebug() << "Couldn't find the correct port for the arduino.\n";
+                    qDebug() << "Couldn't find the correct port for the arduino./n";
                     //QMessageBox::information(this, "Serial Port Error", "Couldn't open serial port to arduino.");
                 }
   }
@@ -409,7 +408,7 @@ void MainWindow::manipString(QString heard)
     if (heardList[0] == "change") {
         atcName = heardList[5];
         voce::synthesize("Hello" + atcName.toStdString());
-        ui->textBrowser_11->append("Hello " + atcName);
+        ui->textBrowser_11->append("Hello " + atcName + ".");
     }
     else if (heard == "launch all u a v") {
         ui->webView_4->page()->mainFrame()->evaluateJavaScript("start();");
@@ -596,7 +595,7 @@ void MainWindow::onTalkReleased()
 
     if (s.empty() == false)
     {
-        ui->textBrowser_11->append("<span style = 'color: #9FF781'>ATC: " + QString::fromStdString(s) + "</span>");
+        ui->textBrowser_11->append("<span style = 'color: #FAFAFA'>ATC: " + QString::fromStdString(s) + "</span>");
         manipString(QString::fromStdString(s));
     }
     else
@@ -619,6 +618,7 @@ void MainWindow::onMapLoaded()
     ui->webView_4->page()->mainFrame()->addToJavaScriptWindowObject("JSBridge", this);
     connect(ui->pushButton_11, SIGNAL(pressed()), this, SLOT(onTalkPressed()));
     connect(ui->pushButton_11, SIGNAL(released()), this, SLOT(lag()));
+    voce::synthesize("Welcome aboard. Please state your name.");
 
     // Launch Initial UAVs (string name, string origin, string destination, string speed in mph, int index number, int fuel level).
     addUAV("UAV1", "Van Nuys", "Porter Ranch", 900, mainIndex, 12);
@@ -627,6 +627,8 @@ void MainWindow::onMapLoaded()
     addUAV("UAV4", "Van Nuys", "Studio City", 700, mainIndex, 63);
     addUAV("UAV5", "Van Nuys", "Downtown Burbank", 1500, mainIndex, 60);
     addUAV("UAV6", "Van Nuys", "San Fernando", 1200, mainIndex, 60);
+
+    player->setMedia(QUrl::fromLocalFile("C:/Users/Ernest Curioso/Documents/Qt Projects/UAVProject/UAVProject/sounds/Alert.mp3"));
 
     //UAV UAV1 ("UAV1", "Van Nuys", "Canoga Park", 700, mainIndex, 12);
     //addUAV(UAV1.getName(), UAV1.getOrigin(), UAV1.getDestination(), UAV1.getSpeed(), UAV1.getMainIndex(), UAV1.getBattery());
@@ -744,15 +746,17 @@ void MainWindow::fuelSim(QString name, int index)
     // Alerts for low fuel levels
     if (fuel[index] == 20){
         showUAVWindow(name, index);
+        player->play();
         ui->webView_4->page()->mainFrame()->evaluateJavaScript("popup('" + QString::number(index) + "', 'Battery at 20%');");
 
-        ui->textBrowser_11->append("\n" + name + "\nLow Battery at 20%. \nWill emergency land at nearest USPS at 10%.\n");
+        ui->textBrowser_11->append("<br><span style= 'color: #FA5858'>" + name + " ALERT!<br>Low Battery at 20%. <br>Will emergency land at nearest USPS at 10%.</span><br>");
         voce::synthesize("U A V" + QString::number(index).toStdString() + "Low Battery at 20%");
 
         fuel[index]--;
     }
     else if (fuel[index] == 10){
         showUAVWindow(name, index);
+        player->play();
         ui->webView_4->page()->mainFrame()->evaluateJavaScript("popup('" + QString::number(index) + "', 'Emergency Landing!');");
 
         temp = getLatLng(index);
@@ -761,9 +765,9 @@ void MainWindow::fuelSim(QString name, int index)
 
         emerg[index] = true;
 
-        ui->textBrowser_11->append("\n" + name +
-                        "\nLow Battery at 10% \n"
-                        "Emergency landing at " + USPSName[i] + " post office.\n");
+        ui->textBrowser_11->append("<br><span style= 'color: #FA5858'>" + name + " ALERT!" +
+                        "<br>Low Battery at 10% <br>"
+                        "Emergency landing at " + USPSName[i] + " post office.</span><br>");
         voce::synthesize("U A V" + QString::number(index).toStdString() + "Low Battery at 10%. Emergency landing at" + USPSName[i].toStdString() + "post office.");
 
         reroute(index, USPSName[i]);
@@ -772,13 +776,14 @@ void MainWindow::fuelSim(QString name, int index)
     }
     else if (fuel[index] == 2) {
         showUAVWindow(name, index);
+        player->play();
         ui->webView_4->page()->mainFrame()->evaluateJavaScript("popup('" + QString::number(index) + "', 'Unexpected landing.');");
 
         emerg[index] = true;
 
-        ui->textBrowser_11->append("\n" + name +
-                        "\nDid not make it to nearest USPS. \n" +
-                        "Landed at current location.\n");
+        ui->textBrowser_11->append("<span style= 'color: #FA5858'><br>" + name + " ALERT!" +
+                        "<br>Did not make it to nearest USPS. <br>" +
+                        "Landed at current location.</span><br>");
 
         voce::synthesize("U A V" + QString::number(index).toStdString() + "did not make it to the nearest U S P S. Landed at current location.");
 
@@ -1100,74 +1105,74 @@ void MainWindow::showInfo(QString name, int index)
     }
 
     //Displays live update.
-    if (name == "UAV1") {        
-        ui->textBrowser->setText("MISSION STATUS: " + mission[g] + "\n\n" +
-                                 "UAV STATUS: " + status[g] + "\n\n" +
-                                 "DESTINATION: " + destinationArray[index] + "\n\n" +
-                                 "SPEED: " + QString::number(speedArray[index]) + " MPH\n\n" +
+    if (name == "UAV1") {
+        ui->textBrowser->setText("MISSION STATUS: " + mission[g] + "<br><br>" +
+                                 "UAV STATUS: " + status[g] + "<br><br>" +
+                                 "DESTINATION: " + destinationArray[index] + "<br><br>" +
+                                 "SPEED: " + QString::number(speedArray[index]) + " MPH<br><br>" +
                                  "LOCATION: " + a.toString());
     }
     else if (name == "UAV2") {
-        ui->textBrowser_2->setText("MISSION STATUS: " + mission[g] + "\n\n" +
-                                 "UAV STATUS: " + status[g] + "\n\n" +
-                                   "DESTINATION: " + destinationArray[index] + "\n\n" +
-                                 "SPEED: " + QString::number(speedArray[index]) + " MPH\n\n" +
+        ui->textBrowser_2->setText("MISSION STATUS: " + mission[g] + "<br><br>" +
+                                 "UAV STATUS: " + status[g] + "<br><br>" +
+                                   "DESTINATION: " + destinationArray[index] + "<br><br>" +
+                                 "SPEED: " + QString::number(speedArray[index]) + " MPH<br><br>" +
                                  "LOCATION: " + a.toString());
     }
     else if (name == "UAV3") {
-        ui->textBrowser_3->setText("MISSION STATUS: " + mission[g] + "\n\n" +
-                                 "UAV STATUS: " + status[g] + "\n\n" +
-                                   "DESTINATION: " + destinationArray[index] + "\n\n" +
-                                   "SPEED: " + QString::number(speedArray[index]) + " MPH\n\n" +
+        ui->textBrowser_3->setText("MISSION STATUS: " + mission[g] + "<br><br>" +
+                                 "UAV STATUS: " + status[g] + "<br><br>" +
+                                   "DESTINATION: " + destinationArray[index] + "<br><br>" +
+                                   "SPEED: " + QString::number(speedArray[index]) + " MPH<br><br>" +
                                  "LOCATION: " + a.toString());
     }
     else if (name == "UAV4") {
-        ui->textBrowser_4->setText("MISSION STATUS: " + mission[g] + "\n\n" +
-                                 "UAV STATUS: " + status[g] + "\n\n" +
-                                   "DESTINATION: " + destinationArray[index] + "\n\n" +
-                                   "SPEED: " + QString::number(speedArray[index]) + " MPH\n\n" +
+        ui->textBrowser_4->setText("MISSION STATUS: " + mission[g] + "<br><br>" +
+                                 "UAV STATUS: " + status[g] + "<br><br>" +
+                                   "DESTINATION: " + destinationArray[index] + "<br><br>" +
+                                   "SPEED: " + QString::number(speedArray[index]) + " MPH<br><br>" +
                                  "LOCATION: " + a.toString());
     }
     else if (name == "UAV5") {
-        ui->textBrowser_5->setText("MISSION STATUS: " + mission[g] + "\n\n" +
-                                 "UAV STATUS: " + status[g] + "\n\n" +
-                                   "DESTINATION: " + destinationArray[index] + "\n\n" +
-                                   "SPEED: " + QString::number(speedArray[index]) + " MPH\n\n" +
+        ui->textBrowser_5->setText("MISSION STATUS: " + mission[g] + "<br><br>" +
+                                 "UAV STATUS: " + status[g] + "<br><br>" +
+                                   "DESTINATION: " + destinationArray[index] + "<br><br>" +
+                                   "SPEED: " + QString::number(speedArray[index]) + " MPH<br><br>" +
                                  "LOCATION: " + a.toString());
     }
     else if (name == "UAV6") {
-        ui->textBrowser_6->setText("MISSION STATUS: " + mission[g] + "\n\n" +
-                                 "UAV STATUS: " + status[g] + "\n\n" +
-                                   "DESTINATION: " + destinationArray[index] + "\n\n" +
-                                   "SPEED: " + QString::number(speedArray[index]) + " MPH\n\n" +
+        ui->textBrowser_6->setText("MISSION STATUS: " + mission[g] + "<br><br>" +
+                                 "UAV STATUS: " + status[g] + "<br><br>" +
+                                   "DESTINATION: " + destinationArray[index] + "<br><br>" +
+                                   "SPEED: " + QString::number(speedArray[index]) + " MPH<br><br>" +
                                  "LOCATION: " + a.toString());
     }
     else if (name == "UAV7") {
-        ui->textBrowser_7->setText("MISSION STATUS: " + mission[g] + "\n\n" +
-                                 "UAV STATUS: " + status[g] + "\n\n" +
-                                   "DESTINATION: " + destinationArray[index] + "\n\n" +
-                                   "SPEED: " + QString::number(speedArray[index]) + " MPH\n\n" +
+        ui->textBrowser_7->setText("MISSION STATUS: " + mission[g] + "<br><br>" +
+                                 "UAV STATUS: " + status[g] + "<br><br>" +
+                                   "DESTINATION: " + destinationArray[index] + "<br><br>" +
+                                   "SPEED: " + QString::number(speedArray[index]) + " MPH<br><br>" +
                                  "LOCATION: " + a.toString());
     }
     else if (name == "UAV8") {
-        ui->textBrowser_8->setText("MISSION STATUS: " + mission[g] + "\n\n" +
-                                 "UAV STATUS: " + status[g] + "\n\n" +
-                                   "DESTINATION: " + destinationArray[index] + "\n\n" +
-                                   "SPEED: " + QString::number(speedArray[index]) + " MPH\n\n" +
+        ui->textBrowser_8->setText("MISSION STATUS: " + mission[g] + "<br><br>" +
+                                 "UAV STATUS: " + status[g] + "<br><br>" +
+                                   "DESTINATION: " + destinationArray[index] + "<br><br>" +
+                                   "SPEED: " + QString::number(speedArray[index]) + " MPH<br><br>" +
                                  "LOCATION: " + a.toString());
     }
     else if (name == "UAV9") {
-        ui->textBrowser_9->setText("MISSION STATUS: " + mission[g] + "\n\n" +
-                                 "UAV STATUS: " + status[g] + "\n\n" +
-                                   "DESTINATION: " + destinationArray[index] + "\n\n" +
-                                   "SPEED: " + QString::number(speedArray[index]) + " MPH\n\n" +
+        ui->textBrowser_9->setText("MISSION STATUS: " + mission[g] + "<br><br>" +
+                                 "UAV STATUS: " + status[g] + "<br><br>" +
+                                   "DESTINATION: " + destinationArray[index] + "<br><br>" +
+                                   "SPEED: " + QString::number(speedArray[index]) + " MPH<br><br>" +
                                  "LOCATION: " + a.toString());
     }
     else if (name == "UAV10") {
-        ui->textBrowser_10->setText("MISSION STATUS: " + mission[g] + "\n\n" +
-                                 "UAV STATUS: " + status[g] + "\n\n" +
-                                    "DESTINATION: " + destinationArray[index] + "\n\n" +
-                                    "SPEED: " + QString::number(speedArray[index]) + " MPH\n\n" +
+        ui->textBrowser_10->setText("MISSION STATUS: " + mission[g] + "<br><br>" +
+                                 "UAV STATUS: " + status[g] + "<br><br>" +
+                                    "DESTINATION: " + destinationArray[index] + "<br><br>" +
+                                    "SPEED: " + QString::number(speedArray[index]) + " MPH<br><br>" +
                                  "LOCATION: " + a.toString());
     }
 
