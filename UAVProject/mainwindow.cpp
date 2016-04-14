@@ -465,16 +465,25 @@ void MainWindow::manipString(QString heard)
     }
     else if (heardList[0] == "return") {
         temp = numStringToInt(heardList[6]);
-        destinationArray[temp] = originArray[temp];
-        reroute(temp, originArray[temp]);
-        start(temp, originArray[temp]);
+        if (destinationArray[temp] == originArray[temp]) {
+        }
+        else {
+            destinationArray[temp] = originArray[temp];
+            reroute(temp, originArray[temp]);
+            start(temp, originArray[temp]);
+        }
     }
     else if (heardList[0] == "emergency") {
         temp = numStringToInt(heardList[5]);
         temp3 = getLatLng(temp);
         int i = closestUSPS(temp3);
-        emerg[temp] = true;
-        reroute(temp, USPSName[i]);
+        if (destinationArray[temp] == USPSName[i]) {
+        }
+        else {
+            destinationArray[temp] = USPSName[i];
+            emerg[temp] = true;
+            reroute(temp, USPSName[i]);\
+        }
     }
     else if (heardList[0] == "code") {
         if (heardList[1] == "red") {
@@ -498,9 +507,9 @@ void MainWindow::manipString(QString heard)
                 if (destinationArray[i] == USPSName[j]) {
                 }
                 else {
-                destinationArray[i] = USPSName[j];
-                emerg[i] = true;
-                reroute(i, USPSName[j]);
+                    destinationArray[i] = USPSName[j];
+                    emerg[i] = true;
+                    reroute(i, USPSName[j]);
                 }
             }
         }
@@ -508,10 +517,14 @@ void MainWindow::manipString(QString heard)
             voce::synthesize("Returning all U A V to origin.");
             ui->textBrowser_11->append("Cayley: Returning all UAV to origin.");
             for (int i=1; i<=mainIndex-1; i++) {
-                destinationArray[i] = originArray[i];
-                emerg[i] = true;
-                reroute(i, originArray[i]);
-                start(i, originArray[i]);
+                if (destinationArray[i] == originArray[i]) {
+                }
+                else {
+                    destinationArray[i] = originArray[i];
+                    emerg[i] = true;
+                    reroute(i, originArray[i]);
+                    start(i, originArray[i]);
+                }
             }
         }
     }
