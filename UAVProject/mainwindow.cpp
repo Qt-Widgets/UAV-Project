@@ -30,6 +30,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->webView_4->load(QUrl("file:/C:/Users/Ernest Curioso/Documents/Qt Projects/UAVProject/UAVProject/map.html"));
     ui->progressBar->setMinimum(0);
     ui->progressBar->setMaximum(100);
+    ui->logoLabel->setStyleSheet("background-color: #FFFFFF;");
+    ui->logoLabel->setAlignment(Qt::AlignCenter);
+    QPixmap image("C:/Users/Ernest Curioso/Documents/Qt Projects/UAVProject/UAVProject/images/LOGO.png");
+    ui->logoLabel->setPixmap(image);
     connect(ui->webView_4, SIGNAL(loadProgress(int)), ui->progressBar, SLOT(setValue(int)));
     connect(ui->webView_4, SIGNAL(loadFinished(bool)), this, SLOT(onMapLoaded()));
 
@@ -104,6 +108,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->closeAllButton->hide();
 
     // User Interface Appearance
+
+    QWidget::setWindowTitle("Multi-Air Vehicle Drone Control");
 
     ui->pushButton->setStyleSheet("background-color: #FA5858; color: #000000 ");
     ui->pushButton_2->setStyleSheet("background-color: #FA5858; color: #000000 ");
@@ -482,7 +488,7 @@ void MainWindow::manipString(QString heard)
         else {
             destinationArray[temp] = USPSName[i];
             emerg[temp] = true;
-            reroute(temp, USPSName[i]);\
+            reroute(temp, USPSName[i]);
         }
     }
     else if (heardList[0] == "code") {
@@ -627,11 +633,12 @@ void MainWindow::showTime()
 void MainWindow::onMapLoaded()
 {
     ui->progressBar->hide();
+    ui->logoLabel->hide();
     ui->webView_4->show();
     ui->webView_4->page()->mainFrame()->addToJavaScriptWindowObject("JSBridge", this);
     connect(ui->pushButton_11, SIGNAL(pressed()), this, SLOT(onTalkPressed()));
     connect(ui->pushButton_11, SIGNAL(released()), this, SLOT(lag()));
-    voce::synthesize("Welcome aboard. Please state your name.");
+    voce::synthesize("Welcome. Please state your name.");
 
     // Launch Initial UAVs (string name, string origin, string destination, string speed in mph, int index number, int fuel level).
     addUAV("UAV1", "Van Nuys", "Porter Ranch", 900, mainIndex, 12);
