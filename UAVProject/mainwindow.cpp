@@ -109,7 +109,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // User Interface Appearance
 
-    QWidget::setWindowTitle("Multi-Air Vehicle Drone Control");
+    QWidget::setWindowTitle("Multi Air Vehicle Drone Control");
 
     ui->pushButton->setStyleSheet("background-color: #FA5858; color: #000000 ");
     ui->pushButton_2->setStyleSheet("background-color: #FA5858; color: #000000 ");
@@ -398,7 +398,7 @@ void MainWindow::manipString(QString heard)
     int temp2 = -1;
     QString temp3;
 
-    if (responseName == true) {
+    /*if (responseName == true) {
         if (heard == "ernest" || heard == "daniel" || heard == "blake" || heard == "tariq" || heard == "eric" || heard == "aaron") {
             atcName = heard;
             voce::synthesize("Hello" + atcName.toStdString());
@@ -410,7 +410,7 @@ void MainWindow::manipString(QString heard)
             ui->textBrowser_11->append("Cayley: ATC name not recognized. Please restate your name.");
         }
     }
-    else if (responseName == false) {
+    else if (responseName == false) {*/
     if (heardList[0] == "change") {
         atcName = heardList[5];
         voce::synthesize("Hello" + atcName.toStdString());
@@ -461,13 +461,39 @@ void MainWindow::manipString(QString heard)
             ui->textBrowser_11->append("Cayley: " + USPSName[temp2] + ".");
         }
     }
-    else if (heardList [0] == "hover") {
+    else if (heardList [0] == "pause") {
         temp = numStringToInt(heardList[4]);
         ui->webView_4->page()->mainFrame()->evaluateJavaScript("pauseFlight('" + QString::number(temp) + "');");
     }
     else if (heardList[0] == "resume") {
         temp = numStringToInt(heardList[6]);
         ui->webView_4->page()->mainFrame()->evaluateJavaScript("resumeFlight('" + QString::number(temp) + "');");
+    }
+    else if (heardList[0] == "reroute") {
+        temp = numStringToInt(heardList[4]);
+        for (int i = 0; i <=30; i++) {
+            QStringList usps = USPSName[i].split(" ");
+            QString first = usps[0];
+            if (first.toLower() == heardList[6]) {
+                if (destinationArray[temp] == USPSName[i]) {
+                }
+                else {
+                    destinationArray[temp] = USPSName[i];
+                    reroute(temp,USPSName[i]);
+                    start(temp,USPSName[i]);
+                }
+            }
+        }
+    }
+    else if (heardList[0] == "recharge") {
+        temp = numStringToInt(heardList[4]);
+        fuel[temp] = 100;
+    }
+    else if (heardList[0] == "set") {
+        if (heardList[1] == "low") {
+            temp = numStringToInt(heardList[7]);
+            fuel[temp] = 13;
+        }
     }
     else if (heardList[0] == "return") {
         temp = numStringToInt(heardList[6]);
@@ -533,7 +559,7 @@ void MainWindow::manipString(QString heard)
                 }
             }
         }
-    }
+    //}
     else if (heardList[0] == "no") {
         if (responseRed == true) {
             voce::synthesize("Code red aborted.");
@@ -638,10 +664,12 @@ void MainWindow::onMapLoaded()
     ui->webView_4->page()->mainFrame()->addToJavaScriptWindowObject("JSBridge", this);
     connect(ui->pushButton_11, SIGNAL(pressed()), this, SLOT(onTalkPressed()));
     connect(ui->pushButton_11, SIGNAL(released()), this, SLOT(lag()));
-    voce::synthesize("Welcome. Please state your name.");
+    voce::synthesize("Welcome.");
+    ui->textBrowser_11->append("Welcome.");
+
 
     // Launch Initial UAVs (string name, string origin, string destination, string speed in mph, int index number, int fuel level).
-    addUAV("UAV1", "Van Nuys", "Porter Ranch", 900, mainIndex, 12);
+    addUAV("UAV1", "Van Nuys", "Porter Ranch", 900, mainIndex, 50);
     addUAV("UAV2", "Van Nuys", "West Hills", 700, mainIndex, 49);
     addUAV("UAV3", "Van Nuys", "Calabasas", 700, mainIndex, 95);
     addUAV("UAV4", "Van Nuys", "Studio City", 700, mainIndex, 63);
