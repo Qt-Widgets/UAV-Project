@@ -669,7 +669,7 @@ void MainWindow::onMapLoaded()
 
 
     // Launch Initial UAVs (string name, string origin, string destination, string speed in mph, int index number, int fuel level).
-    addUAV("UAV1", "Van Nuys", "Porter Ranch", 900, mainIndex, 50);
+    addUAV("UAV1", "Van Nuys", "Porter Ranch", 900, mainIndex, 12);
     addUAV("UAV2", "Van Nuys", "West Hills", 700, mainIndex, 49);
     addUAV("UAV3", "Van Nuys", "Calabasas", 700, mainIndex, 95);
     addUAV("UAV4", "Van Nuys", "Studio City", 700, mainIndex, 63);
