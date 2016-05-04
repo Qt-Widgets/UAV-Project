@@ -528,6 +528,11 @@ void MainWindow::manipString(QString heard)
             voce::synthesize("Returning all U A V to origin. Are you sure?");
             ui->textBrowser_11->append("Cayley: Returning all UAV to origin. Are you sure?");
         }
+        else if (heardList[1] == "orange") {
+            responseOrange = true;
+            voce::synthesize("Pausing all U A V. Are you sure?");
+            ui->textBrowser_11->append("Cayley: Pausing all UAV. Are you sure?");
+        }
     }
     else if (heardList[0] == "yes") {
         if (responseRed == true) {
@@ -559,6 +564,13 @@ void MainWindow::manipString(QString heard)
                 }
             }
         }
+        else if (responseOrange == true) {
+            voce::synthesize("Pausing all U A V.");
+            ui->textBrowser_11->append("Cayley: Pausing all UAV.");
+            for (int i=1; i<=mainIndex-1; i++) {
+                ui->webView_4->page()->mainFrame()->evaluateJavaScript("pauseFlight('" + QString::number(i) + "');");
+            }
+        }
     //}
     else if (heardList[0] == "no") {
         if (responseRed == true) {
@@ -569,12 +581,17 @@ void MainWindow::manipString(QString heard)
             voce::synthesize("Code yellow aborted.");
             ui->textBrowser_11->append("Cayley: Code yellow aborted.");
         }
+        else if (responseOrange == true) {
+            voce::synthesize("Code orange aborted.");
+            ui->textBrowser_11->append("Cayley: Code orange aborted.");
+        }
     }
     }
 
     if (heardList[0] != "code") {
         responseRed = false;
         responseYellow = false;
+        responseOrange = false;
     }
 }
 

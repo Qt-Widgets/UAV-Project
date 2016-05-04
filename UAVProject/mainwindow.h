@@ -74,6 +74,7 @@ private:
     bool responseName = true;
     QString atcName;
     QMediaPlayer *player = new QMediaPlayer;
+    bool responseOrange = false;
 
 };
 
