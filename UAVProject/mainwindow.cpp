@@ -466,8 +466,15 @@ void MainWindow::manipString(QString heard)
         ui->webView_4->page()->mainFrame()->evaluateJavaScript("pauseFlight('" + QString::number(temp) + "');");
     }
     else if (heardList[0] == "resume") {
-        temp = numStringToInt(heardList[6]);
-        ui->webView_4->page()->mainFrame()->evaluateJavaScript("resumeFlight('" + QString::number(temp) + "');");
+        if (heardList[3] == "all") {
+            for (int i=1; i<=mainIndex-1; i++) {
+                ui->webView_4->page()->mainFrame()->evaluateJavaScript("resumeFlight('" + QString::number(i) + "');");
+            }
+        }
+        else {
+            temp = numStringToInt(heardList[6]);
+            ui->webView_4->page()->mainFrame()->evaluateJavaScript("resumeFlight('" + QString::number(temp) + "');");
+        }
     }
     else if (heardList[0] == "reroute") {
         temp = numStringToInt(heardList[4]);
@@ -571,7 +578,7 @@ void MainWindow::manipString(QString heard)
                 ui->webView_4->page()->mainFrame()->evaluateJavaScript("pauseFlight('" + QString::number(i) + "');");
             }
         }
-    //}
+    }
     else if (heardList[0] == "no") {
         if (responseRed == true) {
             voce::synthesize("Code red aborted.");
@@ -585,7 +592,6 @@ void MainWindow::manipString(QString heard)
             voce::synthesize("Code orange aborted.");
             ui->textBrowser_11->append("Cayley: Code orange aborted.");
         }
-    }
     }
 
     if (heardList[0] != "code") {

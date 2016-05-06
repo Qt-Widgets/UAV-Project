@@ -6,7 +6,7 @@
  
 grammar digits;
 
-public <command>	= (set low battery for U A V <digit>) | (recharge U A V <digit>) | (<verb> A T C to <atcname>) | (<atcname>) | (code <color>) | (reset) | (report <noun> for U A V <digit>) | (<verb> U A V <digit>) | (reroute U A V <digit> to <postoffice>) | (launch all U A V) | (<bool>);
+public <command>	= (<verb> all U A V) | (set low battery for U A V <digit>) | (recharge U A V <digit>) | (<verb> A T C to <atcname>) | (<atcname>) | (code <color>) | (reset) | (report <noun> for U A V <digit>) | (<verb> U A V <digit>) | (reroute U A V <digit> to <postoffice>) | (launch all U A V) | (<bool>);
 <report>			= (report <snoun>);
 <verb>	 			= (set | change | alter | ascend | descend | fly | pause | resume flight for | emergency land | return to origin | emergency land );
 <noun>  		 	= (U A V status | mission status | speed | location | destination | battery | closest post office);
